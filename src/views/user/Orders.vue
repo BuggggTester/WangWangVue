@@ -31,7 +31,7 @@
         <div class="dialog-footer">
           <el-button type="primary" @click="closeCancelDialog(order)">返回</el-button>
           <el-button  @click="cancelOrder(order)">
-            残忍取消
+            残忍取消~
           </el-button>
         </div>
       </template>
