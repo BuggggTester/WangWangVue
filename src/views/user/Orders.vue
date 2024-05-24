@@ -141,6 +141,19 @@ onMounted(async () => {
   // totalPages.value = Math.ceil(totalOrders.value / pageSize.value);
   // updatePagedOrders();
 })
+onMounted(()=> {
+  // ignore ResizeObserver loop limit exceeded
+// this is ok in several scenarios according to
+    const e = window.onerror
+    window.onerror = function(err) {
+      if (err === 'ResizeObserver loop limit exceeded') {
+        console.warn('Ignored: ResizeObserver loop limit exceeded')
+        return false
+      } else {
+        return e(...arguments)
+      }
+    }
+})
 </script>
 <style>
 /* 样式可以根据需要进行调整 */

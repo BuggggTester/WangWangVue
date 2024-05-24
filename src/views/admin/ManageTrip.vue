@@ -15,6 +15,9 @@
 </template>
 
 <script setup>
+import requestUtil from "@/util/request"
+const travels = requestUtil.get("/travel/selectall");
+console.log(travels);
 const trips = [
   {
     title: '“环西部火车游”高品质旅游办专线列车',
