@@ -116,18 +116,6 @@ const closeCancelDialog = (order) => {
 const openCancelDialog = (order) => {
   order.dialogVisible3 = true;
 }
-// // 根据当前页码和每页数量筛选订单数据
-// const updatePagedOrders = () => {
-//   const start = (currentPage.value - 1) * pageSize.value;
-//   const end = start + pageSize.value;
-//   pagedOrders.value = orders.value.slice(start, end);
-// }
-//
-// // 处理分页变化
-// const handleCurrentChange = (currentPage) => {
-//   currentPage.value = currentPage;
-//   updatePagedOrders();
-// }
 const modifyOrder = (order) => {
 
 }
