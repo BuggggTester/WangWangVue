@@ -41,6 +41,21 @@ const routes = [
         ]
     },
     {
+      path: '/admin',
+      name: 'Admin',
+      component: () => import('../views/admin/layout'),
+      children: [{
+          path: '/admin/main',
+          name: 'AdminMain',
+          component: () => import('../views/admin/Main'),
+      },{
+          path: '/admin/main/trip',
+          name: 'ManageTrip',
+          component: () => import('../views/admin/ManageTrip'),
+      }
+      ]
+    },
+    {
       path: '/test',
       name: 'Test',
       component: () => import('../views/test.vue'),
@@ -49,12 +64,17 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: () => import('../views/Login'),
+    },{
+        path: "/admin/login",
+        name: 'AdminLogin',
+        component: () => import('../views/admin/Login'),
     },
     {
         path: '/register',
         name: 'Register',
         component: () => import('../views/Register'),
     },
+
     {
         path: '/:pathMatch(.*)*',
         name: '404',

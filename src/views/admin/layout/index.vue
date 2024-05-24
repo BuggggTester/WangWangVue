@@ -13,13 +13,12 @@
 
 
 <script setup>
-import Menu from '@/layout/menu'
-import Header from '@/layout/header'
-import Footer from '@/layout/footer'
-import Tabs from '@/layout/tabs'
+import Menu from '@/views/admin/layout/menu'
+import Header from '@/views/admin/layout/header'
+import Footer from '@/views/admin/layout/footer'
+import Tabs from '@/views/admin/layout/tabs'
 import {onMounted} from "vue";
 import router from "@/router";
-
 
 
 </script>

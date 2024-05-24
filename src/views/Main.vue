@@ -51,46 +51,10 @@
         <el-tab-pane label="铁路旅游" name="first"></el-tab-pane>
       </el-tabs>
       <el-row :gutter="20">
-        <el-col :span="6">
-        <el-card style="max-width: 480px">
-          <img
-              src="../assets/images/suggestTrips/card1.png"
-              style="width: 100%"
-              class="card-image"
-          />
-          <template #footer>”环西部火车游“高品质旅游办专线列车</template>
-        </el-card>
-        </el-col>
-        <el-col :span="6">
+        <el-col :span="6" v-for="(trip, index) in travelInfo" :key="index">
           <el-card style="max-width: 480px">
-            <img
-                src="../assets/images/suggestTrips/card2.png"
-                style="width: 100%"
-                class="card-image"
-            />
-            <template #footer>”环西部火车游“陇上江南-行摄山</template>
-          </el-card>
-        </el-col>
-        <el-col :span="6">
-          <el-card style="max-width: 480px">
-            <img
-                src="../assets/images/suggestTrips/card3.png"
-                style="width: 100%"
-                class="card-image"
-
-            />
-            <template #footer>”环西部火车游“华夏寻根·人文始祖</template>
-          </el-card>
-        </el-col>
-        <el-col :span="6">
-          <el-card style="max-width: 480px">
-            <img
-                src="../assets/images/suggestTrips/card4.png"
-                style="width: 100%"
-                class="card-image"
-
-            />
-            <template #footer>“环西部火车游”精品旅游线路</template>
+            <img :src="trip.image" style="width: 100%" class="card-image" />
+            <template #footer>{{ trip.title }}</template>
           </el-card>
         </el-col>
       </el-row>
@@ -121,6 +85,40 @@ const images = [
   { src: require('@/assets/images/carousel/image3.png') },
   { src: require('@/assets/images/carousel/image4.png') },
 ]
+// const travelInfo = ref([]);
+// requestUtil.get('/travel/selectall')
+//     .then(travelInfoGet => {
+//       // 在这里处理travelInfoGet的值
+//       console.log(travelInfoGet);
+//       travelInfo.value = travelInfoGet.data.map(item => ({
+//         image: item.photo,
+//         title: item.title
+//       }));
+//       console.log(travelInfo);
+//     })
+//     .catch(error => {
+//       // 处理可能的错误
+//       console.error('An error occurred:', error);
+//     });
+const travelInfo = [
+  {
+    title: '“环西部火车游”高品质旅游办专线列车',
+    image: require('@/assets/images/suggestTrips/card1.png')
+  },
+  {
+    title: '“环西部火车游”陇上江南-行摄山',
+    image: require('@/assets/images/suggestTrips/card2.png')
+  },
+  {
+    title: '“环西部火车游”华夏寻根·人文始祖',
+    image: require('@/assets/images/suggestTrips/card3.png')
+  },
+  {
+    title: '“环西部火车游”精品旅游线路',
+    image: require('@/assets/images/suggestTrips/card4.png')
+  }
+]
+console.log(travelInfo);
 const activeName = ref('first')
 
 

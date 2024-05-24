@@ -15,7 +15,13 @@ Vue-3<br>
 所以此处的架构只作为大致参考，方便各位后续开发。
 
 1. assets<br>
-assets文件夹下包含了程序运行中所需要的静态图片文件，style文件夹下包含了运行中的css文件。
+assets文件夹下包含了程序运行中所需要的静态图片文件，css文件夹下包含了运行中的css文件。
+<br>在具体vue组件中需要引用css时，用类似这样的方法进行引用：
+```
+<style>
+    import "@/assets/css/***.css"
+</style>
+```
 <br> ~~但由于不符规范，后续或许需要将各文件css放这里。~~
 2. layout <br>
 layout文件夹下包括menu、header、footer、tabs（暂时没用上），各部分下的index包含了
@@ -27,6 +33,7 @@ router下的index包含了所有的url，所以之后如果各位开发新的页
 util文件夹下包含了两个文件（暂时）：
 * request.js
 这个js文件是copy下来的，包装好了前后端数据传输的工具函数，包括get与post等。后续开发时按照这样的形式调用：
+
 ```javascript
 import requestUtil from "@/util/request"
 //调用示例：

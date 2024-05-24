@@ -2,24 +2,16 @@
   <div class="login-page">
     <div class="background-image"></div>
     <div class="login-container">
-      <span class="login">登录</span>
-    <div class="component">
-      <el-input v-model="account" placeholder="请输入账号" style="width: 70%; height: 40px;" :prefix-icon="User" clearable="true"></el-input>
-    </div>
+      <span class="login">管理员登录</span>
+      <div class="component">
+        <el-input v-model="account" placeholder="请输入账号" style="width: 70%; height: 40px;" :prefix-icon="User" clearable="true"></el-input>
+      </div>
       <div class="component">
         <el-input v-model="password" placeholder="请输入密码" style="width: 70%; height: 40px" :prefix-icon="User" type="password" show-password="true"></el-input>
       </div>
       <el-row>
         <el-col :offset="4">
-        <el-button type="primary"  class="login-container-button"  @click="login">登录</el-button>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="2" :offset="4">
-        <el-checkbox v-model="remember" label="记住账号" size="large" />
-        </el-col>
-        <el-col :span="8" :offset="5">
-        <span style="font-size: 13px">没有账号？点此<span style="color:#25a4bb; cursor: pointer " @click="router.push('/register')">注册</span></span>
+          <el-button type="primary"  class="login-container-button"  @click="login">登录</el-button>
         </el-col>
       </el-row>
     </div>
@@ -49,19 +41,18 @@ const login = async() => {
     return false;
   }
   try {
-    user = await requestUtil.get('/user/select', {
+    user = await requestUtil.get('/user/select/admin', {
       "userName": account.value
     })
-    console.log(user.data[0].user_name);
-    cookieUtil.setCookie("userName", user.data[0].user_name, 3); // 3天过期
+    console.log(user.data.password);
+    cookieUtil.setCookie("adminName", user.data.user_name, 3); // 3天过期
   }catch (e) {
     console.error(e);
   }
-
-  let pwd = user.data[0].password;
+  let pwd = user.data.password;
   console.log(pwd);
   if(pwd === password.value){
-    await router.push('/main');
+    await router.push('/admin/main');
     ElMessage({
       message: "登录成功！",
       type: "success"
@@ -76,16 +67,14 @@ const login = async() => {
 }
 
 onMounted(async ()=>{
-  const res = cookieUtil.getCookie("userName")
+  const res = cookieUtil.getCookie("adminName")
   console.log(res)
   if(res !== ""){
-    router.push('/main').then(alert("自动登录成功！"))
+    router.push('/admin/main').then(alert("自动登录成功！"))
   }
 })
 </script>
-
-<style>
-@import "@/assets/css/login.css";
+<style scoped>
 @import "@/assets/css/card-image.css";
-
+@import "@/assets/css/adminLogin.css";
 </style>
