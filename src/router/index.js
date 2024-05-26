@@ -26,11 +26,7 @@ const routes = [
               path: '/user/unfinished',
               name: 'Unfinished',
               component: () => import('../views/user/Unfinished.vue'),
-        },{
-              path: '/user/message',
-              name: 'Message',
-              component: () => import('../views/user/Message.vue'),
-          }
+        },
           ]
         }
         ,{
@@ -41,6 +37,11 @@ const routes = [
                 path: '/manage/orders',
                 name: 'CreateOrder',
                 component: () => import('../views/manager/CreateOrder.vue'),
+            },
+            {
+                path: '/message',
+                name: 'Message',
+                component: () => import('../views/Message.vue'),
             }
         ]
     },
