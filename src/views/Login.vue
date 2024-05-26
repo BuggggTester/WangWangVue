@@ -66,7 +66,7 @@ const login = async() => {
   let pwd = user.data.password;
   console.log(user.data.user_name);
   console.log(pwd);
-  if(pwd === password.value){
+  if(pwd === password.value) {
     cookieUtil.setCookie("userName", user.data.user_name, 1); // 1天过期
     ElMessage({
       message: "登录成功！",
@@ -75,7 +75,7 @@ const login = async() => {
     await router.push('/main');
     return true;
   }
-  else if(user.data.user_name == null) {
+  else if(user.data.user_name === "") {
     ElMessage({
       message: "登陆失败：用户名不存在！",
       type: "warning"
@@ -83,6 +83,8 @@ const login = async() => {
     return false;
   }
   else if(pwd !== password.value){
+    console.log(user.data);
+
     ElMessage({
       message: "登录失败：密码错误",
       type: "warning"
