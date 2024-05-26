@@ -41,11 +41,17 @@ const remember = ref(false)
 const login = async() => {
   console.log(remember.value)
   if(account.value.length<=1) {
-    alert("请输入昵称！");
+    ElMessage({
+      message: "请输入昵称！",
+      type: "warning"
+    })
     return false;
   }
   if(password.value.length <= 1){
-    alert("请输入密码！");
+    ElMessage({
+      message: "请输入密码！",
+      type: "warning"
+    })
     return false;
   }
   try {
@@ -53,23 +59,30 @@ const login = async() => {
       "userName": account.value
     })
     console.log(user.data[0].user_name);
-    cookieUtil.setCookie("userName", user.data[0].user_name, 3); // 3天过期
   }catch (e) {
     console.error(e);
   }
 
   let pwd = user.data[0].password;
+  console.log(user.data[0].user_name);
   console.log(pwd);
   if(pwd === password.value){
     await router.push('/main');
+    cookieUtil.setCookie("userName", user.data[0].user_name, 1); // 1天过期
     ElMessage({
       message: "登录成功！",
       type: "success"
     })
   }
-  else{
+  else if(user.data[0].user_name == null) {
     ElMessage({
-      message: "登录失败！",
+      message: "登陆失败：用户名不存在！",
+      type: "warning"
+    })
+  }
+  else if(pwd !== password.value){
+    ElMessage({
+      message: "登录失败：密码错误",
       type: "warning"
     })
   }
@@ -79,7 +92,10 @@ onMounted(async ()=>{
   const res = cookieUtil.getCookie("userName")
   console.log(res)
   if(res !== ""){
-    router.push('/main').then(alert("自动登录成功！"))
+    router.push('/main').then(ElMessage({
+      message: "已自动登录！",
+      type: "success"
+    }))
   }
 })
 </script>

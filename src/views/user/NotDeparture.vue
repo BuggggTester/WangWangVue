@@ -87,7 +87,7 @@
 </template>
 
 <script setup>
-import {ref, watch} from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import requestUtil from "@/util/request";
 import NoOrder from "@/views/NoOrder.vue";
 const value1 = ref('')

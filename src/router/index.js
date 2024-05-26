@@ -41,7 +41,11 @@ const routes = [
                 path: '/manage/orders',
                 name: 'CreateOrder',
                 component: () => import('../views/manager/CreateOrder.vue'),
-            }
+        },{
+            path: '/manage/foods',
+            name: 'Foods',
+            component: () => import('../views/manager/Food.vue'),
+        }
         ]
     },
     {
