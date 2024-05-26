@@ -58,15 +58,19 @@ import cookieUtil from "@/util/cookie"
 import {ElMessage} from "element-plus";
 const router = useRouter()
 const user = cookieUtil.getCookie("userName")
-if(user === ""){
-  ElMessage({
-    message: "请先登录！",
-    type: "warning"
-  });
-  setTimeout(()=>{
-    router.push('/login')
-  },1000);
-}
+
+onMounted(()=> {
+  if(user === ""){
+    ElMessage({
+      message: "请先登录！",
+      type: "warning"
+    });
+    setTimeout(()=>{
+      router.push('/login')
+    },1000);
+  }
+})
+
 let dialogVisible = ref(false)
 const goHome = () =>{
   router.push('/main')

@@ -58,33 +58,36 @@ const login = async() => {
     user = await requestUtil.get('/user/select', {
       "userName": account.value
     })
-    console.log(user.data[0].user_name);
+    console.log(user.data);
   }catch (e) {
     console.error(e);
   }
 
-  let pwd = user.data[0].password;
-  console.log(user.data[0].user_name);
+  let pwd = user.data.password;
+  console.log(user.data.user_name);
   console.log(pwd);
   if(pwd === password.value){
-    await router.push('/main');
-    cookieUtil.setCookie("userName", user.data[0].user_name, 1); // 1天过期
+    cookieUtil.setCookie("userName", user.data.user_name, 1); // 1天过期
     ElMessage({
       message: "登录成功！",
       type: "success"
     })
+    await router.push('/main');
+    return true;
   }
-  else if(user.data[0].user_name == null) {
+  else if(user.data.user_name == null) {
     ElMessage({
       message: "登陆失败：用户名不存在！",
       type: "warning"
-    })
+    });
+    return false;
   }
   else if(pwd !== password.value){
     ElMessage({
       message: "登录失败：密码错误",
       type: "warning"
-    })
+    });
+    return false;
   }
 }
 
