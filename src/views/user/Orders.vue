@@ -59,15 +59,6 @@
   <div v-else class="no-trip-card">
     <NoOrder/>
   </div>
-<!--  <el-pagination-->
-<!--      v-if="totalPages > 1"-->
-<!--      @current-change="handleCurrentChange"-->
-<!--      :current-page="currentPage"-->
-<!--      :page-sizes="[5, 10, 20, 50]"-->
-<!--      :page-size="pageSize"-->
-<!--      :total="totalOrders"-->
-<!--      layout="prev, pager, next, jumper, sizes, total"-->
-<!--  />-->
 </template>
 <script setup>
 import { onMounted, ref, reactive } from 'vue'
@@ -122,6 +113,8 @@ const modifyOrder = (order) => {
 onMounted(async () => {
   const results = await requestUtil.get('/order/select/history/1');
   orders.value = results.data;
+  console.log(results);
+  console.log(orders);
   orders.value.forEach(order => {
     order.dialogVisible3 = false;
   });
