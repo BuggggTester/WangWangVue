@@ -8,7 +8,13 @@
       @open="handleOpen"
       @close="handleClose"
       router="true"
+      :collapse="isCollapse"
   >
+    <el-menu-item @click="collapseItem">
+        <el-icon>
+          <Operation/>
+        </el-icon>
+    </el-menu-item>
     <el-menu-item index="/main">
       <template #title>
         <el-icon>
@@ -47,6 +53,14 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
+const isCollapse = ref(true)
+
+function collapseItem() {
+  if (isCollapse.value == true) isCollapse.value = false;
+  else isCollapse.value = true;
+}
 
 </script>
 

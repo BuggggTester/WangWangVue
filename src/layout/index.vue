@@ -1,7 +1,7 @@
 <template>
   <div class="app-wrapper">
     <el-container>
-      <el-aside width="200px" class="sidebar-container"><Menu/></el-aside>
+      <el-aside width="isCollapse ? '65px' : '200px'" class="sidebar-container"><Menu/></el-aside>
       <el-container>
         <el-header><Header/></el-header>
         <el-main><router-view/></el-main>
