@@ -16,12 +16,11 @@
         </el-icon>
     </el-menu-item>
     <el-menu-item index="/main">
-      <template #title>
         <el-icon>
           <House/>
         </el-icon>
         <span>主页</span>
-      </template>
+
     </el-menu-item>
     <el-menu-item index="/user/unfinished">
       <el-icon>
