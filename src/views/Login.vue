@@ -84,10 +84,14 @@ import {ElMessage} from "element-plus";
 import cookieUtil from "@/util/cookie"
 
 const loginRef = ref(null);
+const lastUser = cookieUtil.getCookie("userName");
+const lastPwd = cookieUtil.getCookie("password");
+const lastRem = cookieUtil.getCookie("rememberMe");
+console.log(lastRem);
 const loginForm =ref({
-  username: "",
-  password: "",
-  rememberMe: false
+  username: lastUser,
+  password: lastPwd,
+  rememberMe: lastRem
 })
 const loginRules = ref({
   account: [{ required: true, trigger: "blur", message: "请输入您的账号" }],
@@ -107,12 +111,14 @@ const handleLogin = ()=>{
         cookieUtil.setCookie("userId", res.data.userId, 3);
         cookieUtil.setCookie("password", res.data.password,3);
         cookieUtil.setCookie("avatar", res.data.avatar,3);
+        cookieUtil.setCookie("rememberMe", loginForm.value.rememberMe, 3);
         //TODO: 后续添加其他cookie
       }else {
         cookieUtil.setCookie("userName", loginForm.value.username, 1);
         cookieUtil.setCookie("userId", res.data.userId, 1);
         cookieUtil.setCookie("password", res.data.password,1);
         cookieUtil.setCookie("avatar", res.data.avatar,1);
+        cookieUtil.setCookie("rememberMe", loginForm.value.rememberMe, 1);
       }
       if(res.data.msg === 'login success'){
         ElMessage({
@@ -127,18 +133,6 @@ const handleLogin = ()=>{
 const handleRegister = () => {
   router.push('/register');
 }
-
-
-onMounted(async ()=>{
-  const res = cookieUtil.getCookie("userName")
-  console.log(res)
-  if(res !== ""){
-    router.push('/main').then(ElMessage({
-      message: "已自动登录！",
-      type: "success"
-    }))
-  }
-})
 </script>
 
 <style>

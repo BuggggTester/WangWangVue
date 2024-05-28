@@ -80,10 +80,14 @@ const goHome = () =>{
 }
 const quit = () =>{
   try{
-    cookieUtil.deleteCookie("userName");
-    cookieUtil.deleteCookie("userId");
-    cookieUtil.deleteCookie("password");
-    cookieUtil.deleteCookie("avatar");
+    const rememberMe = cookieUtil.getCookie("rememberMe");
+    if(!rememberMe) {
+      //如果登录选择不记住密码，则清除cookie
+      cookieUtil.deleteCookie("userName");
+      cookieUtil.deleteCookie("userId");
+      cookieUtil.deleteCookie("password");
+      cookieUtil.deleteCookie("avatar");
+    }
     dialogVisible = false;
     ElMessage({
       message: "退出成功！",

@@ -20,6 +20,7 @@ const load = () => {
 }
 onMounted(() => {
   messages = getMessages();
+  console.log(messages);
 })
 </script>
 
