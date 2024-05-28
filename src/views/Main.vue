@@ -51,9 +51,9 @@
         <el-tab-pane label="铁路旅游" name="first"></el-tab-pane>
       </el-tabs>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="(trip, index) in travelInfo" :key="index">
+        <el-col :span="6" v-for="(trip, index) in travelInf" :key="index">
           <el-card style="max-width: 480px">
-            <img :src="trip.image" style="width: 100%" class="card-image" />
+            <img :src="trip.photo" style="width: 100%" class="card-image" />
             <template #footer>{{ trip.title }}</template>
           </el-card>
         </el-col>
@@ -85,44 +85,17 @@ const images = [
   { src: require('@/assets/images/carousel/image3.png') },
   { src: require('@/assets/images/carousel/image4.png') },
 ]
-// const travelInfo = ref([]);
-// requestUtil.get('/travel/selectall')
-//     .then(travelInfoGet => {
-//       // 在这里处理travelInfoGet的值
-//       console.log(travelInfoGet);
-//       travelInfo.value = travelInfoGet.data.map(item => ({
-//         image: item.photo,
-//         title: item.title
-//       }));
-//       console.log(travelInfo);
-//     })
-//     .catch(error => {
-//       // 处理可能的错误
-//       console.error('An error occurred:', error);
-//     });
-const travelInfo = [
-  {
-    title: '“环西部火车游”高品质旅游办专线列车',
-    image: require('@/assets/images/suggestTrips/card1.png')
-  },
-  {
-    title: '“环西部火车游”陇上江南-行摄山',
-    image: require('@/assets/images/suggestTrips/card2.png')
-  },
-  {
-    title: '“环西部火车游”华夏寻根·人文始祖',
-    image: require('@/assets/images/suggestTrips/card3.png')
-  },
-  {
-    title: '“环西部火车游”精品旅游线路',
-    image: require('@/assets/images/suggestTrips/card4.png')
-  }
-]
-console.log(travelInfo);
-
-const activeName = ref('first')
-
-
+const activeName = ref('first');
+const travelInf = ref([]);
+onMounted(async() => {
+  const res = await requestUtil.get('/travel/selectall');
+  console.log(res);
+  travelInf.value = res.data;
+  travelInf.value.forEach(item=>{
+    item.photo = requestUtil.getServerUrl() + item.photo;
+  })
+  console.log(travelInf.value);
+})
 const searchTrips = async () => {
   let dplace = departureOption.value.at(0)+'/'+departureOption.value.at(1);
   let splace = selectedOption.value.at(0)+'/'+selectedOption.value.at(1);

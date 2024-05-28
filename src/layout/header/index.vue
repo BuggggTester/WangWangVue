@@ -42,7 +42,8 @@
     </el-col>
     <el-col :span="2" :offset="1">
       <div>
-      <img src="../../assets/images/head.png" alt="头像" style="height: 50px; margin-right: 10px;"/>
+<!--      <img :src="avatarUrl" alt="头像" style="height: 50px; margin-right: 10px;"/>-->
+        <el-avatar :src="avatarUrl" />
       </div>
     </el-col>
   </el-row>
@@ -56,9 +57,11 @@ const input = ref('')
 import { useRouter } from 'vue-router'
 import cookieUtil from "@/util/cookie"
 import {ElMessage} from "element-plus";
+import {getServerUrl} from "@/util/request";
 const router = useRouter()
 const user = cookieUtil.getCookie("userName")
-
+const avatarUrl = getServerUrl()+cookieUtil.getCookie("avatar");
+console.log(avatarUrl);
 onMounted(()=> {
   if(user === ""){
     ElMessage({
@@ -77,7 +80,14 @@ const goHome = () =>{
 }
 const quit = () =>{
   try{
-    cookieUtil.deleteCookie("userName");
+    const rememberMe = cookieUtil.getCookie("rememberMe");
+    if(!rememberMe) {
+      //如果登录选择不记住密码，则清除cookie
+      cookieUtil.deleteCookie("userName");
+      cookieUtil.deleteCookie("userId");
+      cookieUtil.deleteCookie("password");
+      cookieUtil.deleteCookie("avatar");
+    }
     dialogVisible = false;
     ElMessage({
       message: "退出成功！",

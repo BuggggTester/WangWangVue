@@ -82,28 +82,28 @@ onMounted(async () => {
 
   // 在异步操作完成后执行后续逻辑
   console.log(travels.value.length);
-  trips.value = [
-    {
-      title: travels.value[0].title,
-      image: require('@/assets/images/suggestTrips/card1.png'),
-      dialogVisible: false
-    },
-    {
-      title: travels.value[1].title,
-      image: require('@/assets/images/suggestTrips/card2.png'),
-      dialogVisible: false
-    },
-    {
-      title: travels.value[2].title,
-      image: require('@/assets/images/suggestTrips/card3.png'),
-      dialogVisible: false
-    },
-    {
-      title: travels.value[3].title,
-      image: require('@/assets/images/suggestTrips/card4.png'),
-      dialogVisible: false
-    }
-  ];
+  // trips.value = [
+  //   {
+  //     title: travels.value[0].title,
+  //     image: require('@/assets/images/suggestTrips/card1.png'),
+  //     dialogVisible: false
+  //   },
+  //   {
+  //     title: travels.value[1].title,
+  //     image: require('@/assets/images/suggestTrips/card2.png'),
+  //     dialogVisible: false
+  //   },
+  //   {
+  //     title: travels.value[2].title,
+  //     image: require('@/assets/images/suggestTrips/card3.png'),
+  //     dialogVisible: false
+  //   },
+  //   {
+  //     title: travels.value[3].title,
+  //     image: require('@/assets/images/suggestTrips/card4.png'),
+  //     dialogVisible: false
+  //   }
+  // ];
 
   console.log(trips.value);
 });
