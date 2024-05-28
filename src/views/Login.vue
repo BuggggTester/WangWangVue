@@ -108,7 +108,7 @@ const handleLogin = ()=>{
         cookieUtil.setCookie("password", res.data.password,3);
         cookieUtil.setCookie("avatar", res.data.avatar,3);
         //TODO: 后续添加其他cookie
-      }else {
+      }else {2
         cookieUtil.setCookie("userName", loginForm.value.password, 1);
         cookieUtil.setCookie("userId", res.data.userId, 1);
         cookieUtil.setCookie("password", res.data.password,1);

@@ -28,8 +28,13 @@ const routes = [
               component: () => import('../views/user/Unfinished.vue'),
         },
           ]
-        }
-        ,{
+        },
+        {
+                path: '/userinfo',
+                name: 'Information',
+                component: () => import('../views/user/UserInfo.vue'),
+        },
+        {
             path: '/manage/trips',
             name: 'CreateTrip',
             component: () => import('../views/manager/CreateTrip.vue'),

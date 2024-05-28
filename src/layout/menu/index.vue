@@ -14,22 +14,23 @@
         <el-icon>
           <Operation/>
         </el-icon>
+      <span>菜单</span>
     </el-menu-item>
     <el-menu-item index="/main">
-      <template #title>
         <el-icon>
           <House/>
         </el-icon>
         <span>主页</span>
-      </template>
-    </el-menu-item>
-    <el-menu-item index="/user/unfinished">
-      <el-icon>
-        <User/>
-      </el-icon>
-      <span>用户订单</span>
     </el-menu-item>
     <el-sub-menu index="1">
+      <template #title>
+        <el-icon><User/></el-icon>
+        <span>用户中心</span>
+      </template>
+      <el-menu-item index="/userinfo">用户信息</el-menu-item>
+      <el-menu-item index="/user/unfinished">用户订单</el-menu-item>
+    </el-sub-menu>
+    <el-sub-menu index="2">
       <template #title>
         <el-icon><location /></el-icon>
         <span>车次/订单管理</span>
