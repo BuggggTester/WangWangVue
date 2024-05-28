@@ -109,7 +109,7 @@ const handleLogin = ()=>{
         cookieUtil.setCookie("avatar", res.data.avatar,3);
         //TODO: 后续添加其他cookie
       }else {
-        cookieUtil.setCookie("userName", loginForm.value.password, 1);
+        cookieUtil.setCookie("userName", loginForm.value.username, 1);
         cookieUtil.setCookie("userId", res.data.userId, 1);
         cookieUtil.setCookie("password", res.data.password,1);
         cookieUtil.setCookie("avatar", res.data.avatar,1);
