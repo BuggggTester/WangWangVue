@@ -4,20 +4,21 @@
       <el-tab-pane label="当前铁路旅游" name="first"/>
     </el-tabs>
     <el-row :gutter="20">
-      <el-col :span="6" v-for="(trip, index) in trips" :key="index">
-        <el-card style="max-width: 480px" @click="openDialog(trip)">
-          <img :src="trip.image" style="width: 100%" class="card-image"/>
-          <template #footer>{{ trip.title }}</template>
+      <el-col :span="6" v-for="(travel, index) in travels" :key="index">
+        <el-card style="max-width: 480px" @click="openDialog(travel)">
+          <img :src="travel.photo" style="width: 100%" class="card-image"/>
+          <template #footer>{{ travel.title }}</template>
         </el-card>
         <el-dialog
-            v-model="trip.dialogVisible"
-            :visible.sync="trip.dialogVisible"
+            v-model="travel.dialogVisible"
+            :visible.sync="travel.dialogVisible"
             title="修改订单"
             width="1000"
-            :trip="trip"
+            :travel="travel"
         >
           <div class="component">
-          <el-input v-model="title" style="width: 500px" placeholder="请输入标题（不超过30个字）" clearable="true"/>
+            <span>请输入标题：</span><span style="color: red">*</span>
+            <el-input v-model="title" style="width: 85%; margin-left: 5%" placeholder="请输入标题（不超过30个字）" clearable="true"/>
           </div>
           <br>
           <div class="component">
@@ -27,7 +28,9 @@
                 action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
                 multiple
             >
-              <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+              <el-icon class="el-icon--upload">
+                <upload-filled/>
+              </el-icon>
               <div class="el-upload__text">
                 Drop file here or <em>click to upload</em>
               </div>
@@ -40,8 +43,8 @@
           </div>
           <template #footer>
             <div class="dialog-footer">
-              <el-button type="primary" @click="closeDialog(trip)">返回</el-button>
-              <el-button @click="modifyTrip(trip)">
+              <el-button type="primary" @click="closeDialog(travel)">返回</el-button>
+              <el-button @click="modifyTrip(travel)">
                 提交修改
               </el-button>
             </div>
@@ -55,7 +58,7 @@
 <script setup>
 import {ref, onMounted} from 'vue';
 import requestUtil from "@/util/request";
-import { UploadFilled } from '@element-plus/icons-vue'
+import {UploadFilled} from '@element-plus/icons-vue'
 
 const active = ref('first');
 const travels = ref([]);
@@ -81,31 +84,12 @@ onMounted(async () => {
   await fetchData();
 
   // 在异步操作完成后执行后续逻辑
-  console.log(travels.value.length);
-  // trips.value = [
-  //   {
-  //     title: travels.value[0].title,
-  //     image: require('@/assets/images/suggestTrips/card1.png'),
-  //     dialogVisible: false
-  //   },
-  //   {
-  //     title: travels.value[1].title,
-  //     image: require('@/assets/images/suggestTrips/card2.png'),
-  //     dialogVisible: false
-  //   },
-  //   {
-  //     title: travels.value[2].title,
-  //     image: require('@/assets/images/suggestTrips/card3.png'),
-  //     dialogVisible: false
-  //   },
-  //   {
-  //     title: travels.value[3].title,
-  //     image: require('@/assets/images/suggestTrips/card4.png'),
-  //     dialogVisible: false
-  //   }
-  // ];
-
-  console.log(trips.value);
+  console.log(travels.value);
+  travels.value.forEach(item => {
+    item.photo = requestUtil.getServerUrl() + item.photo;
+    item.dialogVisible = false;
+  })
+  console.log(travels.value);
 });
 
 </script>
