@@ -42,8 +42,7 @@
     </el-col>
     <el-col :span="2" :offset="1">
       <div>
-<!--      <img :src="avatarUrl" alt="头像" style="height: 50px; margin-right: 10px;"/>-->
-        <el-avatar :src="avatarUrl" />
+        <el-avatar :src="avatarUrl" @click="router.push('/userinfo')"/>
       </div>
     </el-col>
   </el-row>

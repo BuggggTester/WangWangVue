@@ -64,6 +64,7 @@
 import { onMounted, ref, reactive } from 'vue'
 import requestUtil from "@/util/request";
 import { ElMessage } from 'element-plus'
+import cookieUtil from "@/util/cookie"
 const orders = ref([]); // 所有订单
 const currentPage = ref(1); // 当前页码
 const pageSize = ref(10); // 每页订单数量
@@ -73,13 +74,14 @@ const totalPages = ref(1);
 const totalOrders = ref(0);
 // 计算当前页要显示的订单数据
 const pagedOrders = ref([]);
+const userId = cookieUtil.getCookie("userId");
 const cancelOrder = async (order) => {
   try{
     let tripId = order.trip.trip_id;
     let userId = 1;
     console.log(order)
     console.log(tripId)
-    await requestUtil.get(`order/delete/${tripId}/1`)
+    await requestUtil.get(`order/delete/${tripId}/${userId}`)
     console.log('删除成功！')
     ElMessage({
       message: '订单已取消！',
