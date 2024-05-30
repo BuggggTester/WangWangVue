@@ -10,10 +10,21 @@ const pick_date = ref('')
 const size = ref('default')
 const count = ref(0)
 const tableData = ref([])
+let unreadmessages = ref([])
 const load = () => {
   count.value += 10
 }
-const setAllRead = () =>{}
+const setAllRead = async () =>{
+  unreadmessages.value = await requestUtil.get('message/unreadselect', {
+    receive: cookieUtil.getCookie("userId")
+  })
+  let message;
+  for(message in unreadmessages.value){
+    await requestUtil.put("setread", {
+      message_id: message.message_id
+    })
+  }
+}
 const getddl = () =>{
   console.log(pick_date.value+"has been set")
 }
@@ -23,7 +34,6 @@ onMounted( async () => {
   })
   messages.value = rec.data
   console.log(messages.value)
-  console.log(messages);
 })
 
 </script>
@@ -48,17 +58,43 @@ onMounted( async () => {
       </el-col>
     </el-row>
     <el-divider border-style="hidden" style="margin: 10px"/>
-    <el-row justify="space-around">
-      <el-col :span="8"><p>标题</p></el-col>
-      <el-col :span="3"><p>日期</p></el-col>
-      <el-col :span="4"><p>发送者</p></el-col>
-      <el-col :span="2"><p>状态</p></el-col>
-    </el-row>
+      <el-row justify="space-around">
+        <el-col :span="6"><p>标题</p></el-col>
+        <el-col :span="3"><p>日期</p></el-col>
+        <el-col :span="4"><p>发送者</p></el-col>
+        <el-col :span="2"><p>状态</p></el-col>
+      </el-row>
     <el-divider style="margin: 6px"/>
     <ul v-infinite-scroll="load" style="overflow: auto">
-      <div v-for="message in messages">
+      <li v-for="message in messages" class="infinite-list-item">
+        <div v-if="message.ifread === false" class="message-row-unread">
+          <el-row justify="space-around" class="message-row">
+            <el-popover v-bind="{content: message.body}" trigger="click">
+              <template #reference>
+                <el-col :span="6"><p>{{message.title}}</p></el-col>
+              </template>
+            </el-popover>
+            <el-col :span="3"><p>{{message.send_date}}</p></el-col>
+            <el-col :span="4"><p>{{message.send}}</p></el-col>
+            <el-col :span="2" v-if="message.ifread === false"><p>未读</p></el-col>
+          </el-row>
+        </div>
 
-      </div>
+        <div v-else class="message-row-read">
+          <el-row justify="space-around" class="message-row">
+            <el-popover v-bind="{content: message.body}" trigger="click">
+              <template #reference>
+                <el-col :span="6"><p>{{message.title}}</p></el-col>
+              </template>
+
+            </el-popover>
+            <el-col :span="3"><p>{{message.send_date}}</p></el-col>
+            <el-col :span="4"><p>{{message.send}}</p></el-col>
+            <el-col :span="2" v-if="message.ifread === true"><p>已读</p></el-col>
+          </el-row>
+        </div>
+<!--        <el-divider border-style="dashed" />-->
+      </li>
     </ul>
   </el-container>
 </template>
@@ -79,5 +115,25 @@ onMounted( async () => {
   justify-content: center;
   height: 50px;
   margin: 10px;
+}
+.infinite-list .infinite-list-item + .list-item {
+  margin-top: 10px;
+}
+.message-row{
+  margin-top: 6px;
+}
+.message-row-unread {
+  background-color: rgba(137, 193, 246, 0.44);
+  border-radius:50px;
+  margin-top: 5px;
+  height: 30px !important;
+  overflow:hidden !important;
+  align-items: center;
+}
+.message-row-read {
+  border-radius:50px;
+  margin-top: 5px;
+  height: 30px !important;
+  overflow:hidden !important
 }
 </style>
