@@ -2,6 +2,7 @@
 import {nextTick, onMounted, ref} from "vue"
 import requestUtil from "@/util/request"
 import cookieUtil from "@/util/cookie"
+import messageUtil from "@/util/message"
 import index from "vuex";
 let messages = ref([])
 
@@ -13,8 +14,14 @@ let unreadmessages = ref([])
 const load = () => {
   count.value += 10
 }
+const setRead = async (message_id) => {
+  console.log("set")
+  await requestUtil.put('/message/setread', {
+    message_id: message_id
+  })
+}
 const setAllRead = async () =>{
-  const rec = await requestUtil.get('/message/unreadselect', {
+  const rec = await requestUtil.get('message/unreadselect', {
     receive: cookieUtil.getCookie("userId")
   })
   unreadmessages.value = rec.data;
@@ -71,6 +78,9 @@ const catchChange = async () => {
     }
   }
 }
+const createTest = async () => {
+  await messageUtil.createMessage("Crow_D", 1, "推送测试", "test")
+}
 onMounted( async () => {
   await getAllMessages()
 })
@@ -108,9 +118,9 @@ onMounted( async () => {
       <li v-for="message in messages" class="infinite-list-item">
         <div v-if="message.ifread === false" class="message-row-unread">
           <el-row justify="space-around" class="message-row">
-            <el-popover v-bind="{content: message.body}" trigger="click">
+            <el-popover v-bind="{content: message.body}" trigger="click" >
               <template #reference>
-                <el-col :span="6"><p>{{message.title}}</p></el-col>
+                <el-col :span="6" @click="setRead(message.message_id)"><p>{{message.title}}</p></el-col>
               </template>
             </el-popover>
             <el-col :span="3"><p>{{message.send_date}}</p></el-col>
@@ -123,7 +133,7 @@ onMounted( async () => {
           <el-row justify="space-around" class="message-row">
             <el-popover v-bind="{content: message.body}" trigger="click">
               <template #reference>
-                <el-col :span="6"><p>{{message.title}}</p></el-col>
+                <el-col :span="6" @click="setRead(message.message_id)"><p>{{message.title}}</p></el-col>
               </template>
 
             </el-popover>
@@ -135,6 +145,7 @@ onMounted( async () => {
         <el-divider class="divider"/>
       </li>
     </ul>
+    <el-button @click="createTest">press to create a message</el-button>
   </el-container>
 </template>
 
