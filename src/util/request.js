@@ -54,6 +54,20 @@ export function get(url, params = {}) {
         });
     });
 }
+
+export function put(url, params = {}) {
+    return new Promise((resolve, reject) => {
+        httpService({
+            url: url,
+            method: 'put',
+            params: params
+        }).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
 /*
 
  */
@@ -105,6 +119,7 @@ export function getServerUrl(){
 
 export default {
     get,
+    put,
     post,
     fileUpload,
     getServerUrl,

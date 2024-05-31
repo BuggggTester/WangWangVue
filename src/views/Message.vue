@@ -9,31 +9,36 @@ const default_value = ref(false)
 const pick_date = ref('')
 const size = ref('default')
 const count = ref(0)
-const tableData = ref([])
 let unreadmessages = ref([])
 const load = () => {
   count.value += 10
 }
 const setAllRead = async () =>{
-  unreadmessages.value = await requestUtil.get('message/unreadselect', {
+  const rec = await requestUtil.get('/message/unreadselect', {
     receive: cookieUtil.getCookie("userId")
   })
-  let message;
-  for(message in unreadmessages.value){
-    await requestUtil.put("setread", {
-      message_id: message.message_id
+  unreadmessages.value = rec.data;
+  const num = unreadmessages.value.length
+  for(var i = 0; i < num; i ++){
+    // console.log(unreadmessages.value[i]);
+    await requestUtil.put('/message/setread', {
+      message_id: unreadmessages.value[i].message_id
     })
   }
+  await getAllMessages()
 }
 const getddl = () =>{
   console.log(pick_date.value+"has been set")
 }
-onMounted( async () => {
+const getAllMessages = async () => {
   const rec = await requestUtil.get('message/baseselect',{
     receive: cookieUtil.getCookie("userId")
   })
   messages.value = rec.data
-  console.log(messages.value)
+  // console.log(messages.value)
+}
+onMounted( async () => {
+  await getAllMessages()
 })
 
 </script>
@@ -93,7 +98,7 @@ onMounted( async () => {
             <el-col :span="2" v-if="message.ifread === true"><p>已读</p></el-col>
           </el-row>
         </div>
-<!--        <el-divider border-style="dashed" />-->
+        <el-divider class="divider"/>
       </li>
     </ul>
   </el-container>
@@ -135,5 +140,10 @@ onMounted( async () => {
   margin-top: 5px;
   height: 30px !important;
   overflow:hidden !important
+}
+.divider{
+  margin-top: 0px;
+  margin-bottom: 5px;
+  border-bottom: 1px;
 }
 </style>
