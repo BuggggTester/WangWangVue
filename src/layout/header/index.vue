@@ -96,6 +96,7 @@ const quit = () =>{
       cookieUtil.deleteCookie("password");
       cookieUtil.deleteCookie("avatar");
     }
+    cookieUtil.setCookie("ifLogin", false, 3600);
     dialogVisible = false;
     ElMessage({
       message: "退出成功！",

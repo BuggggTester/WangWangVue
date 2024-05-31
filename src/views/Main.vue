@@ -72,6 +72,7 @@ import { useRouter } from 'vue-router'
 import requestUtil from '@/util/request'
 import timeUtil from '@/util/time'
 import cookieUtil from "@/util/cookie"
+import router from "@/router";
 const tabPosition = ref('left')
 const departureOption = ref([])
 const selectedOption = ref([])
@@ -95,7 +96,8 @@ onMounted(async() => {
     item.photo = requestUtil.getServerUrl() + item.photo;
   })
   console.log(travelInf.value);
-})
+});
+
 const searchTrips = async () => {
   let dplace = departureOption.value.at(0)+'/'+departureOption.value.at(1);
   let splace = selectedOption.value.at(0)+'/'+selectedOption.value.at(1);

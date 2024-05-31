@@ -104,7 +104,7 @@
     if (file.raw) {
       const formData = new FormData();
       formData.append('avatar', file.raw);
-      formData.append('userId', 1);
+      formData.append('userId', cookieUtil.getCookie("userId"));
       try {
         const results = await requestUtils.fileUpload('user/update/avatar', formData);
         imageUrl.value = results.data.imageUrl; // 更新imageUrl为上传成功后的图片URL

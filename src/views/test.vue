@@ -1,57 +1,61 @@
 <template>
-  <el-upload
-      class="upload-demo"
-      action="http://localhost:1145/file/upload"
-      :file-list="fileList"
-      :on-change="handleChange"
-      :http-request="customHttpRequest"
-      multiple
-      :limit="3"
-      :on-exceed="handleExceed"
-      :auto-upload="false">
-    <el-button size="small" type="primary">点击上传</el-button>
-    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-  </el-upload>
-  <img :src="imageUrl">
+  <div>
+    // 这里是提交的表单数据
+    <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="80px">
+
+    </el-form>
+    // 头像上传
+    <el-form-item label="头像" prop="chairImg">
+      <el-upload
+          class="avatar-uploader"
+          action="http://localhost:9999/chairman/uploadimg"
+          :show-file-list="false"
+          multiple
+          :limit="1"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload">
+        <!-- 构建虚拟路径 -->
+        <img v-if="editForm.chairImg" :src=" 'http://localhost:1145/api/file/' + editForm.chairImg" class="avatar">
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      </el-upload>
+    </el-form-item>
+  </div>
 </template>
+<script>
+import { ElForm, ElFormItem, ElUpload, ElMessage } from 'element-plus';
 
-<script setup>
-import requestUtils, {getServerUrl} from "@/util/request";
-import { ElMessage } from "element-plus";
-import { ref } from "vue";
-    // const imageUrl = ref("http://localhost:1145/images/avatars/b2d139e3-27b7-47c0-9102-1e917814f310.png");
-    const imageUrl = getServerUrl()+"images/user.png";
-    console.log(imageUrl);
-    const fileList = ref([]);
-
-    const handleChange = (file, fileList) => {
-      if (file.raw) {
-        const formData = new FormData();
-        formData.append('File', file.raw);
-
-        requestUtils.fileUpload('file/upload', formData)
-            .then(response => {
-              imageUrl.value = response.data.imageUrl; // 更新imageUrl为上传成功后的图片URL
-              ElMessage({
-                message: "上传成功！",
-                type: "success"
-              });
-            })
-            .catch(error => {
-              ElMessage({
-                message: "上传失败！",
-                type: "warning"
-              });
-            });
-
+export default {
+  data() {
+    return {
+      editForm: {}, // 初始化表单数据对象
+      editFormRules: {} // 表单验证规则，如果有的话
     };
+  },
+  methods: {
+    handleAvatarSuccess(res) {
+      // 把图片名给img
+      this.editForm.chairImg = res;
+    },
+    beforeAvatarUpload(file) {
+      // 设置限定格式
+      const img_mimetype = ['image/jpeg', 'image/jpg', 'image/png']
+      const isJPG = img_mimetype.includes(file.type);
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isJPG) {
+        this.$message.error('上传头像只能是图片格式!');
+        return false;
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!');
+        return false;
+      }
+      return isJPG && isLt2M;
+    },
+    // 提交修改的表单数据
+    async editChairmans() {
+      const {data: rese} = await this.$http.post('/chairman/editChairmans', this.editForm);
+    }
 
-    const customHttpRequest = (file) => {
-      // 自定义上传逻辑，如果需要可以在这里进行处理
-    };
-
-    const handleExceed = (files, fileList) => {
-      ElMessage.warning('最多只能上传 3 张图片');
-    };
+  }
 }
 </script>

@@ -1,0 +1,47 @@
+.trip-card {
+    width: 60%;
+}
+.trip-time {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+.trip-no {
+    text-align: center;
+    font-size: 15px;
+}
+.trip-price {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: #ff8800;
+}
+.trip-place {
+    text-align: center;
+    font-weight: bold;
+    font-size: 30px;
+}
+.underline-container {
+    position: relative;
+    display: inline-block;
+}
+
+.underline-container::after {
+    content: "";
+    position: absolute;
+    left: -300%; /* 左侧超出文本部分的长度 */
+    right: -300%; /* 右侧超出文本部分的长度 */
+    bottom: -10px; /* 控制下划线距离文本的位置 */
+    height: 1px; /* 下划线的高度 */
+    background-color: darkgray; /* 下划线颜色 */
+}
+
+.underline-text {
+    position: relative;
+    z-index: 1;
+}
+.time {
+    text-align: center;
+    color: gray;
+    font-size: 15px;
+}

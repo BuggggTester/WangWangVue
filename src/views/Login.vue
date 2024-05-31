@@ -1,28 +1,5 @@
 <template>
   <div class="login-page">
-<!--    <div class="background-image"></div>-->
-<!--    <div class="login-container">-->
-<!--      <span class="login">登录</span>-->
-<!--    <div class="component">-->
-<!--      <el-input v-model="account" :rules="loginRules" placeholder="请输入账号" style="width: 70%; height: 40px;" :prefix-icon="User" clearable="true"></el-input>-->
-<!--    </div>-->
-<!--    <div class="component">-->
-<!--        <el-input v-model="password" :rules="loginRules" placeholder="请输入密码" style="width: 70%; height: 40px" :prefix-icon="User" type="password" show-password="true"></el-input>-->
-<!--      </div>-->
-<!--      <el-row>-->
-<!--        <el-col :offset="4">-->
-<!--        <el-button type="primary"  class="login-container-button"  @click="login">登录</el-button>-->
-<!--        </el-col>-->
-<!--      </el-row>-->
-<!--      <el-row>-->
-<!--        <el-col :span="2" :offset="4">-->
-<!--        <el-checkbox v-model="remember" label="记住账号" size="large" />-->
-<!--        </el-col>-->
-<!--        <el-col :span="8" :offset="5">-->
-<!--        <span style="font-size: 13px">没有账号？点此<span style="color:#25a4bb; cursor: pointer " @click="router.push('/register')">注册</span></span>-->
-<!--        </el-col>-->
-<!--      </el-row>-->
-<!--    </div>-->
     <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
       <el-form-item prop="username">
         <h1 class="title">登录</h1>
@@ -111,12 +88,14 @@ const handleLogin = ()=>{
         cookieUtil.setCookie("userId", res.data.userId, 3);
         cookieUtil.setCookie("password", res.data.password,3);
         cookieUtil.setCookie("rememberMe", loginForm.value.rememberMe, 3);
+        cookieUtil.setCookie("ifLogin", true, 3);
         //TODO: 后续添加其他cookie
       }else {
         cookieUtil.setCookie("userName", loginForm.value.username, 1);
         cookieUtil.setCookie("userId", res.data.userId, 1);
         cookieUtil.setCookie("password", res.data.password,1);
         cookieUtil.setCookie("rememberMe", loginForm.value.rememberMe, 1);
+        cookieUtil.setCookie("ifLogin", true, 1);
       }
       if(res.data.msg === 'login success'){
         ElMessage({
