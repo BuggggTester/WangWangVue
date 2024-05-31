@@ -147,7 +147,7 @@ onMounted( async () => {
         <el-divider class="divider"/>
       </li>
     </ul>
-<!--    <el-button @click="createTest">press to create a message</el-button>-->
+    <el-button @click="createTest">press to create a message</el-button>
   </el-container>
 </template>
 
@@ -176,7 +176,7 @@ onMounted( async () => {
 }
 .message-row-unread {
   background-color: rgba(137, 193, 246, 0.44);
-  border-radius:50px;
+  border-radius:10px;
   margin-top: 5px;
   height: 30px !important;
   overflow:hidden !important;
