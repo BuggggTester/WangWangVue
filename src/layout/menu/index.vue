@@ -16,7 +16,7 @@
         </el-icon>
       <span>菜单</span>
     </el-menu-item>
-    <el-menu-item index="/main">
+    <el-menu-item index="/main" @click="updateUnreadMessagesNumber">
         <el-icon>
           <House/>
         </el-icon>
@@ -35,8 +35,8 @@
         <el-icon><location /></el-icon>
         <span>车次/订单管理</span>
       </template>
-        <el-menu-item index="/manage/trips">创建车次</el-menu-item>
-        <el-menu-item index="/manage/orders">创建订单</el-menu-item>
+        <el-menu-item index="/manage/trips" >创建车次</el-menu-item>
+        <el-menu-item index="/manage/orders" >创建订单</el-menu-item>
     </el-sub-menu>
     <el-menu-item index="/message">
       <el-icon>
@@ -64,10 +64,13 @@ import cookieUtil from "@/util/cookie"
 function collapseItem() {
   if (isCollapse.value == true) isCollapse.value = false;
   else isCollapse.value = true;
+  updateUnreadMessagesNumber();
 }
-
-onMounted(async () => {
+async function updateUnreadMessagesNumber (){
   unreadMessageNumber = await messageUtil.getUnreadMessageNumber(cookieUtil.getCookie("userId"))
+}
+onMounted(async () => {
+  await updateUnreadMessagesNumber()
   // console.log("unreadMessageNumber = "+unreadMessageNumber)
 })
 </script>
@@ -76,4 +79,5 @@ onMounted(async () => {
 .full-height {
   height: 100%;
 }
+
 </style>
