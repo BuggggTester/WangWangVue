@@ -42,7 +42,8 @@
       <el-icon>
         <ChatDotSquare />
       </el-icon>
-      <span>消息中心</span>
+      <span v-if="unreadMessageNumber === 0">消息中心</span>
+      <span v-else>消息中心({{unreadMessageNumber}}条未读）</span>
     </el-menu-item>
     <el-menu-item index="4">
       <el-icon>
@@ -54,15 +55,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
 
 const isCollapse = ref(true)
-
+let unreadMessageNumber = ref()
+import messageUtil from '@/util/message'
+import cookieUtil from "@/util/cookie"
 function collapseItem() {
   if (isCollapse.value == true) isCollapse.value = false;
   else isCollapse.value = true;
 }
 
+onMounted(async () => {
+  unreadMessageNumber = await messageUtil.getUnreadMessageNumber(cookieUtil.getCookie("userId"))
+  // console.log("unreadMessageNumber = "+unreadMessageNumber)
+})
 </script>
 
 <style lang="scss" scoped>
