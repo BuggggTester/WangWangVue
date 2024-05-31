@@ -42,7 +42,7 @@
     </el-col>
     <el-col :span="2" :offset="1">
       <div>
-        <el-avatar :src="avatarUrl" @click="router.push('/userinfo')"/>
+        <el-avatar :src="getServerUrl()+userInfo.avatar" @click="router.push('/userinfo')"/>
       </div>
     </el-col>
   </el-row>
@@ -57,9 +57,11 @@ import { useRouter } from 'vue-router'
 import cookieUtil from "@/util/cookie"
 import {ElMessage} from "element-plus";
 import {getServerUrl} from "@/util/request";
+import requestUtil from "@/util/request";
 const router = useRouter()
 const user = cookieUtil.getCookie("userName")
-const avatarUrl = getServerUrl()+cookieUtil.getCookie("avatar");
+const avatarUrl = ref('');
+const userInfo = ref([]);
 console.log(avatarUrl);
 onMounted(()=> {
   if(user === ""){
@@ -71,6 +73,13 @@ onMounted(()=> {
       router.push('/login')
     },1000);
   }
+})
+onMounted(async()=> {
+  const res = await requestUtil.get("/user/select/userId",{
+    userId: cookieUtil.getCookie("userId")
+  })
+  userInfo.value = res.data;
+  console.log(res);
 })
 
 let dialogVisible = ref(false)

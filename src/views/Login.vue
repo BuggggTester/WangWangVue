@@ -110,14 +110,12 @@ const handleLogin = ()=>{
         cookieUtil.setCookie("userName", loginForm.value.username, 3);
         cookieUtil.setCookie("userId", res.data.userId, 3);
         cookieUtil.setCookie("password", res.data.password,3);
-        cookieUtil.setCookie("avatar", res.data.avatar,3);
         cookieUtil.setCookie("rememberMe", loginForm.value.rememberMe, 3);
         //TODO: 后续添加其他cookie
       }else {
         cookieUtil.setCookie("userName", loginForm.value.username, 1);
         cookieUtil.setCookie("userId", res.data.userId, 1);
         cookieUtil.setCookie("password", res.data.password,1);
-        cookieUtil.setCookie("avatar", res.data.avatar,1);
         cookieUtil.setCookie("rememberMe", loginForm.value.rememberMe, 1);
       }
       if(res.data.msg === 'login success'){

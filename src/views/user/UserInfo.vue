@@ -12,15 +12,30 @@
                            @click="dialogVisible = true"></el-avatar>
                 <el-dialog v-model="dialogVisible"
                            title="更换头像">
+<!--                  <el-upload-->
+<!--                      class="avatar-uploader"-->
+<!--                      action="http://localhost:1145/user/update/avatar"-->
+<!--                      :show-file-list="false"-->
+<!--                      :on-change="handleChange"-->
+<!--                      :on-success="handleAvatarSuccess"-->
+<!--                      :before-upload="beforeAvatarUpload"-->
+<!--                  >-->
+<!--                    <img v-if="imageUrl" :src="imageUrl" class="avatar" />-->
+<!--                    <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>-->
+<!--                    <el-button>点击上传</el-button>-->
+<!--                  </el-upload>-->
                   <el-upload
-                      class="avatar-uploader"
-                      action="http://localhost:1145/user"
-                      :show-file-list="false"
-                      :on-success="handleAvatarSuccess"
-                      :before-upload="beforeAvatarUpload"
-                  >
-                    <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-                    <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+                      class="upload-demo"
+                      action="http://localhost:1145/user/update/avatar"
+                      :file-list="fileList"
+                      :on-change="handleChange"
+                      :http-request="customHttpRequest"
+                      multiple
+                      :limit="3"
+                      :on-exceed="handleExceed"
+                      :auto-upload="false">
+                    <el-button size="small" type="primary">点击上传</el-button>
+                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                   </el-upload>
                   <template #footer>
                     <div class="dialog-footer">
@@ -80,15 +95,38 @@
   const dialogVisible = ref(false);
   const imageUrl = ref('');
   const type = ref('')
-  console.log(cookieUtil.getCookie("userId"));
+  var version = Math.random();
   const handleAvatarSuccess = function (response, uploadFile) {
     imageUrl.value = URL.createObjectURL(uploadFile.raw);
     console.log(imageUrl.value);
   };
+  const handleChange = async(file, fileList) => {
+    if (file.raw) {
+      const formData = new FormData();
+      formData.append('avatar', file.raw);
+      formData.append('userId', 1);
+      try {
+        const results = await requestUtils.fileUpload('user/update/avatar', formData);
+        imageUrl.value = results.data.imageUrl; // 更新imageUrl为上传成功后的图片URL
+        console.log(imageUrl);
+        ElMessage({
+          message: "上传成功！",
+          type: "success"
+        });
+      }catch (e) {
+        ElMessage({
+          message: "上传失败！",
+          type: "warning"
+        });
+      }
+
+
+    }
+  };
   onMounted(async()=> {
     try {
       const res = await requestUtil.get('/user/select/userId', {
-        "userId": 1
+        "userId": cookieUtil.getCookie("userId")
       })
       userInfo.value = res.data;
       console.log(res);

@@ -113,7 +113,7 @@ const modifyOrder = (order) => {
 
 }
 onMounted(async () => {
-  const results = await requestUtil.get('/order/select/history/1');
+  const results = await requestUtil.get(`/order/select/history/${userId}`);
   orders.value = results.data;
   console.log(results);
   console.log(orders);
