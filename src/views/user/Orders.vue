@@ -27,7 +27,7 @@ onMounted(async () => {
   });
 })
 onMounted(()=> {
-  // ignore ResizeObserver loop limit exceeded
+  // ignore ResizeObserver loop limit  exceeded
 // this is ok in several scenarios according to
     const e = window.onerror
     window.onerror = function(err) {
