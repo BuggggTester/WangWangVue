@@ -5,7 +5,7 @@ import cookieUtil from "@/util/cookie"
 import index from "vuex";
 let messages = ref([])
 
-const default_value = ref(false)
+const onlyunread = ref(false)
 const pick_date = ref('')
 const size = ref('default')
 const count = ref(0)
@@ -27,15 +27,49 @@ const setAllRead = async () =>{
   }
   await getAllMessages()
 }
-const getddl = () =>{
-  console.log(pick_date.value+"has been set")
-}
 const getAllMessages = async () => {
   const rec = await requestUtil.get('message/baseselect',{
     receive: cookieUtil.getCookie("userId")
   })
   messages.value = rec.data
   // console.log(messages.value)
+}
+const getUnreadMessages = async () => {
+  const rec = await requestUtil.get('message/unreadselect',{
+    receive: cookieUtil.getCookie("userId")
+  })
+  messages.value = rec.data
+}
+const getMessagesByDate = async () => {
+  const rec = await requestUtil.get('message/dateselect', {
+    receive: cookieUtil.getCookie("userId"),
+    send_date: pick_date.value
+  })
+  messages.value = rec.data
+}
+const getUnreadMessagesByDate = async () => {
+  const rec = await requestUtil.get('message/unreaddateselect', {
+    receive: cookieUtil.getCookie("userId"),
+    send_date: pick_date.value
+  })
+  messages.value = rec.data
+}
+const catchChange = async () => {
+  console.log(pick_date.value)
+  console.log(onlyunread.value)
+  if(pick_date.value === "" || pick_date.value == null){
+    if(!onlyunread.value){
+      await getAllMessages()
+    }else{
+      await getUnreadMessages()
+    }
+  }else{
+    if(!onlyunread.value){
+      await getMessagesByDate()
+    }else{
+      await getUnreadMessagesByDate()
+    }
+  }
 }
 onMounted( async () => {
   await getAllMessages()
@@ -48,16 +82,16 @@ onMounted( async () => {
     <el-header class="header" style="margin-left: 2.5%">消息中心</el-header>
     <el-row justify="space-between">
       <el-col :span="7"><el-button style="font-family: 'Microsoft Yahei'" @click="setAllRead">全部设为已读</el-button></el-col>
-      <el-col :span="3"><el-checkbox v-model="default_value">只看未读消息</el-checkbox></el-col>
+      <el-col :span="3"><el-checkbox v-model="onlyunread" @change="catchChange">只看未读消息</el-checkbox></el-col>
       <el-col :span="7">
         <div>
         <el-date-picker
           v-model="pick_date"
           type="date"
-          format="YYYY/MM/DD"
+          format="YYYY-MM-DD"
           value-format="YYYY-MM-DD"
           placeholder="选择消息接收截止日期"
-          @change="getddl"
+          @change="catchChange"
         />
         </div>
       </el-col>
