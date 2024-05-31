@@ -1,20 +1,33 @@
 import requestUtil from "@/util/request"
 import {dayjs} from "element-plus";
+import axios from 'axios';
+/*
+功能：生成消息并推送给指定用户
+使用方法：
+<script>
+import messageUtil from "@/util/message"
+
+const _functionname = async (_params) => {
+  await messageUtil.createMessage("whosend", userId, "title", "body")
+}
+ */
 export async function createMessage(send, receive, title, body){
-    const now = dayjs()
-    const send_date = now.format('YYYY-MM-DD')
-    const send_time = now.format('HH:mm:ss')
-    const message = new Map()
-    message.set('send', send)
-    message.set('receive', receive)
-    message.set('title', title)
-    message.set('body', body)
-    message.set('send_date', send_date)
-    message.set('send_time', send_time)
     await requestUtil.post('message/create', {
-        messagemap: message
+        send: send,
+        receive: receive,
+        title: title,
+        body: body
     })
 }
+
+export async function getUnreadMessageNumber(receive){
+    const rec = await requestUtil.get('message/unreadnumberselect', {
+        receive: receive
+    })
+    console.log(rec.data)
+    return rec.data
+}
 export default {
-    createMessage
+    createMessage,
+    getUnreadMessageNumber
 }

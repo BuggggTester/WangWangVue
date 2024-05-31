@@ -107,12 +107,14 @@ onMounted( async () => {
       </el-col>
     </el-row>
     <el-divider border-style="hidden" style="margin: 10px"/>
+    <ul v-infinite-scroll="load" style="overflow: auto">
       <el-row justify="space-around">
         <el-col :span="6"><p>标题</p></el-col>
         <el-col :span="3"><p>日期</p></el-col>
         <el-col :span="4"><p>发送者</p></el-col>
         <el-col :span="2"><p>状态</p></el-col>
       </el-row>
+    </ul>
     <el-divider style="margin: 6px"/>
     <ul v-infinite-scroll="load" style="overflow: auto">
       <li v-for="message in messages" class="infinite-list-item">
@@ -145,7 +147,7 @@ onMounted( async () => {
         <el-divider class="divider"/>
       </li>
     </ul>
-    <el-button @click="createTest">press to create a message</el-button>
+<!--    <el-button @click="createTest">press to create a message</el-button>-->
   </el-container>
 </template>
 
