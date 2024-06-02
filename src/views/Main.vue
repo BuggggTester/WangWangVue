@@ -114,6 +114,7 @@ const searchTrips = async () => {
   try{
     let result =await requestUtil.post('/trip/select/place/time',param);
     console.log(result.data);
+    router.push({path:'/ticket',query: param});
   }catch (e) {
     console.error(e);
   }

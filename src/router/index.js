@@ -11,6 +11,11 @@ const routes = [
           component: () => import('../views/Main'),
         },
         {
+            path: '/ticket',
+            name: 'TicketInfo',
+            component: ()=> import ('../views/TicketInfo.vue')
+        },
+        {
           path: '/user',
           name: 'User',
           component: () => import('../views/user/User.vue'),
@@ -53,6 +58,11 @@ const routes = [
                 component: () => import('../views/Message.vue'),
             }
         ]
+    },
+    {
+        path: '/ticketcard',
+        name: 'TicketCard',
+        component: ()=> import ('../views/TicketCard.vue')
     },
     {
       path: '/admin',
