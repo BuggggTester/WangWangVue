@@ -1,7 +1,11 @@
 <template>
 <!--  orders-->
   <div v-if="orders!= null" v-for="order in orders" :key="order.order_id">
-    <OrderCard :order="order"/>
+    <div style="display: flex">
+      <OrderCard :order="order"/>
+      <OrderCard :order="order" style="margin-left: 5%"/>
+    </div>
+
   </div>
   <div v-else class="no-trip-card">
     <NoOrder/>

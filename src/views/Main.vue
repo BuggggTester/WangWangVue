@@ -30,7 +30,7 @@
             <span class="demonstration">发车时间</span>
             <el-date-picker
                 v-model="startTime"
-                type="datetime"
+                type="date"
                 placeholder="选择发车时间"
                 :default-time="defaultTime"
                 style="padding-left: 5%; width: 56%;"

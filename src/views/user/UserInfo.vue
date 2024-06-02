@@ -31,16 +31,24 @@
                       :on-change="handleChange"
                       :http-request="customHttpRequest"
                       multiple
+                      drag
                       :limit="3"
                       :on-exceed="handleExceed"
                       :auto-upload="false">
-                    <el-button size="small" type="primary">点击上传</el-button>
-                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                    <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+                    <div class="el-upload__text">
+                      Drop file here or <em>click to upload</em>
+                    </div>
+                    <template #tip>
+                      <div class="el-upload__tip">
+                        jpg/png files with a size less than 500kb
+                      </div>
+                    </template>
                   </el-upload>
                   <template #footer>
                     <div class="dialog-footer">
                       <el-button @click="dialogVisible = false">取消更换</el-button>
-                      <el-button @click="" type="primary">确认更换</el-button>
+<!--                      <el-button @click="window.location.reload()" type="primary">确认更换</el-button>-->
                     </div>
                   </template>
                 </el-dialog>
@@ -113,6 +121,9 @@
           message: "上传成功！",
           type: "success"
         });
+        setTimeout(function() {
+          location.reload();
+        }, 500); // 1000毫秒等于1秒
       }catch (e) {
         ElMessage({
           message: "上传失败！",

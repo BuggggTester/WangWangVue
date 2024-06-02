@@ -2,7 +2,7 @@
   <el-card class="trip-card">
     <template #header>
       <div class="card-header">
-        <span><b>行程信息</b></span>
+        <span>订单日期：2024年5月1日</span>
       </div>
     </template>
 
@@ -72,49 +72,68 @@
 </template>
 <script>
 import requestUtil from "@/util/request";
-import {ElMessage} from "element-plus";
+import { ElMessage } from "element-plus";
+
 export default {
   props: {
     order: Object
   },
   setup(props) {
     const cancelOrder = async (order) => {
-      try{
+      try {
         let tripId = order.trip.trip_id;
         let userId = 1;
-        console.log(order)
-        console.log(tripId)
-        await requestUtil.get(`order/delete/${tripId}/${userId}`)
-        console.log('删除成功！')
+        console.log(order);
+        console.log(tripId);
+        await requestUtil.get(`order/delete/${tripId}/${userId}`);
+        console.log('删除成功！');
         ElMessage({
           message: '订单已取消！',
           type: 'success',
-        })
+        });
         setTimeout(() => {
           location.reload();
         }, 500);
-      }catch (e) {
-        console.log(e)
-        ElMessage.error('订单取消失败'+e)
+      } catch (e) {
+        console.log(e);
+        ElMessage.error('订单取消失败' + e);
       }
-    }
+    };
+
     const openModifyDialog = (order) => {
       order.dialogVisible2 = true;
-    }
+    };
+
     const closeModifyDialog = (order) => {
-      order.dialogVisible2 =false;
-      console.log(order.dialogVisible2)
-    }
+      order.dialogVisible2 = false;
+      console.log(order.dialogVisible2);
+    };
+
     const closeCancelDialog = (order) => {
       order.dialogVisible3 = false;
-      console.log(order.dialogVisible3)
-    }
+      console.log(order.dialogVisible3);
+    };
+
     const openCancelDialog = (order) => {
       order.dialogVisible3 = true;
-    }
-    const modifyOrder = (order) => {
+    };
 
-    }
+    const modifyOrder = (order) => {
+      // 在这里添加修改订单的逻辑
+    };
+
+    return {
+      cancelOrder,
+      openModifyDialog,
+      closeModifyDialog,
+      closeCancelDialog,
+      openCancelDialog,
+      modifyOrder
+    };
+  },
+
+  methods: {
+    // 这里可以添加其他需要的方法
   }
 }
 </script>
