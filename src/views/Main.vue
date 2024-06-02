@@ -1,12 +1,18 @@
 <template>
   <div style="align-items: center ">
-    <div style="width: 100%;height: 30%; background-color: #25a4bb;">
-    <el-carousel :interval="4000" height="300px">
-      <el-carousel-item v-for="(item, index) in images" :key="index">
-        <img :src="item.src" alt="carousel-image">
-      </el-carousel-item>
-    </el-carousel>
+    <div class="container">
+      <div class="carousel-container">
+        <!-- 这里放置走马灯的代码 -->
+        <div style="width: 100%;height: 30%;">
+          <el-carousel :interval="4000" height="300px">
+            <el-carousel-item v-for="(item, index) in images" :key="index">
+              <img :src="item.src" alt="carousel-image">
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+      </div>
       <div class="overlay">
+        <!-- 这里放置overlay的代码 -->
         <el-tabs :tab-position="tabPosition" v-model="searchType" style="height: 100%" class="demo-tabs" type="border-card">
           <el-tab-pane label="车票" name="first">
             <div class="component">
@@ -41,7 +47,6 @@
               <el-checkbox v-model="checked1" label="学生" size="large" />
               <el-button type="primary" @click="searchTrips" style="margin-left: 20px">查询</el-button>
             </div>
-
           </el-tab-pane>
           <el-tab-pane label="常用查询" name="second"></el-tab-pane>
           <el-tab-pane label="订餐" name="third">订餐</el-tab-pane>
