@@ -1,6 +1,6 @@
 <template>
 <!--  orders-->
-  <div v-if="orders!= null" v-for="order in orders" :key="order.order_id">
+  <div v-if="orders.length > 0 " v-for="order in orders" :key="order.order_id">
     <div style="display: flex">
       <OrderCard :order="order"/>
       <OrderCard :order="order" style="margin-left: 5%"/>
@@ -16,6 +16,7 @@ import { onMounted, ref, reactive } from 'vue'
 import requestUtil from "@/util/request";
 import { ElMessage } from 'element-plus'
 import cookieUtil from "@/util/cookie"
+import NoOrder from "@/views/NoOrder.vue"
 import OrderCard from "@/views/OrderCard.vue"
 const orders = ref([]); // 所有订单
 const userId = cookieUtil.getCookie("userId");
@@ -26,6 +27,7 @@ onMounted(async () => {
   orders.value = results.data;
   console.log(results);
   console.log(orders);
+  console.log(orders.value.length);
   orders.value.forEach(order => {
     order.dialogVisible3 = false;
   });
