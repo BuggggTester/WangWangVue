@@ -9,21 +9,10 @@
                 <el-avatar :size="200"
                            class="avatar"
                            :src="requestUtil.getServerUrl()+userInfo.avatar"
-                           @click="dialogVisible = true"></el-avatar>
+                           @click="dialogVisible = true"/>
+                <div style="font-size: 20px;margin-top: 15px; cursor: pointer; color: #25a4bb;" @click="dialogVisible = true">点此处或图片更换头像</div>
                 <el-dialog v-model="dialogVisible"
                            title="更换头像">
-<!--                  <el-upload-->
-<!--                      class="avatar-uploader"-->
-<!--                      action="http://localhost:1145/user/update/avatar"-->
-<!--                      :show-file-list="false"-->
-<!--                      :on-change="handleChange"-->
-<!--                      :on-success="handleAvatarSuccess"-->
-<!--                      :before-upload="beforeAvatarUpload"-->
-<!--                  >-->
-<!--                    <img v-if="imageUrl" :src="imageUrl" class="avatar" />-->
-<!--                    <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>-->
-<!--                    <el-button>点击上传</el-button>-->
-<!--                  </el-upload>-->
                   <el-upload
                       class="upload-demo"
                       action="http://localhost:1145/user/update/avatar"
@@ -43,7 +32,6 @@
                   <template #footer>
                     <div class="dialog-footer">
                       <el-button @click="dialogVisible = false">取消更换</el-button>
-<!--                      <el-button @click="window.location.reload()" type="primary">确认更换</el-button>-->
                     </div>
                   </template>
                 </el-dialog>
