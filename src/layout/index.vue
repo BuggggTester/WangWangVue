@@ -19,8 +19,21 @@ import Footer from '@/layout/footer'
 import Tabs from '@/layout/tabs'
 import {onMounted} from "vue";
 import router from "@/router";
+import cookieUtil from "@/util/cookie";
+import {ElMessage} from "element-plus";
 
-
+onMounted(()=> {
+  console.log(cookieUtil.getCookie("ifLogin"));
+  // console.log(cookieUtil.getCookie("ifLogin") === "false");
+  if(cookieUtil.getCookie("ifLogin") === "false"){
+    console.log(cookieUtil.getCookie("ifLogin"));
+    ElMessage({
+      message: "请先登录！",
+      type: "warning"
+    });
+    router.push('/login');
+  }
+})
 
 </script>
 

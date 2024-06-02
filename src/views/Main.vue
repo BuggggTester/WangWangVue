@@ -1,51 +1,54 @@
 <template>
-  <div style="align-items: center">
+  <div style="align-items: center ">
+    <div style="width: 100%;height: 30%; background-color: #25a4bb;">
     <el-carousel :interval="4000" height="300px">
       <el-carousel-item v-for="(item, index) in images" :key="index">
         <img :src="item.src" alt="carousel-image">
       </el-carousel-item>
     </el-carousel>
-    <div class="overlay">
-      <el-tabs :tab-position="tabPosition" v-model="searchType" style="height: 100%" class="demo-tabs" type="border-card">
-        <el-tab-pane label="车票" name="first">
-          <div class="component">
-            <span class="demonstration">出发地</span>
-            <el-cascader
-                size="medium"
-                style="width: 65%; padding-left: 7%"
-                :options="pcTextArr"
-                v-model="departureOption">
-            </el-cascader>
+      <div class="overlay">
+        <el-tabs :tab-position="tabPosition" v-model="searchType" style="height: 100%" class="demo-tabs" type="border-card">
+          <el-tab-pane label="车票" name="first">
+            <div class="component">
+              <span class="demonstration">出发地</span>
+              <el-cascader
+                  size="medium"
+                  style="width: 65%; padding-left: 7%"
+                  :options="pcTextArr"
+                  v-model="departureOption">
+              </el-cascader>
             </div>
-          <div class="component">
-            <span class="demonstration">目的地</span>
-            <el-cascader
-                size="medium"
-                style="width: 65%; padding-left: 7%"
-                :options="pcTextArr"
-                v-model="selectedOption">
-            </el-cascader>
-          </div>
-          <div class="component">
-            <span class="demonstration">发车时间</span>
-            <el-date-picker
-                v-model="startTime"
-                type="datetime"
-                placeholder="选择发车时间"
-                :default-time="defaultTime"
-                style="padding-left: 5%; width: 56%;"
-            />
-          </div>
+            <div class="component">
+              <span class="demonstration">目的地</span>
+              <el-cascader
+                  size="medium"
+                  style="width: 65%; padding-left: 7%"
+                  :options="pcTextArr"
+                  v-model="selectedOption">
+              </el-cascader>
+            </div>
+            <div class="component">
+              <span class="demonstration">发车时间</span>
+              <el-date-picker
+                  v-model="startTime"
+                  type="date"
+                  placeholder="选择发车时间"
+                  :default-time="defaultTime"
+                  style="padding-left: 5%; width: 56%;"
+              />
+            </div>
             <div class="component">
               <el-checkbox v-model="checked1" label="学生" size="large" />
-          <el-button type="primary" @click="searchTrips" style="margin-left: 20px">查询</el-button>
-          </div>
+              <el-button type="primary" @click="searchTrips" style="margin-left: 20px">查询</el-button>
+            </div>
 
-        </el-tab-pane>
-        <el-tab-pane label="常用查询" name="second"></el-tab-pane>
-        <el-tab-pane label="订餐" name="third">订餐</el-tab-pane>
-      </el-tabs>
+          </el-tab-pane>
+          <el-tab-pane label="常用查询" name="second"></el-tab-pane>
+          <el-tab-pane label="订餐" name="third">订餐</el-tab-pane>
+        </el-tabs>
+      </div>
     </div>
+
     <div class="suggestTrip">
       <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
         <el-tab-pane label="铁路旅游" name="first"></el-tab-pane>
@@ -72,6 +75,7 @@ import { useRouter } from 'vue-router'
 import requestUtil from '@/util/request'
 import timeUtil from '@/util/time'
 import cookieUtil from "@/util/cookie"
+import router from "@/router";
 const tabPosition = ref('left')
 const departureOption = ref([])
 const selectedOption = ref([])
@@ -95,7 +99,8 @@ onMounted(async() => {
     item.photo = requestUtil.getServerUrl() + item.photo;
   })
   console.log(travelInf.value);
-})
+});
+
 const searchTrips = async () => {
   let dplace = departureOption.value.at(0)+'/'+departureOption.value.at(1);
   let splace = selectedOption.value.at(0)+'/'+selectedOption.value.at(1);

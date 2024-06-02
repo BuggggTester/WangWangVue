@@ -2,6 +2,7 @@
 import {nextTick, onMounted, ref} from "vue"
 import requestUtil from "@/util/request"
 import cookieUtil from "@/util/cookie"
+import messageUtil from "@/util/message"
 import index from "vuex";
 let messages = ref([])
 
@@ -13,8 +14,14 @@ let unreadmessages = ref([])
 const load = () => {
   count.value += 10
 }
+const setRead = async (message_id) => {
+  console.log("set")
+  await requestUtil.put('/message/setread', {
+    message_id: message_id
+  })
+}
 const setAllRead = async () =>{
-  const rec = await requestUtil.get('/message/unreadselect', {
+  const rec = await requestUtil.get('message/unreadselect', {
     receive: cookieUtil.getCookie("userId")
   })
   unreadmessages.value = rec.data;
@@ -71,6 +78,9 @@ const catchChange = async () => {
     }
   }
 }
+const createTest = async () => {
+  await messageUtil.createMessage("Crow_D", 1, "推送测试", "test")
+}
 onMounted( async () => {
   await getAllMessages()
 })
@@ -97,20 +107,22 @@ onMounted( async () => {
       </el-col>
     </el-row>
     <el-divider border-style="hidden" style="margin: 10px"/>
+    <ul v-infinite-scroll="load" style="overflow: auto">
       <el-row justify="space-around">
         <el-col :span="6"><p>标题</p></el-col>
         <el-col :span="3"><p>日期</p></el-col>
         <el-col :span="4"><p>发送者</p></el-col>
         <el-col :span="2"><p>状态</p></el-col>
       </el-row>
+    </ul>
     <el-divider style="margin: 6px"/>
     <ul v-infinite-scroll="load" style="overflow: auto">
       <li v-for="message in messages" class="infinite-list-item">
         <div v-if="message.ifread === false" class="message-row-unread">
           <el-row justify="space-around" class="message-row">
-            <el-popover v-bind="{content: message.body}" trigger="click">
+            <el-popover v-bind="{content: message.body}" trigger="click" >
               <template #reference>
-                <el-col :span="6"><p>{{message.title}}</p></el-col>
+                <el-col :span="6" @click="setRead(message.message_id)"><p>{{message.title}}</p></el-col>
               </template>
             </el-popover>
             <el-col :span="3"><p>{{message.send_date}}</p></el-col>
@@ -123,7 +135,7 @@ onMounted( async () => {
           <el-row justify="space-around" class="message-row">
             <el-popover v-bind="{content: message.body}" trigger="click">
               <template #reference>
-                <el-col :span="6"><p>{{message.title}}</p></el-col>
+                <el-col :span="6" @click="setRead(message.message_id)"><p>{{message.title}}</p></el-col>
               </template>
 
             </el-popover>
@@ -135,6 +147,7 @@ onMounted( async () => {
         <el-divider class="divider"/>
       </li>
     </ul>
+    <el-button @click="createTest">press to create a message</el-button>
   </el-container>
 </template>
 
@@ -163,7 +176,7 @@ onMounted( async () => {
 }
 .message-row-unread {
   background-color: rgba(137, 193, 246, 0.44);
-  border-radius:50px;
+  border-radius:10px;
   margin-top: 5px;
   height: 30px !important;
   overflow:hidden !important;

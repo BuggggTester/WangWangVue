@@ -69,6 +69,7 @@ create table messages (
                           body text,
                           ifread bool not null default false,
                           send_date date NOT NULL DEFAULT '1990-01-01',
+                          send_time time NOT NULL DEFAULT '00:00:00',
                           constraint user_key foreign key (receive) references users(user_id)
 )
 
