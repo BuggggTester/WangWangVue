@@ -10,6 +10,16 @@ const routes = [
           name: 'Main',
           component: () => import('../views/Main'),
         },
+            {
+                path: '/search/hotel',
+                name: 'HotelSearch',
+                component: () => import('../views/Hotel/SearchHotel.vue')
+            },
+            {
+                path: '/testRoom',
+                name: 'HotelDetail',
+                component: () => import('../views/Hotel/HotelDetails.vue')
+            },
         {
             path: '/ticket',
             name: 'TicketInfo',
@@ -108,7 +118,19 @@ const routes = [
         path: '/:pathMatch(.*)*',
         name: '404',
         component: () => import('../views/404.vue')
-    }
+    },
+    {
+        path: '/testHotel',
+        name: 'HotelSearch',
+        component: () => import('../views/Hotel/SearchHotel.vue')
+    },
+    {
+        path: '/testRoom',
+        name: 'HotelDetail',
+        component: () => import('../views/Hotel/HotelDetails.vue')
+    },
+
+
 ]
 
 const router = createRouter({
