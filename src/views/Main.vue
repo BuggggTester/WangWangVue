@@ -1,59 +1,67 @@
 <template>
-  <div style="align-items: center">
-    <el-carousel :interval="4000" height="300px">
-      <el-carousel-item v-for="(item, index) in images" :key="index">
-        <img :src="item.src" alt="carousel-image">
-      </el-carousel-item>
-    </el-carousel>
-    <div class="overlay">
-      <el-tabs :tab-position="tabPosition" v-model="searchType" style="height: 100%" class="demo-tabs" type="border-card">
-        <el-tab-pane label="车票" name="first">
-          <div class="component">
-            <span class="demonstration">出发地</span>
-            <el-cascader
-                size="medium"
-                style="width: 65%; padding-left: 7%"
-                :options="pcTextArr"
-                v-model="departureOption">
-            </el-cascader>
+  <div style="align-items: center ">
+    <div class="container">
+      <div class="carousel-container">
+        <!-- 这里放置走马灯的代码 -->
+        <div style="width: 100%;height: 30%;">
+          <el-carousel :interval="4000" height="300px">
+            <el-carousel-item v-for="(item, index) in images" :key="index">
+              <img :src="item.src" alt="carousel-image">
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+      </div>
+      <div class="overlay">
+        <!-- 这里放置overlay的代码 -->
+        <el-tabs :tab-position="tabPosition" v-model="searchType" style="height: 100%" class="demo-tabs" type="border-card">
+          <el-tab-pane label="车票" name="first">
+            <div class="component">
+              <span class="demonstration">出发地</span>
+              <el-cascader
+                  size="medium"
+                  style="width: 65%; padding-left: 7%"
+                  :options="pcTextArr"
+                  v-model="departureOption">
+              </el-cascader>
             </div>
-          <div class="component">
-            <span class="demonstration">目的地</span>
-            <el-cascader
-                size="medium"
-                style="width: 65%; padding-left: 7%"
-                :options="pcTextArr"
-                v-model="selectedOption">
-            </el-cascader>
-          </div>
-          <div class="component">
-            <span class="demonstration">发车时间</span>
-            <el-date-picker
-                v-model="startTime"
-                type="datetime"
-                placeholder="选择发车时间"
-                :default-time="defaultTime"
-                style="padding-left: 5%; width: 56%;"
-            />
-          </div>
+            <div class="component">
+              <span class="demonstration">目的地</span>
+              <el-cascader
+                  size="medium"
+                  style="width: 65%; padding-left: 7%"
+                  :options="pcTextArr"
+                  v-model="selectedOption">
+              </el-cascader>
+            </div>
+            <div class="component">
+              <span class="demonstration">发车时间</span>
+              <el-date-picker
+                  v-model="startTime"
+                  type="date"
+                  placeholder="选择发车时间"
+                  :default-time="defaultTime"
+                  style="padding-left: 5%; width: 56%;"
+              />
+            </div>
             <div class="component">
               <el-checkbox v-model="checked1" label="学生" size="large" />
-          <el-button type="primary" @click="searchTrips" style="margin-left: 20px">查询</el-button>
-          </div>
-
-        </el-tab-pane>
-        <el-tab-pane label="常用查询" name="second"></el-tab-pane>
-        <el-tab-pane label="订餐" name="third">订餐</el-tab-pane>
-      </el-tabs>
+              <el-button type="primary" @click="searchTrips" style="margin-left: 20px">查询</el-button>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="常用查询" name="second"></el-tab-pane>
+          <el-tab-pane label="订餐" name="third">订餐</el-tab-pane>
+        </el-tabs>
+      </div>
     </div>
+
     <div class="suggestTrip">
       <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
         <el-tab-pane label="铁路旅游" name="first"></el-tab-pane>
       </el-tabs>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="(trip, index) in travelInfo" :key="index">
+        <el-col :span="6" v-for="(trip, index) in travelInf" :key="index">
           <el-card style="max-width: 480px">
-            <img :src="trip.image" style="width: 100%" class="card-image" />
+            <img :src="trip.photo" style="width: 100%" class="card-image" />
             <template #footer>{{ trip.title }}</template>
           </el-card>
         </el-col>
@@ -72,6 +80,8 @@ import { useRouter } from 'vue-router'
 import requestUtil from '@/util/request'
 import timeUtil from '@/util/time'
 import cookieUtil from "@/util/cookie"
+import router from "@/router";
+import {ElMessage} from "element-plus";
 const tabPosition = ref('left')
 const departureOption = ref([])
 const selectedOption = ref([])
@@ -85,43 +95,17 @@ const images = [
   { src: require('@/assets/images/carousel/image3.png') },
   { src: require('@/assets/images/carousel/image4.png') },
 ]
-// const travelInfo = ref([]);
-// requestUtil.get('/travel/selectall')
-//     .then(travelInfoGet => {
-//       // 在这里处理travelInfoGet的值
-//       console.log(travelInfoGet);
-//       travelInfo.value = travelInfoGet.data.map(item => ({
-//         image: item.photo,
-//         title: item.title
-//       }));
-//       console.log(travelInfo);
-//     })
-//     .catch(error => {
-//       // 处理可能的错误
-//       console.error('An error occurred:', error);
-//     });
-const travelInfo = [
-  {
-    title: '“环西部火车游”高品质旅游办专线列车',
-    image: require('@/assets/images/suggestTrips/card1.png')
-  },
-  {
-    title: '“环西部火车游”陇上江南-行摄山',
-    image: require('@/assets/images/suggestTrips/card2.png')
-  },
-  {
-    title: '“环西部火车游”华夏寻根·人文始祖',
-    image: require('@/assets/images/suggestTrips/card3.png')
-  },
-  {
-    title: '“环西部火车游”精品旅游线路',
-    image: require('@/assets/images/suggestTrips/card4.png')
-  }
-]
-console.log(travelInfo);
-
-const activeName = ref('first')
-
+const activeName = ref('first');
+const travelInf = ref([]);
+onMounted(async() => {
+  const res = await requestUtil.get('/travel/selectall');
+  console.log(res);
+  travelInf.value = res.data;
+  travelInf.value.forEach(item=>{
+    item.photo = requestUtil.getServerUrl() + item.photo;
+  })
+  console.log(travelInf.value);
+});
 
 const searchTrips = async () => {
   let dplace = departureOption.value.at(0)+'/'+departureOption.value.at(1);
@@ -130,6 +114,7 @@ const searchTrips = async () => {
   console.log(splace);
   let time = timeUtil.formatDate(startTime.value);
   console.log(time);
+
   let param = {
     "fromPlace": dplace,
     "toPlace": splace,
@@ -139,6 +124,7 @@ const searchTrips = async () => {
   try{
     let result =await requestUtil.post('/trip/select/place/time',param);
     console.log(result.data);
+    await router.push({path: '/ticket', query: param});
   }catch (e) {
     console.error(e);
   }

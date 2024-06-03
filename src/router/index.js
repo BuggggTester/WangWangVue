@@ -10,6 +10,21 @@ const routes = [
           name: 'Main',
           component: () => import('../views/Main'),
         },
+            {
+                path: '/search/hotel',
+                name: 'HotelSearch',
+                component: () => import('../views/Hotel/SearchHotel.vue')
+            },
+            {
+                path: '/testRoom',
+                name: 'HotelDetail',
+                component: () => import('../views/Hotel/HotelDetails.vue')
+            },
+        {
+            path: '/ticket',
+            name: 'TicketInfo',
+            component: ()=> import ('../views/TicketInfo.vue')
+        },
         {
           path: '/user',
           name: 'User',
@@ -28,8 +43,13 @@ const routes = [
               component: () => import('../views/user/Unfinished.vue'),
         },
           ]
-        }
-        ,{
+        },
+        {
+                path: '/userinfo',
+                name: 'Information',
+                component: () => import('../views/user/UserInfo.vue'),
+        },
+        {
             path: '/manage/trips',
             name: 'CreateTrip',
             component: () => import('../views/manager/CreateTrip.vue'),
@@ -48,6 +68,11 @@ const routes = [
                 component: () => import('../views/Message.vue'),
             }
         ]
+    },
+    {
+        path: '/ticketcard',
+        name: 'TicketCard',
+        component: ()=> import ('../views/TicketCard.vue')
     },
     {
       path: '/admin',
@@ -88,7 +113,19 @@ const routes = [
         path: '/:pathMatch(.*)*',
         name: '404',
         component: () => import('../views/404.vue')
-    }
+    },
+    {
+        path: '/testHotel',
+        name: 'HotelSearch',
+        component: () => import('../views/Hotel/SearchHotel.vue')
+    },
+    {
+        path: '/testRoom',
+        name: 'HotelDetail',
+        component: () => import('../views/Hotel/HotelDetails.vue')
+    },
+
+
 ]
 
 const router = createRouter({

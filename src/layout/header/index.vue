@@ -10,7 +10,7 @@
       <div>
         <el-input
             v-model="input"
-            style="width: 480px;"
+            style="width: 25%;"
             placeholder="请输入查询内容"
             clearable
         />
@@ -42,7 +42,7 @@
     </el-col>
     <el-col :span="2" :offset="1">
       <div>
-      <img src="../../assets/images/head.png" alt="头像" style="height: 50px; margin-right: 10px;"/>
+        <el-avatar :src="getServerUrl()+userInfo.avatar" @click="router.push('/userinfo')"/>
       </div>
     </el-col>
   </el-row>
@@ -56,9 +56,13 @@ const input = ref('')
 import { useRouter } from 'vue-router'
 import cookieUtil from "@/util/cookie"
 import {ElMessage} from "element-plus";
+import {getServerUrl} from "@/util/request";
+import requestUtil from "@/util/request";
 const router = useRouter()
 const user = cookieUtil.getCookie("userName")
-
+const avatarUrl = ref('');
+const userInfo = ref([]);
+console.log(avatarUrl);
 onMounted(()=> {
   if(user === ""){
     ElMessage({
@@ -70,6 +74,13 @@ onMounted(()=> {
     },1000);
   }
 })
+onMounted(async()=> {
+  const res = await requestUtil.get("/user/select/userId",{
+    userId: cookieUtil.getCookie("userId")
+  })
+  userInfo.value = res.data;
+  console.log(res);
+})
 
 let dialogVisible = ref(false)
 const goHome = () =>{
@@ -77,7 +88,15 @@ const goHome = () =>{
 }
 const quit = () =>{
   try{
-    cookieUtil.deleteCookie("userName");
+    const rememberMe = cookieUtil.getCookie("rememberMe");
+    if(!rememberMe) {
+      //如果登录选择不记住密码，则清除cookie
+      cookieUtil.deleteCookie("userName");
+      cookieUtil.deleteCookie("userId");
+      cookieUtil.deleteCookie("password");
+      cookieUtil.deleteCookie("avatar");
+    }
+    cookieUtil.setCookie("ifLogin", false, 3600);
     dialogVisible = false;
     ElMessage({
       message: "退出成功！",
