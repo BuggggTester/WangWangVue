@@ -12,7 +12,7 @@
         <div class="availability">有票</div>
         </div>
     </el-card> -->
-    <el-card class="ticket-card" shadow="dark">
+    <el-card class="ticket-card" shadow="dark" @click="dialogVisible = true">
       <div class="ticket-info">
         <el-row class="component">
           <el-col :span="6" class="ticket-time">07:00</el-col>
@@ -49,17 +49,37 @@
         </el-row>
       </template>
   </el-card>
+  <el-dialog v-model="dialogVisible"
+             title="火车票订购">
+  <template #footer>
+    <el-button type="default" @click="dialogVisible=false">返回</el-button>
+    <el-button type="primary" @click="">购买</el-button>
+  </template>
+  </el-dialog>
+
   </template>
   
   <script>
+  import {ref} from "vue";
+  import router from "@/router";
+
   export default {
     name: 'TicketCard',
-    props: {
-      ticket: {
-        type: Object,
-        required: true
+    methods: {
+      router() {
+        return router
       }
-    }
+    },
+    props: {
+      ticket: Object,
+    },
+    setup(props) {
+      const dialogVisible = ref(false);
+      return {
+        dialogVisible
+      }
+    },
+
   }
   </script>
   
