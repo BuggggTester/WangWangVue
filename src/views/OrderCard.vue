@@ -7,25 +7,20 @@
     </template>
 
     <div class="trip-info">
-      <!--      <div><b>车次：{{ order.trip.train_id }}</b></div>-->
-      <!--      <div><b>起始站：{{ order.trip.from_place }}</b></div>-->
-      <!--      <div><b>终点站：{{ order.trip.to_place }}</b></div>-->
-      <!--      <div><b>发车时间：{{ order.trip.start_time }}</b></div>-->
-      <!--      <div><b>座位：{{ order.row }}排 {{ order.seat }} 座</b></div>-->
       <el-row class="component">
-        <el-col :span="6" class="trip-time">07:00</el-col>
+        <el-col :span="6" class="trip-time">{{ order.trip.start_time }}</el-col>
         <el-col :span="6" class="trip-no">
           <div class="underline-container">
-            <span class="underline-text">G87</span>
+            <span class="underline-text">{{ order.trip.train_id }}</span>
           </div>
         </el-col>
-        <el-col :span="6" class="trip-time">12:00</el-col>
-        <el-col :span="6" class="trip-price">￥622</el-col>
+        <el-col :span="6" class="trip-time">{{ order.trip.end_time }}</el-col>
+        <el-col :span="6" class="trip-price">￥{{ order.payment }}</el-col>
       </el-row>
       <el-row class="component">
-        <el-col :span="6" class="trip-place">北京西</el-col>
-        <el-col :span="6" class="time">10时30分</el-col>
-        <el-col :span="6" class="trip-place">成都东</el-col>
+        <el-col :span="6" class="trip-place">{{ order.from_place }}</el-col>
+<!--        <el-col :span="6" class="time">10时30分</el-col>-->
+        <el-col :span="6" :offset="6" class="trip-place">{{ order.to_place }}</el-col>
       </el-row>
     </div>
     <template #footer>
@@ -81,11 +76,11 @@ export default {
   setup(props) {
     const cancelOrder = async (order) => {
       try {
-        let tripId = order.trip.trip_id;
+        let orderId = order.order_id;
         let userId = 1;
         console.log(order);
         console.log(tripId);
-        await requestUtil.get(`order/delete/${tripId}/${userId}`);
+        await requestUtil.get(`order/delete/${orderId}/${userId}`);
         console.log('删除成功！');
         ElMessage({
           message: '订单已取消！',

@@ -18,6 +18,7 @@ import { ElMessage } from 'element-plus'
 import cookieUtil from "@/util/cookie"
 import NoOrder from "@/views/NoOrder.vue"
 import OrderCard from "@/views/OrderCard.vue"
+import {stampToTime} from "@/util/time";
 const orders = ref([]); // 所有订单
 const userId = cookieUtil.getCookie("userId");
 
@@ -30,6 +31,8 @@ onMounted(async () => {
   console.log(orders.value.length);
   orders.value.forEach(order => {
     order.dialogVisible3 = false;
+    order.trip.start_time = stampToTime(order.trip.start_time);
+    order.trip.end_time = stampToTime(order.trip.end_time);
   });
 })
 onMounted(()=> {
