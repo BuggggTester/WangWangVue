@@ -1,4 +1,5 @@
 <template>
+  <div @click="goToTicketDetail">
     <el-card class="ticket-card" shadow="dark">
     <div class="ticket-info">
       <el-row class="component">
@@ -37,21 +38,28 @@
       </el-row>
     </template>
   </el-card>
-  </template>
+  </div>
+</template>
   
-  <script setup>
+<script setup>
   import { defineProps } from 'vue';
+  import { useRouter } from 'vue-router';
+  const router = useRouter();
   const props = defineProps({
     ticket: {
       type: Object,
       required: true
     }
   });
-  </script>
+  const goToTicketDetail = () => {
+    //console.log(ticket);
+    router.push('/TicketDetail');
+  }
+</script>
   
-  <style scoped>
+<style scoped>
   .ticket-card {
-    width: 45%;
+    width: 95%;
     border-radius: 4px;
   }
   
@@ -121,7 +129,7 @@
   }
 
   @import "@/assets/css/card-order.css";
-  </style>
+</style>
 
 
   

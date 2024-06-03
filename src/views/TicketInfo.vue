@@ -5,7 +5,12 @@
         </template>
     </el-page-header>
 
-    <TicketCard v-for="(ticket, index) in tickets" :key="index" :ticket="ticket" />
+    <!-- <TicketCard v-for="(ticket, index) in tickets" :key="index" :ticket="ticket" /> -->
+    <el-row>
+        <el-col :span="12" v-for="(ticket, index) in tickets" :key="index">
+        <TicketCard :ticket="ticket" />
+        </el-col>
+    </el-row>
 </template>
 
 <script setup>
@@ -29,7 +34,81 @@
         firstClass: "10张",
         business: "10张"
     },
-    // 添加更多票证数据
+    {
+        trainNumber: "G483",
+        departureTime: "08:00",
+        arrivalTime: "15:30",
+        departure: "上海",
+        destination: "广州",
+        price: "¥250起",
+        duration: "7小时30分",
+        available: false,
+        departureHighlight: true,
+        arrivalHighlight: true,
+        secondClass: "5张",
+        firstClass: "0张",
+        business: "0张"
+    },
+    {
+        trainNumber: "D123",
+        departureTime: "08:00",
+        arrivalTime: "15:30",
+        departure: "上海",
+        destination: "广州",
+        price: "¥250起",
+        duration: "7小时30分",
+        available: false,
+        departureHighlight: true,
+        arrivalHighlight: true,
+        secondClass: "5张",
+        firstClass: "0张",
+        business: "0张"
+    },
+    {
+        trainNumber: "D123",
+        departureTime: "08:00",
+        arrivalTime: "15:30",
+        departure: "学院路",
+        destination: "沙河",
+        price: "¥10起",
+        duration: "7小时30分",
+        available: false,
+        departureHighlight: true,
+        arrivalHighlight: true,
+        secondClass: "5张",
+        firstClass: "0张",
+        business: "0张"
+    },
+    {
+        trainNumber: "D123",
+        departureTime: "08:00",
+        arrivalTime: "15:30",
+        departure: "沙河",
+        destination: "学院路",
+        price: "¥10起",
+        duration: "7小时30分",
+        available: false,
+        departureHighlight: true,
+        arrivalHighlight: true,
+        secondClass: "5张",
+        firstClass: "0张",
+        business: "0张"
+    },
+    {
+        trainNumber: "D123",
+        departureTime: "08:00",
+        arrivalTime: "15:30",
+        departure: "上海",
+        destination: "广州",
+        price: "¥250起",
+        duration: "7小时30分",
+        available: false,
+        departureHighlight: true,
+        arrivalHighlight: true,
+        secondClass: "5张",
+        firstClass: "0张",
+        business: "0张"
+    },
     ];
 
 </script>
