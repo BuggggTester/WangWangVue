@@ -81,6 +81,7 @@ import requestUtil from '@/util/request'
 import timeUtil from '@/util/time'
 import cookieUtil from "@/util/cookie"
 import router from "@/router";
+import {ElMessage} from "element-plus";
 const tabPosition = ref('left')
 const departureOption = ref([])
 const selectedOption = ref([])
@@ -113,6 +114,7 @@ const searchTrips = async () => {
   console.log(splace);
   let time = timeUtil.formatDate(startTime.value);
   console.log(time);
+
   let param = {
     "fromPlace": dplace,
     "toPlace": splace,
@@ -122,7 +124,7 @@ const searchTrips = async () => {
   try{
     let result =await requestUtil.post('/trip/select/place/time',param);
     console.log(result.data);
-    router.push({path:'/ticket',query: param});
+    await router.push({path: '/ticket', query: param});
   }catch (e) {
     console.error(e);
   }

@@ -35,6 +35,19 @@
           <el-col :span="6" class="availability" >有票</el-col>
         </el-row>
     </div>
+      <template #footer>
+        <el-row>
+          <el-col :span="8">
+            <span style="align-items: center">二等：<span style="color:#42b983">10张</span></span>
+          </el-col>
+          <el-col :span="8">
+            <span style="align-items: center">一等：<span style="color:#42b983">10张</span></span>
+          </el-col>
+          <el-col :span="8">
+            <span style="align-items: center">商务：<span style="color:#42b983">10张</span></span>
+          </el-col>
+        </el-row>
+      </template>
   </el-card>
   </template>
   
@@ -109,13 +122,16 @@
   .highlight-orange-text {
     background-color: orange; 
     color: white; 
-    padding: 1px 4px; 
+    padding: 1px 4px;
+    border-radius: 5px;
   }
 
   .highlight-green-text {
     background-color: green; 
     color: white; 
-    padding: 1px 4px; 
+    padding: 1px 4px;
+    border-radius: 5px;
+
   }
 
   @import "@/assets/css/card-order.css";

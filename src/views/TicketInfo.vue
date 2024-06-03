@@ -1,5 +1,5 @@
 <template>
-    <el-page-header :icon="ArrowLeft">
+    <el-page-header :icon="ArrowLeft" @back="$router.push('/main')">
         <template #content>
             <span class="head-trip-info">{{ $route.query.fromPlace }} - {{ $route.query.toPlace }}</span>
         </template>
@@ -8,6 +8,7 @@
 
 <script setup>
     import { ArrowLeft } from '@element-plus/icons-vue'
+    import router from "@/router";
 </script>
 
 <style scoped>

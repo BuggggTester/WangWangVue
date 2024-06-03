@@ -29,8 +29,8 @@
 .underline-container::after {
     content: "";
     position: absolute;
-    left: -300%; /* 左侧超出文本部分的长度 */
-    right: -300%; /* 右侧超出文本部分的长度 */
+    left: -250%; /* 左侧超出文本部分的长度 */
+    right: -250%; /* 右侧超出文本部分的长度 */
     bottom: -10px; /* 控制下划线距离文本的位置 */
     height: 1px; /* 下划线的高度 */
     background-color: darkgray; /* 下划线颜色 */
