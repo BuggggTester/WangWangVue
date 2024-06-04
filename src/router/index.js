@@ -9,6 +9,10 @@ const routes = [
           path: '/main',
           name: 'Main',
           component: () => import('../views/Main'),
+        },{
+          path: '/hotelOrderInfo',
+          name: 'HotelInfo',
+          component: ()=> import('../views/HotelOrderInfo.vue')
         },
             {
                 path: '/search/hotel',
@@ -41,7 +45,11 @@ const routes = [
               path: '/user/unfinished',
               name: 'Unfinished',
               component: () => import('../views/user/Unfinished.vue'),
-        },
+        },{
+              path: '/user/hotelorders',
+              name: "HotelOrders",
+              component: ()=> import('../views/user/HotelOrders.vue'),
+        }
           ]
         },
         {

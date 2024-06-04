@@ -10,6 +10,7 @@
           </el-tab-pane>
           <el-tab-pane label="历史订单" name="third" index="3" @tab-click="showMyOrders">
           </el-tab-pane>
+          <el-tab-pane label="酒店订单" name="fourth" index="4" @tab-click="showHotelOrders"/>
         </el-tabs>
       </el-header>
       <el-main><router-view/></el-main>
@@ -27,6 +28,9 @@ const activeName = ref('first'); // 默认选中的选项卡名称
 const router = useRouter();
 const dialogVisible = ref(false);
 const orders = ref([]);
+const showHotelOrders = async() => {
+  await router.push('/user/hotelOrders');
+}
 const showMyOrders = async () =>{
   await router.push('/user/orders')
 }
@@ -62,6 +66,9 @@ watch(activeName, (newVal, oldVal) => {
       break;
     case 'third':
       showMyOrders();
+      break;
+    case 'fourth':
+      showHotelOrders();
       break;
     default:
       break;
