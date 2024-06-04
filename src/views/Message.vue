@@ -7,6 +7,7 @@ import index from "vuex";
 let messages = ref([])
 
 const onlyunread = ref(false)
+let dialogVisible = ref([])
 const pick_date = ref('')
 const size = ref('default')
 const count = ref(0)
@@ -14,11 +15,21 @@ let unreadmessages = ref([])
 const load = () => {
   count.value += 10
 }
-const setRead = async (message_id) => {
+const setRead = async (message) => {
   console.log("set")
+
   await requestUtil.put('/message/setread', {
-    message_id: message_id
+    message_id: message.message_id
   })
+  let i = messages.value.indexOf(message)
+  messages.value[i].ifread = true
+}
+const resetDialogState = (messages) => {
+  dialogVisible = ref([])
+  let number = messages.value.length
+  for(let i = 0; i < number; i ++){
+    dialogVisible.value.push(false)
+  }
 }
 const setAllRead = async () =>{
   const rec = await requestUtil.get('message/unreadselect', {
@@ -39,7 +50,7 @@ const getAllMessages = async () => {
     receive: cookieUtil.getCookie("userId")
   })
   messages.value = rec.data
-  // console.log(messages.value)
+  console.log(messages.value)
 }
 const getUnreadMessages = async () => {
   const rec = await requestUtil.get('message/unreadselect',{
@@ -77,6 +88,7 @@ const catchChange = async () => {
       await getUnreadMessagesByDate()
     }
   }
+  resetDialogState(messages)
 }
 const createTest = async () => {
   await messageUtil.createMessage("Crow_D", 1, "推送测试", "test")
@@ -84,7 +96,6 @@ const createTest = async () => {
 onMounted( async () => {
   await getAllMessages()
 })
-
 </script>
 
 <template>
@@ -107,41 +118,35 @@ onMounted( async () => {
       </el-col>
     </el-row>
     <el-divider border-style="hidden" style="margin: 10px"/>
-    <ul v-infinite-scroll="load" style="overflow: auto">
       <el-row justify="space-around">
         <el-col :span="6"><p>标题</p></el-col>
-        <el-col :span="3"><p>日期</p></el-col>
-        <el-col :span="4"><p>发送者</p></el-col>
+        <el-col :span="4"><p>日期</p></el-col>
+        <el-col :span="3"><p>发送者</p></el-col>
         <el-col :span="2"><p>状态</p></el-col>
       </el-row>
-    </ul>
-    <el-divider style="margin: 6px"/>
+    <el-divider style="margin: 5px"/>
     <ul v-infinite-scroll="load" style="overflow: auto">
       <li v-for="message in messages" class="infinite-list-item">
-        <div v-if="message.ifread === false" class="message-row-unread">
+        <div :class="[message.ifread ? 'message-row-read' : 'message-row-unread']">
           <el-row justify="space-around" class="message-row">
-            <el-popover v-bind="{content: message.body}" trigger="click" >
-              <template #reference>
-                <el-col :span="6" @click="setRead(message.message_id)"><p>{{message.title}}</p></el-col>
-              </template>
-            </el-popover>
-            <el-col :span="3"><p>{{message.send_date}}</p></el-col>
-            <el-col :span="4"><p>{{message.send}}</p></el-col>
-            <el-col :span="2" v-if="message.ifread === false"><p>未读</p></el-col>
-          </el-row>
-        </div>
-
-        <div v-else class="message-row-read">
-          <el-row justify="space-around" class="message-row">
-            <el-popover v-bind="{content: message.body}" trigger="click">
-              <template #reference>
-                <el-col :span="6" @click="setRead(message.message_id)"><p>{{message.title}}</p></el-col>
-              </template>
-
-            </el-popover>
-            <el-col :span="3"><p>{{message.send_date}}</p></el-col>
-            <el-col :span="4"><p>{{message.send}}</p></el-col>
+            <el-col :span="6">
+              <el-button plain size="small"@click="dialogVisible[messages.indexOf(message)] = true; setRead(message)">
+                {{ message.title }}
+              </el-button>
+              <el-dialog
+                  v-model="dialogVisible[messages.indexOf(message)]"
+                  :title="message.title"
+                  width="500"
+              >
+                <span class="mainbody">{{ message.body }}</span>
+                <el-divider direction="hidden" style="margin: 10px"/>
+                <span class="foot">发送时间：{{message.send_date}} {{ message.send_time }}</span>
+              </el-dialog>
+            </el-col>
+            <el-col :span="5"><p>&emsp;&emsp;{{message.send_date}}</p></el-col>
+            <el-col :span="4"><p>&emsp;&emsp;{{message.send}}</p></el-col>
             <el-col :span="2" v-if="message.ifread === true"><p>已读</p></el-col>
+            <el-col :span="2" v-else><p>未读</p></el-col>
           </el-row>
         </div>
         <el-divider class="divider"/>
@@ -157,7 +162,7 @@ onMounted( async () => {
   font-size: 30px;
 }
 .infinite-list {
-  height: 300px;
+  height: 54px;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -192,5 +197,12 @@ onMounted( async () => {
   margin-top: 0px;
   margin-bottom: 5px;
   border-bottom: 1px;
+}
+.mainbody{
+  font-family: Arial, "Microsoft Yahei", "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 16px;
+}
+.foot{
+  color: #8c939d;
 }
 </style>
