@@ -120,7 +120,7 @@ onMounted( async () => {
     <el-divider border-style="hidden" style="margin: 10px"/>
       <el-row justify="space-around">
         <el-col :span="6"><p>标题</p></el-col>
-        <el-col :span="3"><p>日期</p></el-col>
+        <el-col :span="4"><p>日期</p></el-col>
         <el-col :span="3"><p>发送者</p></el-col>
         <el-col :span="2"><p>状态</p></el-col>
       </el-row>
@@ -144,7 +144,7 @@ onMounted( async () => {
               </el-dialog>
             </el-col>
             <el-col :span="5"><p>&emsp;&emsp;{{message.send_date}}</p></el-col>
-            <el-col :span="4"><p>{{message.send}}</p></el-col>
+            <el-col :span="4"><p>&emsp;&emsp;{{message.send}}</p></el-col>
             <el-col :span="2" v-if="message.ifread === true"><p>已读</p></el-col>
             <el-col :span="2" v-else><p>未读</p></el-col>
           </el-row>
