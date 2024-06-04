@@ -176,12 +176,13 @@ const handleSortChange = (value) => {
 };
 
 const handleScroll = (event) => {
-  const scrollElement = event.target;
-  if (scrollElement.scrollHeight - scrollElement.scrollTop === scrollElement.clientHeight) {
-    // 滚动到底部时加载更多
-    console.log('Load more hotels');
-    // TODO: 加载更多酒店数据
-  }
+  // const scrollElement = event.target;
+  // if (scrollElement.scrollHeight - scrollElement.scrollTop === scrollElement.clientHeight) {
+  //   // 滚动到底部时加载更多
+  //   console.log('Load more hotels');
+  //   // TODO: 加载更多酒店数据
+  // }
+  console.log('Load more hotels');
 };
 
 const handleViewDetails = (hotel) => {

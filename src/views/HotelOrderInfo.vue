@@ -46,8 +46,49 @@
             <span>支付金额：￥1145</span>
           </el-col>
         </el-row>
-      <el-card style="margin-top: 5%">
-
+      <el-card class="hotel-card" @click="handleViewDetails" style="margin-top: 5%">
+        <el-row style="margin-top: 2%; margin-left: 1%; margin-right: 1%;" class="hotel-row">
+          <el-col :span="10">
+            <el-image :fit="cover" :src="hotel.picturePath" class="hotel-image" alt="酒店图片" />
+          </el-col>
+          <el-col :span="8" :offset="1">
+            <div class="hotel-info">
+              <h3 style="font-family: 微软雅黑; font-size: 25px; margin-bottom: 2%">{{ hotel.name }}</h3>
+              <div class="rating">
+                <el-rate
+                    v-model="hotel.score"
+                    :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                    :low-threshold="3"
+                    :high-threshold="5"
+                    show-score
+                    disabled
+                ></el-rate>
+              </div>
+              <p style="color: #9eb5ff;
+                      font-family: 微软雅黑;
+                      font-size: 16px;
+                      margin-bottom: 2%;
+                      line-height: 24px">{{ hotel.address }}</p>
+              <p style="color: #9eb5ff;
+                      font-family: 微软雅黑;
+                      font-size: 16px;
+                      margin-bottom: 2%;
+                      line-height: 24px">{{ hotel.description }}</p>
+            </div>
+          </el-col>
+          <el-col :span="5">
+            <div class="price-details">
+              <div class="price">
+                <span style="font-size: 14px">￥</span>
+                <span>{{ hotel.price }}</span>
+                <span style="font-size: 14px">起</span>
+              </div>
+              <el-button style="margin-top: 7%" size="large" round type="primary" @click="handleViewDetails">
+                <div style=" font-weight: bold">查看详情</div>
+              </el-button>
+            </div>
+          </el-col>
+        </el-row>
       </el-card>
     </el-card>
   </div>
@@ -68,6 +109,14 @@ import {ref} from "vue";
 const route = useRoute();
 const hotelOrderId = route.query.hotelOrderId;
 const deleteVisible = ref(false);
+const hotel = ref(  {
+  picturePath: require('@/assets/images/carousel/image1.png'),
+  score: 4.9,
+  name: "北京第十四酒店",
+  description: "北京第十四家酒店，不是北京第四十号酒店，也不是北京第四十四号酒店",
+  address: "北京市海淀区",
+  price: 329,
+});
 console.log(hotelOrderId);
 </script>
 
@@ -77,4 +126,22 @@ console.log(hotelOrderId);
   justify-content: center;
 }
 /* 可以添加样式 */
+.hotel-card {
+  display: flex;
+  flex-direction: column;
+  height: 280px;
+}
+
+.hotel-card:hover {
+  display: flex;
+  flex-direction: column;
+  height: 280px;
+}
+.price-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  margin-top: 15%;
+}
 </style>

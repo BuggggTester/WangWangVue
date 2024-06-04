@@ -14,16 +14,16 @@ const routes = [
           name: 'HotelInfo',
           component: ()=> import('../views/HotelOrderInfo.vue')
         },
-            {
+        {
                 path: '/search/hotel',
-                name: 'HotelSearch',
+                name: 'SearchHotel',
                 component: () => import('../views/Hotel/SearchHotel.vue')
-            },
-            {
+        },
+        {
                 path: '/testRoom',
-                name: 'HotelDetail',
+                name: 'HotelDetails',
                 component: () => import('../views/Hotel/HotelDetails.vue')
-            },
+        },
         {
             path: '/ticket',
             name: 'TicketInfo',

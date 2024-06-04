@@ -3,22 +3,24 @@
     <el-card class="ticket-card" shadow="dark">
     <div class="ticket-info">
       <el-row class="component">
-        <el-col :span="6" class="ticket-time">{{ ticket.departureTime }}</el-col>
+        <el-col :span="6" class="ticket-time">{{ ticket.start_time }}</el-col>
         <el-col :span="6" class="trip-no">
           <div class="underline-container">
-            <span class="underline-text">{{ ticket.trainNumber }}</span>
+            <span class="underline-text">{{ ticket.train_id }}</span>
           </div>
         </el-col>
-        <el-col :span="6" class="ticket-time">{{ ticket.arrivalTime }}</el-col>
-        <el-col :span="6" class="ticket-price">{{ ticket.price }}</el-col>
+        <el-col :span="6" class="ticket-time">{{ ticket.end_time }}</el-col>
+        <el-col :span="6" class="ticket-price">￥655起</el-col>
+<!--TODO: 等后端完善，传入price属性-->
       </el-row>
       <el-row class="component">
         <el-col :span="6" class="ticket-place">
-          <span v-if="ticket.departureHighlight" class="highlight-orange-text">始</span>{{ ticket.departure }}
+          <span v-if="ticket.departureHighlight" class="highlight-orange-text">始</span>{{ ticket.from_place }}
         </el-col>
         <el-col :span="6" class="time">{{ ticket.duration }}</el-col>
+<!--TODO: 等后端完善，传入时间属性-->
         <el-col :span="6" class="ticket-place">
-          <span v-if="ticket.arrivalHighlight" class="highlight-green-text">终</span>{{ ticket.destination }}
+          <span v-if="ticket.arrivalHighlight" class="highlight-green-text">终</span>{{ ticket.to_place }}
         </el-col>
         <el-col :span="6" class="availability" v-if="ticket.available">有票</el-col>
         <el-col :span="6" class="availability" v-else>无票</el-col>
@@ -42,7 +44,7 @@
 </template>
   
 <script setup>
-  import { defineProps } from 'vue';
+import {defineProps, ref} from 'vue';
   import { useRouter } from 'vue-router';
   const router = useRouter();
   const props = defineProps({

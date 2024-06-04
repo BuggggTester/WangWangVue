@@ -10,7 +10,7 @@
       <div>
         <el-input
             v-model="input"
-            style="width: 25%;"
+            style="width: 95%;"
             placeholder="请输入查询内容"
             clearable
         />
