@@ -58,9 +58,9 @@ const props = defineProps({
 });
 
 const goToTicketDetail = () => {
-  //console.log(ticket);
-  router.push('/TicketDetail');
+  router.push({path:'/TicketDetail',query: props.ticket.trip_id});
 }
+
 onMounted(async () => {
   const res2 = await requestUtil.get('/trip/sum', {
     "tripId": props.ticket.trip_id,
