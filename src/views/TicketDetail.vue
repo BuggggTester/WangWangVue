@@ -90,22 +90,22 @@ onMounted(async () => {
     }catch(e){
         console.error(e);
     }
-
+    console.log(trip);
     const res5 = await requestUtil.get('/trip/sum', {
     "tripId": tripId.value,
-    "fromPlace": trip.fromPlace,
-    "toPlace": trip.toPlace
+    "fromPlace": trip.value.from_place,
+    "toPlace": trip.value.to_place
     })
-    // const res6 = await requestUtil.get('/trip/minPrice', {
-    // "tripId": tripId.value,
-    // "fromPlace": trip.fromPlace,
-    // "toPlace": trip.toPlace
-    // })
+    const res6 = await requestUtil.get('/trip/minPrice', {
+    "tripId": tripId.value,
+    "fromPlace": trip.value.from_place,
+    "toPlace": trip.value.to_place
+    })
     trip.first_seat = res5.data.firstSeats;
     trip.second_seat = res5.data.secondSeats;
     console.log(duration.value);
     duration.value = res5.data.time;
-    // trip.price = res6.data.minPrice;
+    trip.price = res6.data.minPrice;
 });
 
 
