@@ -48,6 +48,7 @@
                   <div class="card-content">
                     <p class="card-term"><el-icon style=""><User /></el-icon>用户名: {{ userInfo.user_name }}</p>
 <!--                    <p class="card-term">昵称</p>-->
+                    <p class="card-term"><el-icon><Money/></el-icon>账户余额：{{ userInfo.money }} <a style="cursor: pointer; margin-left: 5%;" @click="payDialogVisible = true">点击充值</a></p>
                     <p class="card-term"><el-icon><InfoFilled /></el-icon>用户类型: 用户</p>
                     <p v-if="userInfo.email !== null" class="card-term"><el-icon><Message /></el-icon>邮箱：{{ userInfo.email }} <a style="cursor: pointer;margin-left: 5%" @click="setEmail">重新绑定邮箱</a></p>
                     <p v-else class="card-term"><el-icon><Message /></el-icon>邮箱：暂无 <a style="cursor: pointer;margin-left: 5%" @click="setEmail">点此设置邮箱</a></p>
@@ -92,6 +93,15 @@
                       <template #footer>
                         <el-button type="primary" @click="logoutVisible = false">返回</el-button>
                         <el-button type="default" @click="handleLogout">退出登录</el-button>
+                      </template>
+                    </el-dialog>
+                    <el-dialog v-model="payDialogVisible" title="支付界面">
+                      <div style="display: flex; justify-content: center; align-items: center;">
+                        <img src="@/assets/images/pay.jpg" style="height: 50%; width: 50%;">
+                      </div>                      <el-input v-model="payment" placeholder="请输入充值金额"></el-input>
+                      <template #footer>
+                        <el-button type="primary" @click="payDialogVisible = false">返回</el-button>
+                        <el-button type="default" @click="handlePay">点击支付</el-button>
                       </template>
                     </el-dialog>
                     <el-dialog title="修改密码"
@@ -141,6 +151,7 @@
   const imageUrl = ref('');
   const inputEmail = ref('');
   const emailValid = ref('');
+  const payDialogVisible = ref(false);
   const disabled = ref(false);
   const type = ref('');
   const btnText = ref("获取验证码");
@@ -152,6 +163,7 @@
   const newPwd = ref('');
   const repeatNewPwd = ref('');
   const newValid = ref('');
+  const payment = ref('');
   var version = Math.random();
   const password = ref('*'.repeat(cookieUtil.getCookie("password").length));
   const handleLogout = () => {
@@ -178,6 +190,26 @@
       ElMessage({
         message: "退出失败",
         type: "warning"
+      })
+    }
+  }
+  const handlePay = async()=> {
+    try{
+      console.log(payment.value);
+      const res = await requestUtil.get('/user/recharge',{
+        "payment": payment.value,
+        "userId": cookieUtil.getCookie("userId")
+      });
+      if(res.data.msg == "recharge success") {
+        ElMessage({
+          message: "支付成功！",
+          type: "success"
+        })
+      }
+    }catch (e) {
+      ElMessage({
+        message: "支付失败",
+        type: "error"
       })
     }
   }

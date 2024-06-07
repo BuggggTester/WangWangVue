@@ -184,7 +184,14 @@ const handleSortChange = (value) => {
 };
 
 const handleScroll = (event) => {
-  console.log("?\n");
+
+  // const scrollElement = event.target;
+  // if (scrollElement.scrollHeight - scrollElement.scrollTop === scrollElement.clientHeight) {
+  //   // 滚动到底部时加载更多
+  //   console.log('Load more hotels');
+  //   // TODO: 加载更多酒店数据
+  // }
+  console.log('Load more hotels');
 };
 
 const handleViewDetails = (hotel) => {
@@ -196,10 +203,11 @@ const handleViewDetails = (hotel) => {
 
 <style scoped>
 .home-box {
-  position: fixed;
+  position: relative;
   width: 100%;
   height: 100%;
   top: 0px;
+  left: 0px;
   background-color: #101e41;
   overflow: auto;
 }
@@ -218,7 +226,6 @@ const handleViewDetails = (hotel) => {
 
 .hotel-list {
   margin-left: 12.5%;
-  overflow: auto;
   width: 75%;
 }
 
@@ -293,9 +300,5 @@ const handleViewDetails = (hotel) => {
 .price span {
   font-size: 35px;
   color: #ff681d;
-}
-
-.el-table {
-  overflow: auto; /* 允许横向滚动 */
 }
 </style>

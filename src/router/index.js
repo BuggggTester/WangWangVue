@@ -9,21 +9,34 @@ const routes = [
           path: '/main',
           name: 'Main',
           component: () => import('../views/Main'),
+        },{
+          path: '/hotelOrderInfo',
+          name: 'HotelInfo',
+          component: ()=> import('../views/HotelOrderInfo.vue')
+        },{
+            path: '/user/passengers',
+            name: 'Passengers',
+            component: ()=> import('../views/user/Passengers.vue')
         },
-            {
+        {
                 path: '/search/hotel',
-                name: 'HotelSearch',
+                name: 'SearchHotel',
                 component: () => import('../views/Hotel/SearchHotel.vue')
-            },
-            {
+        },
+        {
                 path: '/testRoom',
-                name: 'HotelDetail',
+                name: 'HotelDetails',
                 component: () => import('../views/Hotel/HotelDetails.vue')
-            },
+        },
         {
             path: '/ticket',
             name: 'TicketInfo',
             component: ()=> import ('../views/TicketInfo.vue')
+        },
+        {
+            path: '/ticketdetail',
+            name: 'TicketDetail',
+            component: ()=> import ('../views/TicketDetail.vue')
         },
         {
           path: '/user',
@@ -41,7 +54,11 @@ const routes = [
               path: '/user/unfinished',
               name: 'Unfinished',
               component: () => import('../views/user/Unfinished.vue'),
-        },
+        },{
+              path: '/user/hotelorders',
+              name: "HotelOrders",
+              component: ()=> import('../views/user/HotelOrders.vue'),
+        }
           ]
         },
         {
@@ -86,6 +103,9 @@ const routes = [
           path: '/admin/main/trip',
           name: 'ManageTrip',
           component: () => import('../views/admin/ManageTrip'),
+      },{
+          path: '/admin/select',
+          name: 'Select'
       }
       ]
     },

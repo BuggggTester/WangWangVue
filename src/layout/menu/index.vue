@@ -29,15 +29,16 @@
       </template>
       <el-menu-item index="/userinfo">用户信息</el-menu-item>
       <el-menu-item index="/user/unfinished">用户订单</el-menu-item>
+      <el-menu-item index="/user/passengers">乘车人信息</el-menu-item>
     </el-sub-menu>
-    <el-sub-menu index="2">
-      <template #title>
-        <el-icon><location /></el-icon>
-        <span>车次/订单管理</span>
-      </template>
-        <el-menu-item index="/manage/trips" >创建车次</el-menu-item>
-        <el-menu-item index="/manage/orders" >创建订单</el-menu-item>
-    </el-sub-menu>
+<!--    <el-sub-menu index="2">-->
+<!--      <template #title>-->
+<!--        <el-icon><location /></el-icon>-->
+<!--        <span>车次/订单管理</span>-->
+<!--      </template>-->
+<!--        <el-menu-item index="/manage/trips" >创建车次</el-menu-item>-->
+<!--        <el-menu-item index="/manage/orders" >创建订单</el-menu-item>-->
+<!--    </el-sub-menu>-->
     <el-menu-item index="/message">
       <el-icon>
         <ChatDotSquare />

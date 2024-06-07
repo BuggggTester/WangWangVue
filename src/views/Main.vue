@@ -48,7 +48,7 @@
               <el-button type="primary" @click="searchTrips" style="margin-left: 20px">查询</el-button>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="常用查询" name="second"></el-tab-pane>
+          <el-tab-pane label="酒店" name="second"></el-tab-pane>
           <el-tab-pane label="订餐" name="third">订餐</el-tab-pane>
         </el-tabs>
       </div>
@@ -124,7 +124,7 @@ const searchTrips = async () => {
   try{
     let result =await requestUtil.post('/trip/select/place/time',param);
     console.log(result.data);
-    await router.push({path: '/ticket', query: param});
+    await router.push({path: '/ticket',query: param});
   }catch (e) {
     console.error(e);
   }

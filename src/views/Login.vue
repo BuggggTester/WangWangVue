@@ -103,6 +103,11 @@ const handleLogin = ()=>{
           type: "success"
         })
         await router.push('/main');
+      }else {
+        ElMessage({
+          message: "登录失败，用户名或密码错误",
+          type: "warning"
+        })
       }
     }
   })

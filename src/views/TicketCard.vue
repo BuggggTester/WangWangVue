@@ -1,161 +1,164 @@
 <template>
-    <!-- <el-card class="ticket-card" shadow="hover">
-      <div class="ticket-info">
-        <div class="train-number">{{ ticket.trainNumber }}</div>
-        <div class="route">{{ ticket.departure }} - {{ ticket.destination }}</div>
-        <div class="price">价格：{{ ticket.price }}元</div>
-        <div class="availability" v-if="ticket.available">有票</div>
-        <div class="availability" v-else>无票</div>
-        <div class="train-number">K1234</div>
-        <div class="route">北京 - 上海</div>
-        <div class="price">¥200起</div>
-        <div class="availability">有票</div>
-        </div>
-    </el-card> -->
-    <el-card class="ticket-card" shadow="dark" @click="dialogVisible = true">
+  <div @click="goToTicketDetail">
+    <el-card class="ticket-card" shadow="dark">
       <div class="ticket-info">
         <el-row class="component">
-          <el-col :span="6" class="ticket-time">07:00</el-col>
+          <el-col :span="6" class="ticket-time">{{ ticket.start_time }}</el-col>
           <el-col :span="6" class="trip-no">
             <div class="underline-container">
-              <span class="underline-text">G87</span>
+              <span class="underline-text">{{ ticket.train_id }}</span>
             </div>
           </el-col>
-          <el-col :span="6" class="ticket-time">14:33</el-col>
-          <el-col :span="6" class="ticket-price">¥200起</el-col>
+          <el-col :span="6" class="ticket-time">{{ ticket.end_time }}</el-col>
+          <el-col :span="6" class="ticket-price">￥{{ ticket.price }}起</el-col>
+          <!--TODO: 等后端完善，传入price属性-->
         </el-row>
         <el-row class="component">
           <el-col :span="6" class="ticket-place">
-            <span class="highlight-orange-text">始</span>北京西
+            <span v-if="ticket.departureHighlight" class="highlight-orange-text">始</span>{{ ticket.from_place }}
           </el-col>
-          <el-col :span="6" class="time">7小时33分</el-col>
+          <el-col :span="6" class="time">{{ ticket.duration }}</el-col>
+          <!--TODO: 等后端完善，传入时间属性-->
           <el-col :span="6" class="ticket-place">
-            <span class="highlight-green-text">终</span>成都东
+            <span v-if="ticket.arrivalHighlight" class="highlight-green-text">终</span>{{ ticket.to_place }}
           </el-col>
-          <el-col :span="6" class="availability" >有票</el-col>
+          <el-col :span="6" class="availability" v-if="ticket.first_seat > 0 || ticket.second_seat > 0">有票</el-col>
+          <el-col :span="6" class="availability" v-else>无票</el-col>
         </el-row>
-    </div>
+      </div>
       <template #footer>
         <el-row>
           <el-col :span="8">
-            <span style="align-items: center">二等：<span style="color:#42b983">10张</span></span>
+            <span style="align-items: center">二等：<span style="color:#42b983">{{ ticket.second_seat }}张</span></span>
           </el-col>
           <el-col :span="8">
-            <span style="align-items: center">一等：<span style="color:#42b983">10张</span></span>
+            <span style="align-items: center">一等：<span style="color:#42b983">{{ ticket.first_seat }}张</span></span>
           </el-col>
-          <el-col :span="8">
-            <span style="align-items: center">商务：<span style="color:#42b983">10张</span></span>
-          </el-col>
+          <!--        <el-col :span="8">-->
+          <!--          <span style="align-items: center">商务：<span style="color:#42b983">{{ ticket.business }}</span></span>-->
+          <!--        </el-col>-->
         </el-row>
       </template>
-  </el-card>
-  <el-dialog v-model="dialogVisible"
-             title="火车票订购">
-  <template #footer>
-    <el-button type="default" @click="dialogVisible=false">返回</el-button>
-    <el-button type="primary" @click="">购买</el-button>
-  </template>
-  </el-dialog>
+    </el-card>
+  </div>
+</template>
 
-  </template>
-  
-  <script>
-  import {ref} from "vue";
-  import router from "@/router";
+<script setup>
+import {defineProps, onMounted, ref} from 'vue';
+import {useRoute} from 'vue-router';
+import requestUtil from '@/util/request'
+import router from "@/router";
 
-  export default {
-    name: 'TicketCard',
-    methods: {
-      router() {
-        return router
-      }
-    },
-    props: {
-      ticket: Object,
-    },
-    setup(props) {
-      const dialogVisible = ref(false);
-      return {
-        dialogVisible
-      }
-    },
+const route = useRoute();
+const props = defineProps({
+  ticket: {
+    type: Object,
+    required: true
+  }
+});
 
-  }
-  </script>
-  
-  <style scoped>
-  .ticket-card {
-    width: 45%;
-    border-radius: 4px;
-  }
-  
-  .ticket-info {
-    padding: 0px;
-  }
-  
-  .ticket-time {
-    text-align: center;
-    font-size: 30px;
-    font-weight: bold;
-  }
+const goToTicketDetail = () => {
+  let param = {
+    "trip_id": props.ticket.trip_id
+  };
+  router.push({path:'/TicketDetail',query: param});
+}
 
-  .ticket-price {
-      text-align: center;
-      font-size: 30px;
-      font-weight: bold;
-      color: #ff8800;
-  }
-  .ticket-place {
-      text-align: center;
-      font-weight: bold;
-      font-size: 20px;
-  }
+onMounted(async () => {
+  const res2 = await requestUtil.get('/trip/sum', {
+    "tripId": props.ticket.trip_id,
+    "fromPlace": route.query.fromPlace,
+    "toPlace": route.query.toPlace
 
-  .time {
-    text-align: center;
-    color: gray;
-    font-size: 15px;
-  }
-  
-  .availability {
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    color: #12a72b;
-  }
+  })
+  const res3 = await requestUtil.get('/trip/minPrice', {
+    "tripId": props.ticket.trip_id,
+    "fromPlace": route.query.fromPlace,
+    "toPlace": route.query.toPlace
+  })
+  props.ticket.first_seat = res2.data.firstSeats;
+  props.ticket.second_seat = res2.data.secondSeats;
+  props.ticket.duration = res2.data.time;
+  props.ticket.price = res3.data.minPrice;
+})
+</script>
 
-  .el-row {
-    margin-bottom: 20px;
-  }
-  .el-row:last-child {
-    margin-bottom: 0;
-  }
-  .el-col {
-    border-radius: 4px;
-  }
+<style scoped>
+.ticket-card {
+  width: 95%;
+  border-radius: 4px;
+}
 
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-  }
+.ticket-info {
+  padding: 0px;
+}
 
-  .highlight-orange-text {
-    background-color: orange; 
-    color: white; 
-    padding: 1px 4px;
-    border-radius: 5px;
-  }
+.ticket-time {
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+}
 
-  .highlight-green-text {
-    background-color: green; 
-    color: white; 
-    padding: 1px 4px;
-    border-radius: 5px;
+.ticket-price {
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: #ff8800;
+}
 
-  }
+.ticket-place {
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+}
 
-  @import "@/assets/css/card-order.css";
-  </style>
+.time {
+  text-align: center;
+  color: gray;
+  font-size: 15px;
+}
+
+.availability {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: #12a72b;
+}
+
+.el-row {
+  margin-bottom: 20px;
+}
+
+.el-row:last-child {
+  margin-bottom: 0;
+}
+
+.el-col {
+  border-radius: 4px;
+}
+
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+}
+
+.highlight-orange-text {
+  background-color: orange;
+  color: white;
+  padding: 1px 4px;
+  border-radius: 5px;
+}
+
+.highlight-green-text {
+  background-color: green;
+  color: white;
+  padding: 1px 4px;
+  border-radius: 5px;
+
+}
+
+@import "@/assets/css/card-order.css";
+</style>
 
 
   
