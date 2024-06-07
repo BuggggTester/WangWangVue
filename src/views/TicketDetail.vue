@@ -10,33 +10,33 @@
     <div>
         <div class="ticket-info">
         <el-row class="component">
-            <el-col :span="8" class="ticket-time">{{ $route.query.ticket.start_time }}</el-col>
+            <el-col :span="8" class="ticket-time">{{trip.start_time }}</el-col>
             <el-col :span="8" class="trip-no">
             <div class="underline-container">
                 <span class="underline-text">时刻表</span>
             </div>
             </el-col>
-            <el-col :span="8" class="ticket-time">{{ ticket.end_time }}</el-col>
+            <el-col :span="8" class="ticket-time">{{ trip.end_time }}</el-col>
         </el-row>
         <el-row class="component">
-            <el-col :span="8" class="ticket-place">{{ ticket.from_place }}</el-col>
-            <el-col :span="8" class="time">{{ ticket.train_id }} · {{ ticket.duration }}</el-col>
-            <el-col :span="8" class="ticket-place">{{ ticket.to_place}}</el-col>
+            <el-col :span="8" class="ticket-place">{{ trip.from_place }}</el-col>
+            <el-col :span="8" class="time">{{trip.train_id }} · {{ duration }}</el-col>
+            <el-col :span="8" class="ticket-place">{{trip.to_place}}</el-col>
         </el-row>
     </div>
 
     <div>
         <el-row>
             <el-col :span="8">二等座</el-col>
-            <el-col :span="8" class="ticket-price">{{ ticket.price }}</el-col>
+            <el-col :span="8" class="ticket-price">{{ trip.price }}</el-col>
         </el-row>
         <el-row>
             <el-col :span="8">一等座</el-col>
-            <el-col :span="8" class="ticket-price">{{ ticket.price}}</el-col>
+            <el-col :span="8" class="ticket-price">{{ trip.price *1.2}}</el-col>
         </el-row>
         <el-row>
             <el-col :span="8">商务座</el-col>
-            <el-col :span="8" class="ticket-price">{{ }}</el-col>
+            <el-col :span="8" class="ticket-price">{{trip.price *1.5}}</el-col>
         </el-row>
     </div>
         
@@ -63,10 +63,42 @@
 import { useRoute } from 'vue-router';
 import {defineProps, onMounted,ref} from 'vue';
 import requestUtil from '@/util/request'
+import timeUtil from '@/util/time'
 import router from "@/router";
+import time from '@/util/time';
 const route = useRoute();
-const ticketId = ref(route.query.trip_id);
-console.log(ticketId);
+const tripId = ref(route.query.trip_id);
+const trip = ref("");
+const duration = ref("");
+
+onMounted(async () => {
+    try{
+    const res4 = await requestUtil.get('/trip/select/tripId', {
+        "tripId": tripId.value,
+    });
+    trip.value = res4.data;
+    trip.value.start_time = timeUtil.stampToTime(timeUtil.formatDate(trip.value.start_time));
+    trip.value.end_time = timeUtil.stampToTime(timeUtil.formatDate(trip.value.end_time));
+    }catch(e){
+        console.error(e);
+    }
+
+    const res5 = await requestUtil.get('/trip/sum', {
+    "tripId": tripId.value,
+    "fromPlace": trip.fromPlace,
+    "toPlace": trip.toPlace
+    })
+    // const res6 = await requestUtil.get('/trip/minPrice', {
+    // "tripId": tripId.value,
+    // "fromPlace": trip.fromPlace,
+    // "toPlace": trip.toPlace
+    // })
+    trip.first_seat = res5.data.firstSeats;
+    trip.second_seat = res5.data.secondSeats;
+    console.log(duration.value);
+    duration.value = res5.data.time;
+    // trip.price = res6.data.minPrice;
+});
 
 
 </script>
