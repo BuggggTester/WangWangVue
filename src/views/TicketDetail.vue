@@ -65,7 +65,7 @@ import {defineProps, onMounted,ref} from 'vue';
 import requestUtil from '@/util/request'
 import router from "@/router";
 const route = useRoute();
-const ticketId = ref(route.query.props.ticket.trip_id);
+const ticketId = ref(route.query.trip_id);
 console.log(ticketId);
 
 
