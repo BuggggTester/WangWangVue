@@ -148,7 +148,7 @@ const handleViewDetails = (hotel) => {
   margin-top: 1%;
   color: white;
   width:100%;
-  align-items: center;
+  text-align: center;
 }
 
 .hotel-image-and-rate {
