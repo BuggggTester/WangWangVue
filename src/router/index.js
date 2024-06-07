@@ -134,16 +134,6 @@ const routes = [
         name: '404',
         component: () => import('../views/404.vue')
     },
-    {
-        path: '/testHotel',
-        name: 'HotelSearch',
-        component: () => import('../views/Hotel/SearchHotel.vue')
-    },
-    {
-        path: '/testRoom',
-        name: 'HotelDetail',
-        component: () => import('../views/Hotel/HotelDetails.vue')
-    },
 
 
 ]

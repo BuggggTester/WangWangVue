@@ -88,6 +88,8 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
+import requestUtil from "@/util/request"
+import cookieUtil from "@/util/cookie"
 
 // 使用 ref 创建响应式数据
 const searchAddress = ref('');
@@ -164,18 +166,25 @@ const tableScrollY = ref(300); // 表格滚动高度
 const emit = defineEmits(['sort-change', 'view-details']);
 
 // 定义方法
-const handleSearch = () => {
-  console.log('Search by address:', searchAddress.value);
-  // TODO: 根据searchAddress发起搜索请求
+const handleSearch = async () => {
+  const hot = await requestUtil.get('/hotels/selectHotelByAddress', {
+    address: searchAddress.value
+  });
+  console.log(searchAddress.value);
+
+  console.log(hot.data);
+  hotels.value = hot.data;
+  console.log(hotels.value);
+  hotels.value.picturePath = "require(" + hotels.value.picturePath + ")";
+  console.log(hotels.value);
 };
 
 const handleSortChange = (value) => {
   console.log('Sort by:', value);
-  emit('sort-change', value); // 触发外部定义的事件
-  // TODO: 根据selectedSort发起排序请求
 };
 
 const handleScroll = (event) => {
+
   // const scrollElement = event.target;
   // if (scrollElement.scrollHeight - scrollElement.scrollTop === scrollElement.clientHeight) {
   //   // 滚动到底部时加载更多
