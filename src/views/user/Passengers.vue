@@ -40,6 +40,7 @@
   </el-card>
 </template>
 <script setup>
+
 import {onMounted, ref} from "vue";
 import requestUtil from "@/util/request"
 import cookieUtil from "@/util/cookie"
@@ -51,6 +52,13 @@ const newName = ref("");
 const newPhone = ref("");
 const newIdentity = ref("");
 onMounted(async () => {
+  if(cookieUtil.getCookie("userId") == "") {
+    ElMessage({
+      message: "；灵异事件",
+      type: "warning"
+    });
+    return;
+  }
   console.log(cookieUtil.getCookie("userId"));
   const res = await requestUtil.get('/passenger/select/userId', {
     "userId": cookieUtil.getCookie("userId")
