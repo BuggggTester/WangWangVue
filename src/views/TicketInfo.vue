@@ -123,12 +123,12 @@
       console.log(fromPlace.value);
       console.log(toPlace.value);
       console.log(startTime.value);
-      const res = await requestUtil.post('/trip/select/place/time', {
+      const res1 = await requestUtil.post('/trip/select/place/time', {
           "fromPlace": fromPlace.value,
           "toPlace": toPlace.value,
           "startTime": startTime.value
       })
-      ticketsInfo.value = res.data;
+      ticketsInfo.value = res1.data;
       ticketsInfo.value.forEach(item=> {
         item.start_time = timeUtil.stampToTime(item.start_time);
         item.end_time = timeUtil.stampToTime(item.end_time);
