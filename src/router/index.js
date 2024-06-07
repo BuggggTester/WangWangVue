@@ -103,6 +103,9 @@ const routes = [
           path: '/admin/main/trip',
           name: 'ManageTrip',
           component: () => import('../views/admin/ManageTrip'),
+      },{
+          path: '/admin/select',
+          name: 'Select'
       }
       ]
     },
