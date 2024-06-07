@@ -194,10 +194,11 @@ const handleViewDetails = (hotel) => {
 
 <style scoped>
 .home-box {
-  position: fixed;
+  position: relative;
   width: 100%;
   height: 100%;
   top: 0px;
+  left: 0px;
   background-color: #101e41;
   overflow: auto;
 }
@@ -216,7 +217,6 @@ const handleViewDetails = (hotel) => {
 
 .hotel-list {
   margin-left: 12.5%;
-  overflow: auto;
   width: 75%;
 }
 
@@ -291,9 +291,5 @@ const handleViewDetails = (hotel) => {
 .price span {
   font-size: 35px;
   color: #ff681d;
-}
-
-.el-table {
-  overflow: auto; /* 允许横向滚动 */
 }
 </style>
