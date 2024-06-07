@@ -63,7 +63,6 @@
 import { useRoute } from 'vue-router';
 import {defineProps, onMounted,ref} from 'vue';
 import requestUtil from '@/util/request'
-import {ref} from "vue";
 import router from "@/router";
 const route = useRoute();
 const ticketId = ref(route.query.props.ticket.trip_id);

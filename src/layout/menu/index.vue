@@ -29,6 +29,7 @@
       </template>
       <el-menu-item index="/userinfo">用户信息</el-menu-item>
       <el-menu-item index="/user/unfinished">用户订单</el-menu-item>
+      <el-menu-item index="/user/passengers">乘车人信息</el-menu-item>
     </el-sub-menu>
     <el-sub-menu index="2">
       <template #title>

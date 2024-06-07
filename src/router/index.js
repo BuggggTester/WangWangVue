@@ -13,6 +13,10 @@ const routes = [
           path: '/hotelOrderInfo',
           name: 'HotelInfo',
           component: ()=> import('../views/HotelOrderInfo.vue')
+        },{
+            path: '/user/passengers',
+            name: 'Passengers',
+            component: ()=> import('../views/user/Passengers.vue')
         },
         {
                 path: '/search/hotel',
