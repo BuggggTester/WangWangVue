@@ -27,9 +27,17 @@
 
     <div>
         <el-row>
-            <el-col :span="8">二等座</el-col>
-            <el-col :span="8" class="ticket-price">{{ trip.price }}</el-col>
+            <el-col :span="8">
+                <span style="align-items: center">二等：<span style="color:#42b983">{{ trip.second_seat }}张</span></span>
+            </el-col>
+            <el-col :span="8" class="ticket-price">
+                {{ trip.price }}
+            </el-col>
+            <el-col :span="8">
+                <el-button @click="order">订购</el-button>
+            </el-col>
         </el-row>
+        
         <el-row>
             <el-col :span="8">一等座</el-col>
             <el-col :span="8" class="ticket-price">{{ trip.price *1.2}}</el-col>
