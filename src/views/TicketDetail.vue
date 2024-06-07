@@ -1,34 +1,54 @@
 <template>
+    <el-page-header :icon="ArrowLeft" @back="$router.push('/ticketinfo')">
+        <template #content>
+            <span class="head-trip-info">车次详情</span>
+        </template>
+    </el-page-header>
+
+    <div class="spacer"></div> <!-- 空的div调整间距用 -->
+
     <div>
-        <h1>火车详情</h1>
         <div class="ticket-info">
         <el-row class="component">
-            <el-col :span="6" class="ticket-time">{{ ticket.departureTime }}</el-col>
-            <el-col :span="6" class="trip-no">
+            <el-col :span="8" class="ticket-time">{{trip.start_time }}</el-col>
+            <el-col :span="8" class="trip-no">
             <div class="underline-container">
-                <span class="underline-text">{{ ticket.trainNumber }}</span>
+                <span class="underline-text">时刻表</span>
             </div>
             </el-col>
-            <el-col :span="6" class="ticket-time">{{ ticket.arrivalTime }}</el-col>
-            <el-col :span="6" class="ticket-price">{{ ticket.price }}</el-col>
+            <el-col :span="8" class="ticket-time">{{ trip.end_time }}</el-col>
         </el-row>
         <el-row class="component">
-            <el-col :span="6" class="ticket-place">
-            <span v-if="ticket.departureHighlight" class="highlight-orange-text">始</span>{{ ticket.departure }}
-            </el-col>
-            <el-col :span="6" class="time">{{ ticket.duration }}</el-col>
-            <el-col :span="6" class="ticket-place">
-            <span v-if="ticket.arrivalHighlight" class="highlight-green-text">终</span>{{ ticket.destination }}
-            </el-col>
-            <el-col :span="6" class="availability" v-if="ticket.available">有票</el-col>
-            <el-col :span="6" class="availability" v-else>无票</el-col>
+            <el-col :span="8" class="ticket-place">{{ trip.from_place }}</el-col>
+            <el-col :span="8" class="time">{{trip.train_id }} · {{ duration }}</el-col>
+            <el-col :span="8" class="ticket-place">{{trip.to_place}}</el-col>
         </el-row>
     </div>
-    
-        <h2>座位选择</h2>
-        <!-- 这里放置座位选择组件 -->
-    
-        <h2>信息输入</h2>
+
+    <div>
+        <el-row>
+            <el-col :span="8">
+                <span style="align-items: center">二等：<span style="color:#42b983">{{ trip.second_seat }}张</span></span>
+            </el-col>
+            <el-col :span="8" class="ticket-price">
+                {{ trip.price }}
+            </el-col>
+            <el-col :span="8">
+                <el-button @click="order">订购</el-button>
+            </el-col>
+        </el-row>
+        
+        <el-row>
+            <el-col :span="8">一等座</el-col>
+            <el-col :span="8" class="ticket-price">{{ trip.price *1.2}}</el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="8">商务座</el-col>
+            <el-col :span="8" class="ticket-price">{{trip.price *1.5}}</el-col>
+        </el-row>
+    </div>
+        
+    <h2>信息输入</h2>
         <el-form>
             <el-form-item label="姓名">
             <el-input v-model="name"></el-input>
@@ -42,39 +62,52 @@
         </el-form>
     
         <el-button @click="order">订购</el-button>
+        <h2>座位选择</h2>
+        <!-- 这里放置座位选择组件 -->
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import { useRoute } from 'vue-router';
-
-const ticket = { //一个终将灭亡的展示用数据
-        trainNumber: "G87",
-        departureTime: "07:00",
-        arrivalTime: "14:33",
-        departure: "北京西",
-        destination: "成都东",
-        price: "¥200起",
-        duration: "7小时33分",
-        available: true,
-        departureHighlight: true,
-        arrivalHighlight: true,
-        secondClass: "10张",
-        firstClass: "10张",
-        business: "10张"
-};
-
+import {defineProps, onMounted,ref} from 'vue';
+import requestUtil from '@/util/request'
+import timeUtil from '@/util/time'
+import router from "@/router";
+import time from '@/util/time';
 const route = useRoute();
+const tripId = ref(route.query.trip_id);
+const trip = ref("");
+const duration = ref("");
 
-//const ticket = route.params.ticket;
-const name = ref('');
-const idNumber = ref('');
-const phoneNumber = ref('');
+onMounted(async () => {
+    try{
+    const res4 = await requestUtil.get('/trip/select/tripId', {
+        "tripId": tripId.value,
+    });
+    trip.value = res4.data;
+    trip.value.start_time = timeUtil.stampToTime(timeUtil.formatDate(trip.value.start_time));
+    trip.value.end_time = timeUtil.stampToTime(timeUtil.formatDate(trip.value.end_time));
+    }catch(e){
+        console.error(e);
+    }
+    console.log(trip);
+    const res5 = await requestUtil.get('/trip/sum', {
+    "tripId": tripId.value,
+    "fromPlace": trip.value.from_place,
+    "toPlace": trip.value.to_place
+    })
+    const res6 = await requestUtil.get('/trip/minPrice', {
+    "tripId": tripId.value,
+    "fromPlace": trip.value.from_place,
+    "toPlace": trip.value.to_place
+    })
+    trip.first_seat = res5.data.firstSeats;
+    trip.second_seat = res5.data.secondSeats;
+    console.log(duration.value);
+    duration.value = res5.data.time;
+    trip.price = res6.data.minPrice;
+});
 
-const order = () => {
-// 订购逻辑，验证信息，提交订单等
-};
 
 </script>
 
@@ -85,7 +118,9 @@ border-radius: 4px;
 }
 
 .ticket-info {
-padding: 0px;
+padding:40px;
+background-color: #c8eaf5; 
+border-radius: 10px;
 }
 
 .ticket-time {
@@ -98,7 +133,7 @@ font-weight: bold;
     text-align: center;
     font-size: 30px;
     font-weight: bold;
-    color: #ff8800;
+    color: #f6392bd0;
 }
 .ticket-place {
     text-align: center;
@@ -147,6 +182,10 @@ color: white;
 padding: 1px 4px;
 border-radius: 5px;
 
+}
+
+.spacer {
+    margin-bottom: 30px; /* 根据需要调整间距 */
 }
 
 @import "@/assets/css/card-order.css";

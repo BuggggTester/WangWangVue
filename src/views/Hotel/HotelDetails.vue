@@ -1,5 +1,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
+import requestUtil from "@/util/request"
+import cookieUtil from "@/util/cookie"
 
 // 使用 ref 创建响应式数据
 const searchAddress = ref('');
