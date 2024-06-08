@@ -255,7 +255,8 @@ const goToTicketOrderPrepare = () => {
     "trip_id": tripId.value,
     "fromPlace": route.query.fromPlace,
     "toPlace": route.query.toPlace,
-    "startTime": route.query.startTime
+    "startTime": route.query.startTime,
+    "price":price.value
   };
   router.push({path: '/TicketOrderPrepare', query: param});
 }

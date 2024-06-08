@@ -93,20 +93,20 @@
         </div>
         <el-radio-group v-model="selectedSeatPlace">
           <el-radio label="window" disabled>窗户</el-radio>
-          <el-radio-button>
+          <el-radio-button label="A">
             <i class="icon-seat"></i>
           </el-radio-button>
-          <el-radio-button>
+          <el-radio-button label="B">
             <i class="icon-seat"></i>
           </el-radio-button>
-          <el-radio-button>
+          <el-radio-button label="C">
             <i class="icon-seat"></i>
           </el-radio-button>
           <el-radio label="aisle" disabled>过道</el-radio>
-          <el-radio-button>
+          <el-radio-button label="D">
             <i class="icon-seat"></i>
           </el-radio-button>
-          <el-radio-button>
+          <el-radio-button label="E">
             <i class="icon-seat"></i>
           </el-radio-button>
           <el-radio label="window" disabled>窗户</el-radio>
@@ -114,13 +114,17 @@
       </el-card>
       </div>
       <div>
-        <el-button @click="order" type="primary" style="margin-left:20%;margin-top:20px;height:40px;width:200px">预定
+        <el-button @click="openDialog" type="primary" style="margin-left:20%;margin-top:20px;height:40px;width:200px">预定
         </el-button>
-        <el-button @click="decideVisible = false" style="margin-left:20%;margin-top:20px;height:40px;width:200px">取消
+        <el-button @click="backToDetail" style="margin-left:20%;margin-top:20px;height:40px;width:200px">取消
         </el-button>
       </div>
-      <el-dialog v-model="decideVisible">
 
+      <el-dialog v-model="dialogVisible">
+        <el-button @click="confirmOrder" type="primary" style="margin-left:15%;margin-top:10px;height:40px;width:200px">确认支付
+        </el-button>
+        <el-button @click="cancelOrder" style="margin-left:20%;margin-top:10px;height:40px;width:200px">取消订单
+        </el-button>
       </el-dialog>
 
     </el-card>
@@ -138,6 +142,7 @@ import cookieUtil from "@/util/cookie"
 import router from "@/router";
 import time from '@/util/time';
 import {ArrowLeft} from "@element-plus/icons-vue";
+import axios from 'axios';
 
 const passengers = ref([]);
 const addVisible = ref(false);
@@ -147,6 +152,7 @@ const newIdentity = ref("");
 const route = useRoute();
 const chooseVisible = ref(false);
 const oldPassengers = ref([]);
+
 onMounted(async()=> {
   const res = await requestUtil.get('/passenger/select/userId', {
     "userId": cookieUtil.getCookie("userId")
@@ -157,6 +163,7 @@ onMounted(async()=> {
   })
   console.log(passengers.value);
 });
+
 const addOldPassenger = (passenger) => {
   if(passengers.value.length <3) {
     if (passengers.value.some(p => p.name === passenger.name)) {
@@ -182,10 +189,11 @@ const addOldPassenger = (passenger) => {
     }, 300)
   }
 }
+
 const addPassenger = async () => {
   try {
     const res = await requestUtil.post("/passenger/create", {
-      "phoneNum": newPhone.value,
+        "phoneNum": newPhone.value,
       "userId": cookieUtil.getCookie("userId"),
       "identity": newIdentity.value,
       "name": newName.value
@@ -214,23 +222,10 @@ const addPassenger = async () => {
 
 }
 
-const orderDialogVisible = ref(false);
 const selectedPaymentMethod = ref(null);
 const selectedSeatPlace = ref(null);
+const dialogVisible = ref(false);
 
-const order = () => {
-  if (selectedPaymentMethod.value === 'wechat') {
-    console.log('使用微信支付');
-  } else if (selectedPaymentMethod.value === 'alipay') {
-    console.log('使用支付宝支付');
-  } else if (selectedPaymentMethod.value === 'bank') {
-    console.log('使用银行卡支付');
-  } else {
-    console.log('请选择支付方式');
-  }
-
-  orderDialogVisible.value = false;
-};
 const backToDetail = () => {
   let param = {
     "trip_id": route.query.trip_id,
@@ -240,6 +235,68 @@ const backToDetail = () => {
   };
   router.push({path: '/ticketdetail', query: param});
 }
+
+const openDialog = async () => {
+      await createOrder(); // 在打开对话框前执行createOrder
+      dialogVisible.value = true;
+    };
+
+const createOrder = async() =>{
+    // 发送创建订单的请求
+    const res = await requestUtil.post('/order/create', {
+        order_time: timeUtil.getCurrentTime(),
+        userId: cookieUtil.getCookie("userId"),
+        //type: this.type,
+        state: "pending",
+        fromPlace: route.query.fromPlace,
+        toPlace: route.query.toPlace,
+        payment: route.query.price,
+        tripId: route.query.trip_id,
+        seat: selectedSeatPlace.value,
+        payTime: null, //createOrder时暂时为null,confirmOrder时再确定
+        payway: selectedPaymentMethod.value
+    })
+    .then(response => {
+      // 请求成功处理
+      console.log(response.data);
+    })
+    .catch(error => {
+      // 请求失败
+      console.error(error);
+    });
+}
+
+const confirmOrder = async() =>{
+    //确认订单
+    const res = await requestUtil.post('/order/confirm', {
+        state: "paid",
+        payTime: timeUtil.getCurrentTime() //createOrder确定了payTime
+    })
+    .then(response => {
+      // 请求成功处理
+      console.log(response.data);
+    })
+    .catch(error => {
+      // 请求失败
+      console.error(error);
+    });
+}
+
+const cancelOrder = async() =>{
+    //确认订单
+    const res = await requestUtil.post('/order/cancel', {
+        state: "canceled"
+    })
+    .then(response => {
+      // 请求成功处理
+      console.log(response.data);
+    })
+    .catch(error => {
+      // 请求失败
+      console.error(error);
+    });
+}
+
 </script>
 
 <style scoped>
