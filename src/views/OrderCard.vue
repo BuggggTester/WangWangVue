@@ -68,7 +68,7 @@
 <script>
 import requestUtil from "@/util/request";
 import { ElMessage } from "element-plus";
-
+import cookieUtil from "@/util/cookie";
 export default {
   props: {
     order: Object
@@ -77,9 +77,8 @@ export default {
     const cancelOrder = async (order) => {
       try {
         let orderId = order.order_id;
-        let userId = 1;
+        let userId = cookieUtil.getCookie("userId");
         console.log(order);
-        console.log(tripId);
         await requestUtil.get(`order/delete/${orderId}/${userId}`);
         console.log('删除成功！');
         ElMessage({

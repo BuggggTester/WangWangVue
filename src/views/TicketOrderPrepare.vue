@@ -106,7 +106,7 @@
           <el-radio-button label="D">
             <i class="icon-seat"></i>
           </el-radio-button>
-          <el-radio-button label="E">
+          <el-radio-button label="F">
             <i class="icon-seat"></i>
           </el-radio-button>
           <el-radio label="window" disabled>窗户</el-radio>
@@ -222,8 +222,8 @@ const addPassenger = async () => {
 
 }
 
-const selectedPaymentMethod = ref(null);
-const selectedSeatPlace = ref(null);
+const selectedPaymentMethod = ref("");
+const selectedSeatPlace = ref("");
 const dialogVisible = ref(false);
 
 const backToDetail = () => {
@@ -237,23 +237,37 @@ const backToDetail = () => {
 }
 
 const openDialog = async () => {
+    if(selectedPaymentMethod.value == "") {
+        ElMessage({
+            message: "请选择支付方式！",
+            type: "warning"
+        });
+        return;
+    }
       await createOrder(); // 在打开对话框前执行createOrder
       dialogVisible.value = true;
     };
 
 const createOrder = async() =>{
+
+    const chosenSeat = ref("");
+    if(selectedSeatPlace.value == "") {
+        chosenSeat.value = "E";
+    } else {
+        chosenSeat.value = selectedSeatPlace.value;
+    }
+    console.log(selectedSeatPlace.value);
     // 发送创建订单的请求
     const res = await requestUtil.post('/order/create', {
         order_time: timeUtil.getCurrentTime(),
         userId: cookieUtil.getCookie("userId"),
         //type: this.type,
-        state: "pending",
+        state: "notpayed",
         fromPlace: route.query.fromPlace,
         toPlace: route.query.toPlace,
         payment: route.query.price,
         tripId: route.query.trip_id,
-        seat: selectedSeatPlace.value,
-        payTime: null, //createOrder时暂时为null,confirmOrder时再确定
+        seat: chosenSeat.value,
         payway: selectedPaymentMethod.value
     })
     .then(response => {
@@ -268,10 +282,7 @@ const createOrder = async() =>{
 
 const confirmOrder = async() =>{
     //确认订单
-    const res = await requestUtil.post('/order/confirm', {
-        state: "paid",
-        payTime: timeUtil.getCurrentTime() //createOrder确定了payTime
-    })
+    const res = await requestUtil.get('/order/confirm')
     .then(response => {
       // 请求成功处理
       console.log(response.data);
@@ -280,6 +291,13 @@ const confirmOrder = async() =>{
       // 请求失败
       console.error(error);
     });
+    ElMessage.success('购票成功');
+    let param = {
+    "fromPlace": route.query.fromPlace,
+    "toPlace": route.query.toPlace,
+    "startTime": route.query.startTime,
+    };
+    router.push({path: '/ticket',query: param});
 }
 
 const cancelOrder = async() =>{
@@ -295,6 +313,7 @@ const cancelOrder = async() =>{
       // 请求失败
       console.error(error);
     });
+    ElMessage.success('取消订单成功');
 }
 
 </script>
