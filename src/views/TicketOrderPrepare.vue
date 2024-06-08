@@ -16,6 +16,9 @@
         <div class="component">
         <span style="font-size: larger">请选择乘车人:</span>
         </div>
+        <div class="component">
+          <hr>
+        </div>
         <div v-if="passengers.length > 0" v-for="passenger in passengers" :key="passenger.pid" style="margin-top: 3%">
           <IdentityCard :passenger="passenger"/>
         </div>
@@ -63,7 +66,10 @@
       </div>
       <div class="component">
       <el-card>
-        <span>请选择支付方式:  </span>
+        <span style="font-size: larger">请选择支付方式:  </span>
+        <div class="component">
+          <hr>
+        </div>
         <el-radio-group v-model="selectedPaymentMethod">
 
           <el-radio-button label="wechat">
@@ -81,7 +87,10 @@
       </div>
       <div class="component">
       <el-card>
-        <span>请选择座位:  </span>
+        <span style="font-size: larger">请选择座位:  </span>
+        <div class="component">
+          <hr>
+        </div>
         <el-radio-group v-model="selectedSeatPlace">
           <el-radio label="window" disabled>窗户</el-radio>
           <el-radio-button>

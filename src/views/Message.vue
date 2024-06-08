@@ -91,7 +91,7 @@ const catchChange = async () => {
   resetDialogState(messages)
 }
 const createTest = async () => {
-  await messageUtil.createMessage("Crow_D", 1, "推送测试", "test")
+  await messageUtil.createMessage("Crow_D", cookieUtil.getCookie("userId"), "推送测试", "test")
 }
 onMounted( async () => {
   await getAllMessages()
@@ -99,10 +99,16 @@ onMounted( async () => {
 </script>
 
 <template>
-  <el-container>
-    <el-header class="header" style="margin-left: 2.5%">消息中心</el-header>
+  <el-card style="padding-left: 5%; padding-right: 5%">
+    <template #header>
+    <el-page-header  @back="goBack">
+      <template #content>
+        <span style="font-size: larger; font-weight: 600; margin-right: 3%; white-space: nowrap;">消息中心</span>
+      </template>
+    </el-page-header>
+    </template>
     <el-row justify="space-between">
-      <el-col :span="7"><el-button style="font-family: 'Microsoft Yahei'" @click="setAllRead">全部设为已读</el-button></el-col>
+      <el-col :span="3"><el-button style="font-family: 'Microsoft Yahei'" @click="setAllRead">全部设为已读</el-button></el-col>
       <el-col :span="3"><el-checkbox v-model="onlyunread" @change="catchChange">只看未读消息</el-checkbox></el-col>
       <el-col :span="7">
         <div>
@@ -130,9 +136,9 @@ onMounted( async () => {
         <div :class="[message.ifread ? 'message-row-read' : 'message-row-unread']">
           <el-row justify="space-around" class="message-row">
             <el-col :span="6">
-              <el-button plain size="small"@click="dialogVisible[messages.indexOf(message)] = true; setRead(message)">
+              <span @click="dialogVisible[messages.indexOf(message)] = true; setRead(message)">
                 {{ message.title }}
-              </el-button>
+              </span>
               <el-dialog
                   v-model="dialogVisible[messages.indexOf(message)]"
                   :title="message.title"
@@ -152,7 +158,7 @@ onMounted( async () => {
       </li>
     </ul>
     <el-button @click="createTest">press to create a message</el-button>
-  </el-container>
+  </el-card>
 </template>
 
 <style scoped>
