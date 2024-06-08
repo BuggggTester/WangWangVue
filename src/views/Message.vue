@@ -133,19 +133,19 @@ onMounted( async () => {
     <el-divider style="margin: 5px"/>
     <ul v-infinite-scroll="load" style="overflow: auto">
       <li v-for="message in messages" class="infinite-list-item">
-        <div :class="[message.ifread ? 'message-row-read' : 'message-row-unread']">
+        <div :class="[message.ifread ? 'message-row-read' : 'message-row-unread']" @click="dialogVisible[messages.indexOf(message)] = true; setRead(message)">
           <el-row justify="space-around" class="message-row">
             <el-col :span="6">
-              <span @click="dialogVisible[messages.indexOf(message)] = true; setRead(message)">
+              <p>
                 {{ message.title }}
-              </span>
+              </p>
               <el-dialog
                   v-model="dialogVisible[messages.indexOf(message)]"
                   :title="message.title"
                   width="500"
               >
-                <span class="mainbody">{{ message.body }}</span>
-                <span class="foot">发送时间：{{message.send_date}} {{ message.send_time }}</span>
+                <div class="mainbody">{{ message.body }}</div>
+                <div class="foot">发送时间：{{message.send_date}} {{ message.send_time }}</div>
               </el-dialog>
             </el-col>
             <el-col :span="5"><p>&emsp;&emsp;{{message.send_date}}</p></el-col>
@@ -207,9 +207,12 @@ onMounted( async () => {
 .mainbody{
   font-family: Arial, "Microsoft Yahei", "Helvetica Neue", Helvetica, sans-serif;
   font-size: 16px;
+  width: 100%;
 }
 .foot{
   color: #8c939d;
+  width: 100%;
+  margin-top: 20px;
 }
 p{
   margin-top: 6px

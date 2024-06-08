@@ -48,7 +48,23 @@
               <el-button type="primary" @click="searchTrips" style="margin-left: 20px">查询</el-button>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="酒店" name="second"></el-tab-pane>
+          <el-tab-pane label="酒店" name="second">
+            <div class="input-hotel">
+              <span>在</span>
+              <el-input
+                  placeholder="目的地"
+                  v-model="searchAddress"
+                  class="search-bar"
+                  suffix-icon="el-icon-search"
+                  @keyup.enter="handleSearch"
+                  style="width:70%; margin-left: 3%"
+              >
+                <template #append>
+                  <el-button icon="el-icon-search" @click="handleSearch">搜索酒店</el-button>
+                </template>
+              </el-input>
+            </div>
+          </el-tab-pane>
           <el-tab-pane label="订餐" name="third">订餐</el-tab-pane>
         </el-tabs>
       </div>
@@ -88,6 +104,7 @@ const selectedOption = ref([])
 const checkbox = ref('')
 const searchType = ref('first')
 const startTime = ref([])
+const searchAddress = ref("")
 let user = ref('')
 const images = [
   { src: require('@/assets/images/carousel/image1.png') }, // 假设图片资源存放在 assets 目录下
@@ -129,6 +146,16 @@ const searchTrips = async () => {
     console.error(e);
   }
 }
+
+const handleSearch = async () => {
+  try{
+    await router.push({path: '/search/hotel', query:
+          {"address" : searchAddress.value}});
+  }catch (e) {
+    console.error(e);
+  }
+};
+
 const defaultTime = new Date(2000, 1, 1, 12, 0, 0)
 const shortcuts = [
   {
@@ -180,6 +207,12 @@ watch(searchType, (newVal, oldVal) => {
 .demonstration {
   color: var(--el-text-color-secondary);
   font-size: small;
+}
+
+.input-hotel {
+  font-family: 微软雅黑;
+  font-size: 20px;
+  font-weight: normal;
 }
 
 .el-carousel__item h3 {

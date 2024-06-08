@@ -3,33 +3,39 @@
     <div class="hotel-search-container">
       <el-image style="width:100%;" :fit="contain" :src="require('@/assets/images/Hotel/topPic.jpg')" class="hotel-image" alt="顶部图片" />
       <!-- 搜索栏 -->
-      <div class="hotel-search-input">
-        <el-input
-            placeholder="在附近寻找酒店"
-            v-model="searchAddress"
-            class="search-bar"
-            suffix-icon="el-icon-search"
-            @keyup.enter="handleSearch"
-        >
-          <template #append>
-            <el-button icon="el-icon-search" @click="handleSearch">搜索酒店</el-button>
-          </template>
-        </el-input>
-      </div>
+      <el-row class="selector">
+        <el-col :span="16">
+          <div class="hotel-search-input">
+            <el-input
+                placeholder="在附近寻找酒店"
+                v-model="searchAddress"
+                class="search-bar"
+                suffix-icon="el-icon-search"
+                @keyup.enter="handleSearch"
+            >
+              <template #append>
+                <el-button icon="el-icon-search" @click="handleSearch">搜索酒店</el-button>
+              </template>
+            </el-input>
+          </div>
+        </el-col>
 
       <!-- 筛选器栏 -->
-      <div class="filter-bar">
-        <el-select
-            v-model="selectedSort"
-            placeholder="请选择排序方式"
-            class="filter-item"
-            @change="handleSortChange"
-        >
-          <el-option label="价格最低" value="price_asc"></el-option>
-          <el-option label="价格最高" value="price_desc"></el-option>
-          <el-option label="评分最高" value="rating_desc"></el-option>
-        </el-select>
-      </div>
+        <el-col :span="8">
+          <div class="filter-bar">
+            <el-select
+                v-model="selectedSort"
+                placeholder="请选择排序方式"
+                class="filter-item"
+                @change="handleSortChange"
+            >
+              <el-option label="价格最低" value="price_asc"></el-option>
+              <el-option label="价格最高" value="price_desc"></el-option>
+              <el-option label="评分最高" value="rating_desc"></el-option>
+            </el-select>
+          </div>
+        </el-col>
+      </el-row>
 
       <!-- 无限滚动列表 -->
       <ul v-infinite-scroll="handleScroll" class="hotel-list" style="overflow: auto">
@@ -69,7 +75,7 @@
                 <div class="price-details">
                   <div class="price">
                     <span style="font-size: 14px">￥</span>
-                    <span>{{ hotel.price }}</span>
+                    <span>{{ hotel.lowestPrice }}</span>
                     <span style="font-size: 14px">起</span>
                   </div>
                   <el-button style="margin-top: 7%" size="large" round type="primary" @click="handleViewDetails">
@@ -90,16 +96,22 @@ import { ref, onMounted, watch } from 'vue';
 import requestUtil from "@/util/request"
 import cookieUtil from "@/util/cookie"
 import {getServerUrl} from "@/util/request";
+import router from "@/router";
+import {useRoute} from "vue-router";
 const url = ref('');
 const hotelsInfo = ref([]);
+const route = useRoute();
+const address = ref(route.query.address)
 onMounted(async()=> {
   const res = await requestUtil.get(`/hotels/selectHotelByAddress`, {
-    "address": "北京市/海淀区"
+    address
   });
+  console.log(address);
   hotelsInfo.value = res.data;
   url.value = res.data;
   console.log(hotelsInfo.value);
 })
+
 // 使用 ref 创建响应式数据
 const searchAddress = ref('');
 const selectedSort = ref('price_asc'); // 默认排序方式
@@ -113,15 +125,26 @@ const handleSearch = async () => {
   const hot = await requestUtil.get('/hotels/selectHotelByAddress', {
     address: searchAddress.value
   });
-  console.log(searchAddress.value);
-
-  console.log(hot.data);
   hotelsInfo.value = hot.data;
-  console.log(hotelsInfo.value);
 };
 
-const handleSortChange = (value) => {
-  console.log('Sort by:', value);
+const handleSortChange = async (value) => {
+  if (value === "price_asc") {
+    const hot = await requestUtil.get('/hotels/selectHotelByPriceASC', {
+      address: searchAddress.value
+    });
+    hotelsInfo.value = hot.data;
+  } else if (value === "price_desc") {
+    const hot = await requestUtil.get('/hotels/selectHotelByPriceDESC', {
+      address: searchAddress.value
+    });
+    hotelsInfo.value = hot.data;
+  } else if (value === "rating_desc") {
+    const hot = await requestUtil.get('/hotels/selectHotelByScore', {
+      address: searchAddress.value
+    });
+    hotelsInfo.value = hot.data;
+  }
 };
 
 const handleScroll = (event) => {
@@ -136,9 +159,7 @@ const handleScroll = (event) => {
 };
 
 const handleViewDetails = (hotel) => {
-  console.log('View details for hotel:', hotel);
-  emit('view-details', hotel); // 触发外部定义的事件
-  // TODO: 打开查看酒店详情的页面或对话框
+
 };
 </script>
 
@@ -163,7 +184,12 @@ const handleViewDetails = (hotel) => {
   flex-direction: row;
   align-items: center;
   padding: 10px;
+  margin-left: 10%;
+}
+
+.selector {
   margin-left: 15%;
+  width: 70%;
 }
 
 .hotel-list {
@@ -187,14 +213,13 @@ const handleViewDetails = (hotel) => {
 }
 
 .search-bar {
-  margin-bottom: 20px;
-  width: 50%;
+  width: 70%;
 }
 
 .filter-bar {
-  margin-bottom: 20px;
   margin-right: 20%;
   text-align: right;
+  margin-top: 3%;
 }
 
 .filter-item {
