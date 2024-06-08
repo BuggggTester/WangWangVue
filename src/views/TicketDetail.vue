@@ -44,7 +44,7 @@
           </el-col>
           <el-col :span="8" class="buy-nutton">
             <div class="button-container">
-              <el-button @click="goToTicketOrderPrepare('second_class')" type="primary" size="mini" style="height:40px;width:130px">
+              <el-button @click="goToTicketOrderPrepare('second')" type="primary" size="mini" style="height:40px;width:130px">
                 订购
               </el-button>
             </div>
@@ -65,7 +65,7 @@
           </el-col>
           <el-col :span="8" class="buy-nutton">
             <div class="button-container">
-              <el-button @click="goToTicketOrderPrepare('first_class')" type="primary" size="mini" style="height:40px;width:130px">
+              <el-button @click="goToTicketOrderPrepare('first')" type="primary" size="mini" style="height:40px;width:130px">
                 订购
               </el-button>
             </div>
@@ -87,7 +87,7 @@
           </el-col>
           <el-col :span="8" class="buy-nutton">
             <div class="button-container">
-              <el-button v-if="trip.first_seat>0 " @click="goToTicketOrderPrepare('business_class')" type="primary" size="mini" style="height:40px;width:130px">
+              <el-button v-if="trip.first_seat>0 " @click="goToTicketOrderPrepare('business')" type="primary" size="mini" style="height:40px;width:130px">
                 订购
               </el-button>
               <el-button v-else type="primary" size="mini" style="height:40px;width:130px" disabled="true">订购</el-button>

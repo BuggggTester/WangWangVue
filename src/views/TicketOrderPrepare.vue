@@ -153,7 +153,7 @@ const newIdentity = ref("");
 const route = useRoute();
 const chooseVisible = ref(false);
 const oldPassengers = ref([]);
-
+const passengerId = ref('');
 onMounted(async()=> {
   const res = await requestUtil.get('/passenger/select/userId', {
     "userId": cookieUtil.getCookie("userId")
@@ -166,7 +166,7 @@ onMounted(async()=> {
 });
 
 const addOldPassenger = (passenger) => {
-  if(passengers.value.length <3) {
+  if(passengers.value.length < 1) {
     if (passengers.value.some(p => p.name === passenger.name)) {
       ElMessage({
         message: "乘车人已存在！",
@@ -175,6 +175,7 @@ const addOldPassenger = (passenger) => {
     } else {
       setTimeout(function () {
         passengers.value.push(passenger);
+        passengerId.value = passenger.pid;
         ElMessage({
           message: "添加乘车人成功！",
           type: "success"
@@ -184,7 +185,7 @@ const addOldPassenger = (passenger) => {
   } else {
     setTimeout(function() {
       ElMessage({
-        message: "最多只能添加3个乘车人！",
+        message: "最多只能添加1个乘车人！",
         type: "warning"
       })
     }, 300)
@@ -193,11 +194,12 @@ const addOldPassenger = (passenger) => {
 
 const addPassenger = async () => {
   try {
+    console.log(route.query.seatType);
     const res = await requestUtil.post("/passenger/create", {
-        "phoneNum": newPhone.value,
+      "phoneNum": newPhone.value,
       "userId": cookieUtil.getCookie("userId"),
       "identity": newIdentity.value,
-      "name": newName.value
+      "name": newName.value,
     })
     console.log(res.data);
     if (res.data.msg == "create passenger success") {
@@ -258,6 +260,7 @@ const createOrder = async() =>{
         chosenSeat.value = selectedSeatPlace.value;
     }
     console.log(selectedSeatPlace.value);
+    console.log(passengerId.value);
     // 发送创建订单的请求
     const res = await requestUtil.post('/order/create', {
         order_time: timeUtil.getCurrentTime(),
@@ -269,16 +272,11 @@ const createOrder = async() =>{
         payment: route.query.price,
         trip_id: route.query.trip_id,
         seat: chosenSeat.value,
-        payway: selectedPaymentMethod.value
+        payway: selectedPaymentMethod.value,
+        "seat_type": route.query.seatType,
+        "pid": 1
     })
-    .then(response => {
-      // 请求成功处理
-      console.log(response.data);
-    })
-    .catch(error => {
-      // 请求失败
-      console.error(error);
-    });
+   console.log(res.data);
 }
 
 const confirmMessage = async () => {
