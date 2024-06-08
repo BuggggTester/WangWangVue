@@ -41,7 +41,7 @@
             </el-col>
             <el-col :span="8" class="buy-nutton">
                 <div class="button-container">                    
-                    <el-button @click="order" type="primary" size="mini" style="height:40px;width:130px">订购</el-button>                    
+                    <el-button @click="orderDialogVisible = true" type="primary" size="mini" style="height:40px;width:130px">订购</el-button>                    
                 </div>
             </el-col>
         </el-row>
@@ -60,7 +60,7 @@
             </el-col>
             <el-col :span="8" class="buy-nutton">
                 <div class="button-container">
-                    <el-button @click="order" type="primary" size="mini" style="height:40px;width:130px">订购</el-button>
+                    <el-button @click="orderDialogVisible = true" type="primary" size="mini" style="height:40px;width:130px">订购</el-button>
                 </div>
             </el-col>
         </el-row>
@@ -106,8 +106,8 @@
 
         
         <div slot="footer" class="dialog-footer">
-            <el-button @click="order" type="primary" style="margin-right: 10px;margin-left:50px;margin-top:10px;">确认支付</el-button>
-            <el-button @click="orderDialogVisible = false" style="margin-right: 10px;margin-left:50px;margin-top:10px;">取消</el-button>
+            <el-button @click="order" type="primary" style="margin-right: 10px;margin-left:150px;margin-top:10px;">确认支付</el-button>
+            <el-button @click="orderDialogVisible = false" style="margin-right: 10px;margin-left:150px;margin-top:10px;">取消</el-button>
         </div>
     </el-dialog>
     
@@ -395,8 +395,8 @@ background-size:auto;
     background-image: url('~@/assets/images/payMethod/wechat.png'); /* 使用webpack的别名指向图片路径 */
     background-size: contain; /* 调整图片尺寸 */
     background-repeat: no-repeat; /* 禁止背景图片重复 */
-    width:80px; /* 设置图标宽度 */
-    height: 100px; /* 设置图标高度 */
+    width:160px; /* 设置图标宽度 */
+    height: 200px; /* 设置图标高度 */
     display: inline-block; /* 将图标设置为行内块元素 */
 }
 
@@ -404,8 +404,8 @@ background-size:auto;
     background-image: url('~@/assets/images/payMethod/alipay.png');
     background-size: contain;
     background-repeat: no-repeat;
-    width: 80px;
-    height: 100px;
+    width: 160px;
+    height: 200px;
     display: inline-block;
 }
 
@@ -413,8 +413,8 @@ background-size:auto;
     background-image: url('~@/assets/images/payMethod/bank.png');
     background-size: contain;
     background-repeat: no-repeat;
-    width: 80px;
-    height: 100px;
+    width: 160px;
+    height: 200px;
     display: inline-block;
 }
 
