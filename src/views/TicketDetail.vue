@@ -35,12 +35,12 @@
         <el-row>
           <el-col :span="8" class="ticket-level">
                 <span style="align-items: center">二等座 
-                    <span class="availability" v-if="trip.first_seat > 0 || trip.second_seat > 0">有票</span>
+                    <span class="availability" v-if="trip.second_seat > 0">有票</span>
                     <span :span="6" class="unavailability" v-else>无票</span>
                 </span>
           </el-col>
           <el-col :span="8" class="ticket-price">
-            ￥{{ price }}
+            ￥{{ (price * 1).toFixed(2) }}
           </el-col>
           <el-col :span="8" class="buy-nutton">
             <div class="button-container">
@@ -56,7 +56,7 @@
         <el-row>
           <el-col :span="8" class="ticket-level">
                 <span style="align-items: center">一等座 
-                    <span class="availability" v-if="trip.first_seat > 0 || trip.second_seat > 0">有票</span>
+                    <span class="availability" v-if="trip.first_seat > 0 ">有票</span>
                     <span :span="6" class="unavailability" v-else>无票</span>
                 </span>
           </el-col>
@@ -87,48 +87,14 @@
           </el-col>
           <el-col :span="8" class="buy-nutton">
             <div class="button-container">
-              <el-button @click="goToTicketOrderPrepare('business_class')" type="primary" size="mini" style="height:40px;width:130px">
+              <el-button v-if="trip.first_seat>0 " @click="goToTicketOrderPrepare('business_class')" type="primary" size="mini" style="height:40px;width:130px">
                 订购
               </el-button>
+              <el-button v-else type="primary" size="mini" style="height:40px;width:130px" disabled="true">订购</el-button>
             </div>
           </el-col>
         </el-row>
       </div>
-
-
-      <div class="component">
-        <el-button style="width: 100%;height:60px;" @click="chooseVisible = true"> + 点击选择乘车人</el-button>
-      </div>
-
-      <el-dialog v-model="chooseVisible">
-        <div v-if="passengers.length > 0" v-for="passenger in passengers" :key="passenger.pid" style="margin-top: 3%">
-          <IdentityCard :passenger="passenger"/>
-        </div>
-        <div class="component">
-          <el-button style="width: 100%;" @click="addVisible = true"> + 点击添加乘车人</el-button>
-        </div>
-        <el-dialog v-model="addVisible">
-          <div class="component">
-            <hr style="color: #6b778c">
-          </div>
-          <div class="component">
-            <span style="margin-right: 2%">请输入姓名：<span style="color: red">*</span></span>
-            <el-input v-model="newName" placeholder="请输入名字" style="width: 65%;"/>
-          </div>
-          <div class="component">
-            <span style="margin-right: 2%">请输入手机号：<span style="color: red">*</span></span>
-            <el-input v-model="newPhone" placeholder="请输入手机号" style="width: 63%;"/>
-          </div>
-          <div class="component">
-            <span style="margin-right: 2%">请输入身份证号：<span style="color: red">*</span></span>
-            <el-input v-model="newIdentity" placeholder="请输入身份证号" style="width: 61%;"/>
-          </div>
-          <template #footer>
-            <el-button type="default" @click="addVisible = false">返回</el-button>
-            <el-button type="primary" @click="addPassenger">添加乘车人</el-button>
-          </template>
-        </el-dialog>
-      </el-dialog>
     </div>
   </el-card>
 </template>
@@ -179,8 +145,9 @@ onMounted(async () => {
     "fromPlace": trip.value.from_place,
     "toPlace": trip.value.to_place
   })
-  trip.first_seat = res5.data.firstSeats;
-  trip.second_seat = res5.data.secondSeats;
+  console.log(res5.data.firstSeats);
+  trip.value.first_seat = res5.data.firstSeats;
+  trip.value.second_seat = res5.data.secondSeats;
   duration.value = res5.data.time;
   price.value = res6.data.minPrice;
 
