@@ -20,7 +20,7 @@ const rooms = ref([
   {
     image: require('@/assets/images/carousel/image1.png'),
     rating: 4.9,
-    roomType: "双床房",
+    roomType: "DOUBLE",
     description: "非常舒适的双床房，可供5个人（？）居住。当然3个人也可以。",
     price: 329.15,
   },{
@@ -159,7 +159,7 @@ const handleViewDetails = (hotel) => {
 .home-box {
   position: relative;
   width: 102.9%;
-  height: 108%;
+  height: 107%;
   margin-top: -50px;
   margin-left: -20px;
   margin-right: -20px;
@@ -295,6 +295,15 @@ const handleViewDetails = (hotel) => {
 }
 
 .price span {
+  font-size: 35px;
+  color: #ff681d;
+}
+
+.capable {
+  margin-top: 27%;
+}
+
+.capable span {
   font-size: 35px;
   color: #ff681d;
 }

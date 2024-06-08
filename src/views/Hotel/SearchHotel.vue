@@ -145,13 +145,13 @@ const handleViewDetails = (hotel) => {
 <style scoped>
 .home-box {
   position: relative;
-  width: 100%;
-  height: 100%;
-  top: 0px;
-  left: 0px;
+  width: 102.9%;
+  height: 107%;
+  margin-top: -50px;
+  margin-left: -20px;
+  margin-right: -20px;
   background-color: #101e41;
   overflow: auto;
-  padding-top: -50px;
 }
 
 .hotel-search-container {

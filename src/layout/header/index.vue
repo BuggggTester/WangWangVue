@@ -1,12 +1,12 @@
 <template>
-  <el-row style="background-color: #2d3a4b; height: 100px; display: flex; align-items: center;" >
+  <el-row style="background-color: #2d3a4b; height: 100%; display: flex; align-items: center;" >
     <el-col :span="5">
       <div style="color: white">
         <img src="../../assets/logo.png" alt="Logo" style="height: 40px; margin-right: 10px;">
         <span class="title" @click="goHome">汪汪旅途</span>
       </div>
     </el-col>
-    <el-col :span="8" >
+    <el-col :span="7" >
       <div>
         <el-input
             v-model="input"
@@ -22,7 +22,7 @@
     <el-col :span="2" :offset="2" style="color: white">
       欢迎，{{ user }}
     </el-col>
-    <el-col :span="1">
+    <el-col :span="2">
       <span style="color: white; cursor: pointer" @click="dialogVisible = true">退出登录</span>
       <el-dialog
           v-model="dialogVisible"

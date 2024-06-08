@@ -204,7 +204,10 @@
         ElMessage({
           message: "支付成功！",
           type: "success"
-        })
+        });
+        setTimeout(function(){
+          location.reload();
+        },500);
       }
     }catch (e) {
       ElMessage({
