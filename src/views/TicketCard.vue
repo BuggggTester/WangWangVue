@@ -29,10 +29,10 @@
       <template #footer>
         <el-row>
           <el-col :span="8">
-            <span style="align-items: center">二等：<span style="color:#42b983">{{ ticket.second_seat }}张</span></span>
+            <span style="align-items: center">二等：<span style="color:#42b983">{{ ticket.second_seat }}</span></span>
           </el-col>
           <el-col :span="8">
-            <span style="align-items: center">一等：<span style="color:#42b983">{{ ticket.first_seat }}张</span></span>
+            <span style="align-items: center">一等：<span style="color:#42b983">{{ ticket.first_seat }}</span></span>
           </el-col>
           <!--        <el-col :span="8">-->
           <!--          <span style="align-items: center">商务：<span style="color:#42b983">{{ ticket.business }}</span></span>-->
@@ -79,8 +79,16 @@ onMounted(async () => {
     "fromPlace": route.query.fromPlace,
     "toPlace": route.query.toPlace
   })
-  props.ticket.first_seat = res2.data.firstSeats;
-  props.ticket.second_seat = res2.data.secondSeats;
+  if(res2.data.firstSeats < 20) {
+    props.ticket.first_seat = res2.data.firstSeats + "张";
+  }else{
+    props.ticket.first_seat = "有座";
+  }
+  if(res2.data.secondSeats < 20) {
+    props.ticket.second_seat = res2.data.secondSeats + "张";
+  }else{
+    props.ticket.second_seat = "有座";
+  }
   props.ticket.duration = res2.data.time;
   props.ticket.price = res3.data.minPrice;
 })
