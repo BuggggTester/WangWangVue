@@ -28,7 +28,6 @@
         >
           <el-option label="价格最低" value="price_asc"></el-option>
           <el-option label="价格最高" value="price_desc"></el-option>
-          <el-option label="距离最近" value="distance_asc"></el-option>
           <el-option label="评分最高" value="rating_desc"></el-option>
         </el-select>
       </div>

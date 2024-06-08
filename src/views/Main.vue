@@ -75,15 +75,6 @@
 
 <script setup>
 import {pcTextArr} from 'element-china-area-data'
-
-let s = "";
-for (let i = 0; i < pcTextArr.length; i++) {
-  for (let j = 0; j < pcTextArr[i].children.length; j++) {
-    s = s + "\"" + pcTextArr[i].label + "-" + pcTextArr[i].children[j].label + "\"" + ", ";
-  }
-}
-console.log(s);
-
 import {onMounted, ref, watch} from 'vue'
 import { useRouter } from 'vue-router'
 import requestUtil from '@/util/request'
