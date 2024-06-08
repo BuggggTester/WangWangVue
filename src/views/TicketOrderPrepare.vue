@@ -261,13 +261,13 @@ const createOrder = async() =>{
     // 发送创建订单的请求
     const res = await requestUtil.post('/order/create', {
         order_time: timeUtil.getCurrentTime(),
-        userId: cookieUtil.getCookie("userId"),
+        user_id: cookieUtil.getCookie("userId"),
         //type: this.type,
         state: "notpayed",
-        fromPlace: route.query.fromPlace,
-        toPlace: route.query.toPlace,
+        from_place: route.query.fromPlace,
+        to_place: route.query.toPlace,
         payment: route.query.price,
-        tripId: route.query.trip_id,
+        trip_id: route.query.trip_id,
         seat: chosenSeat.value,
         payway: selectedPaymentMethod.value
     })
@@ -279,13 +279,15 @@ const createOrder = async() =>{
       // 请求失败
       console.error(error);
     });
-
-    await createTest();
 }
 
-const createTest = async () => {
+const confirmMessage = async () => {
         await messageUtil.createMessage("汪汪旅途", cookieUtil.getCookie("userId"), "火车票购票成功", `您的从${route.query.fromPlace}到${route.query.toPlace}的车次火车票已购买成功，将在${route.query.startTime}出发，请关注车次动态，及时出行，注意安全。祝您旅途愉快，汪汪~`)
-    }
+}
+
+const cancelMessage = async () => {
+        await messageUtil.createMessage("汪汪旅途", cookieUtil.getCookie("userId"), "火车票取消成功", `您的从${route.query.fromPlace}到${route.query.toPlace}的车次火车票已经取消，您在${route.query.startTime}不会出发。汪汪很遗憾这次不能陪伴您出行，祝您生活愉快~`)
+}
 
 const confirmOrder = async() =>{
     //确认订单
@@ -305,6 +307,8 @@ const confirmOrder = async() =>{
     "startTime": route.query.startTime,
     };
     router.push({path: '/ticket',query: param});
+
+    await confirmMessage();
 }
 
 const cancelOrder = async() =>{
@@ -321,6 +325,8 @@ const cancelOrder = async() =>{
       console.error(error);
     });
     ElMessage.success('取消订单成功');
+
+    await cancelMessage();
 }
 
 </script>

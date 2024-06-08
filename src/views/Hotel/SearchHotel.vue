@@ -38,7 +38,7 @@
       </el-row>
 
       <!-- 无限滚动列表 -->
-      <ul v-infinite-scroll="handleScroll" class="hotel-list" style="overflow: auto">
+      <ul v-if="ifempty" v-infinite-scroll="handleScroll" class="hotel-list" style="overflow: auto">
         <li v-for="hotel in hotelsInfo" class="infinite-list-item">
           <el-cards class="hotel-card" @click="handleViewDetails">
             <el-row style="margin-top: 2%; margin-left: 1%; margin-right: 1%;" class="hotel-row">
@@ -87,8 +87,7 @@
           </el-cards>
         </li>
       </ul>
-
-      <el-pagination layout="prev page next"></el-pagination>
+      <div v-else style="margin-top:150px; text-align:center; line-height: 100px; font-size: 80px; color: white">前面的内容，以后再来探索吧~</div>
     </div>
   </div>
 </template>
@@ -105,6 +104,7 @@ const hotelsInfo = ref([]);
 const hotels = ref([]);
 const route = useRoute();
 const address = ref(route.query.address);
+const ifempty = ref(true)
 onMounted(async()=> {
   const res = await requestUtil.get(`/hotels/selectHotelByAddress`, {
     "address": address.value
@@ -113,6 +113,9 @@ onMounted(async()=> {
   hotelsInfo.value = res.data;
   url.value = res.data;
   console.log(hotelsInfo.value);
+  if(hotelsInfo.value.length === 0){
+    ifempty.value = false
+  }
 })
 
 // 使用 ref 创建响应式数据
