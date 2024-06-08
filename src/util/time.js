@@ -38,8 +38,11 @@ export function formToDate(inputDate) {
     const day = String(date.getDate()).padStart(2, '0');
     return `${month}月${day}日`;
 }
+
+
 export default {
     formatDate,
     stampToTime,
-    formToDate
+    formToDate,
+    getCurrentTime
 }
