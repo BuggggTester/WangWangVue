@@ -101,10 +101,10 @@ import {useRoute} from "vue-router";
 const url = ref('');
 const hotelsInfo = ref([]);
 const route = useRoute();
-const address = ref(route.query.address)
+const address = ref(route.query.address);
 onMounted(async()=> {
   const res = await requestUtil.get(`/hotels/selectHotelByAddress`, {
-    address
+    "address": address.value
   });
   console.log(address);
   hotelsInfo.value = res.data;

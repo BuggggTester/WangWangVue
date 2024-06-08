@@ -143,6 +143,7 @@ import router from "@/router";
 import time from '@/util/time';
 import {ArrowLeft} from "@element-plus/icons-vue";
 import axios from 'axios';
+import messageUtil from "@/util/message"
 
 const passengers = ref([]);
 const addVisible = ref(false);
@@ -278,7 +279,13 @@ const createOrder = async() =>{
       // 请求失败
       console.error(error);
     });
+
+    await createTest();
 }
+
+const createTest = async () => {
+        await messageUtil.createMessage("汪汪旅途", cookieUtil.getCookie("userId"), "火车票购票成功", `您的从${route.query.fromPlace}到${route.query.toPlace}的车次火车票已购买成功，将在${route.query.startTime}出发，请关注车次动态，及时出行，注意安全。祝您旅途愉快，汪汪~`)
+    }
 
 const confirmOrder = async() =>{
     //确认订单
