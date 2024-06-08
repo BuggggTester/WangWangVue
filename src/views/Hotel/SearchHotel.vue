@@ -87,7 +87,7 @@
           </el-cards>
         </li>
       </ul>
-      <div v-else style="margin-top:150px; text-align:center; line-height: 100px; font-size: 80px; color: white">前面的内容以后再来探索吧~</div>
+      <div v-else style="margin-top:150px; text-align:center; line-height: 100px; font-size: 80px; color: white">前面的内容，以后再来探索吧~</div>
     </div>
   </div>
 </template>
@@ -101,6 +101,7 @@ import router from "@/router";
 import {useRoute} from "vue-router";
 const url = ref('');
 const hotelsInfo = ref([]);
+const hotels = ref([]);
 const route = useRoute();
 const address = ref(route.query.address);
 const ifempty = ref(true)

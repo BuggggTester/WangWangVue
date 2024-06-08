@@ -2,19 +2,23 @@
 import {onMounted, ref} from "vue";
 import requestUtil, {getServerUrl} from "@/util/request"
 import {inputNumberEmits} from "element-plus";
+import { useRoute } from "vue-router";
 const trip_id = 1
+const route = useRoute();
 let foods = ref('')
 let number = ref(0)
 let rows = ref(0)
+console.log(route.query.trainId);
 let cols = ref([])
 onMounted(async () => {
   const rec = await requestUtil.get('food/select/tripId', {
-    tripId: trip_id
+    "trainId": route.query.trainId,
+    "time": route.query.time
   })
   foods.value = rec.data
   console.log(foods.value)
   number.value = foods.value.length
-  rows.value = (number.value - 1) / 3 + 1
+  rows.value = Math.floor((number.value - 1) / 3) + 1
   while (number.value > 0){
     cols.value.push(number.value < 3 ? number.value : 3)
     number.value -= 3

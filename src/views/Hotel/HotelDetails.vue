@@ -13,7 +13,7 @@ const hotel = ref({
   image: require('@/assets/images/carousel/image1.png'),
   rating: 4.9,
   name: "北京第十四酒店",
-  description: "北京第十四家酒店，不是北京第四十号酒店，也不是北京第四十四号酒店",
+  description: "北京第十四家酒店，不是北京第四十号酒店，也不是北京第四十四号酒店。",
   price: 329.15,
 })
 const rooms = ref([
@@ -84,7 +84,11 @@ const handleViewDetails = (hotel) => {
             <el-image :fit="cover" :src="hotel.image" class="hotel-image" alt="酒店图片" />
           </el-col>
           <el-col :span="7">
-            <p class="rate-number">{{ hotel.rating }}</p>
+            <div class="hotel-class">
+              <span class="rate-number">{{ hotel.rating }}</span>
+              <span>分</span>
+              <p class="hotel-description">{{ hotel.description }}</p>
+            </div>
           </el-col>
         </el-row>
       </div>
@@ -187,6 +191,12 @@ const handleViewDetails = (hotel) => {
   width: 100%;
   height: 40%;
   background: linear-gradient(#101e41, #1e2548);
+}
+
+.hotel-class {
+  font-size: 20px;
+  padding: 4%;
+  line-height: 30px;
 }
 
 .hotel-page-image {
@@ -300,12 +310,13 @@ const handleViewDetails = (hotel) => {
 }
 
 .capable {
-  margin-top: 27%;
+  margin-top: 39%;
+  text-align: center;
 }
 
 .capable span {
-  font-size: 35px;
-  color: #ff681d;
+  font-size: 25px;
+  color: #ffffff;
 }
 
 .el-table {
