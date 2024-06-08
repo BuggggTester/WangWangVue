@@ -38,8 +38,20 @@ export function formToDate(inputDate) {
     const day = String(date.getDate()).padStart(2, '0');
     return `${month}月${day}日`;
 }
+/*
+获取当前时间yyyy-mm-dd
+ */
+export function getCurrentTime() {
+    let today = new Date();
+    let year = today.getFullYear();
+    let month = today.getMonth() + 1; // 月份从0开始，需要加1
+    let day = today.getDate();
 
+    month = month < 10 ? '0' + month : month;
+    day = day < 10 ? '0' + day : day;
 
+    return `${year}-${month}-${day}`; // 输出 yyyy-MM-dd 格式的当前日期
+}
 export default {
     formatDate,
     stampToTime,
