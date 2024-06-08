@@ -260,13 +260,13 @@ const createOrder = async() =>{
     // 发送创建订单的请求
     const res = await requestUtil.post('/order/create', {
         order_time: timeUtil.getCurrentTime(),
-        userId: cookieUtil.getCookie("userId"),
+        user_id: cookieUtil.getCookie("userId"),
         //type: this.type,
         state: "notpayed",
-        fromPlace: route.query.fromPlace,
-        toPlace: route.query.toPlace,
+        from_place: route.query.fromPlace,
+        to_place: route.query.toPlace,
         payment: route.query.price,
-        tripId: route.query.trip_id,
+        trip_id: route.query.trip_id,
         seat: chosenSeat.value,
         payway: selectedPaymentMethod.value
     })
