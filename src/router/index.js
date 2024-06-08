@@ -90,6 +90,16 @@ const routes = [
             component: () => import('../views/Message.vue'),
         },
         {
+            path: '/meal',
+            name: 'Meal',
+            component: () => import('../views/meal/Meal.vue'),
+        },
+        {
+            path: '/message',
+            name: 'Message',
+            component: () => import('../views/Message.vue'),
+        },
+        {
             path: '/payment',
             name: "Payment",
             component: () => import('../views/payment.vue'),

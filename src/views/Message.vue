@@ -139,7 +139,6 @@ onMounted( async () => {
                   width="500"
               >
                 <span class="mainbody">{{ message.body }}</span>
-                <el-divider direction="hidden" style="margin: 10px"/>
                 <span class="foot">发送时间：{{message.send_date}} {{ message.send_time }}</span>
               </el-dialog>
             </el-col>
@@ -177,7 +176,8 @@ onMounted( async () => {
   margin-top: 10px;
 }
 .message-row{
-  margin-top: 6px;
+  margin-top: 3px;
+  margin-bottom: 6px;
 }
 .message-row-unread {
   background-color: rgba(137, 193, 246, 0.44);
@@ -194,9 +194,9 @@ onMounted( async () => {
   overflow:hidden !important
 }
 .divider{
-  margin-top: 0px;
-  margin-bottom: 5px;
-  border-bottom: 1px;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  border-bottom: 10px;
 }
 .mainbody{
   font-family: Arial, "Microsoft Yahei", "Helvetica Neue", Helvetica, sans-serif;
@@ -204,5 +204,11 @@ onMounted( async () => {
 }
 .foot{
   color: #8c939d;
+}
+p{
+  margin-top: 6px
+}
+button{
+  margin-top: 0px;
 }
 </style>
