@@ -87,6 +87,8 @@
           </el-cards>
         </li>
       </ul>
+
+      <el-pagination layout="prev page next"></el-pagination>
     </div>
   </div>
 </template>
@@ -100,6 +102,7 @@ import router from "@/router";
 import {useRoute} from "vue-router";
 const url = ref('');
 const hotelsInfo = ref([]);
+const hotels = ref([]);
 const route = useRoute();
 const address = ref(route.query.address);
 onMounted(async()=> {
