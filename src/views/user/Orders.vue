@@ -1,12 +1,27 @@
 <template>
 <!--  orders-->
-  <div v-if="orders.length > 0 " v-for="order in orders" :key="order.order_id">
+  <!-- <div v-if="orders.length > 0 " v-for="order in orders" :key="order.order_id">
     <div style="display: flex">
       <OrderCard :order="order"/>
       <OrderCard :order="order" style="margin-left: 5%"/>
     </div>
 
+  </div> -->
+
+  <div v-if="orders.length > 0">
+  <!-- 渲染第一列 -->
+  <div v-for="(order, index) in orders.slice(0, Math.ceil(orders.length / 2))" :key="order.order_id" style="display: flex">
+    <OrderCard :order="order"/>
+    <OrderCard :order="orders[index + Math.ceil(orders.length / 2)]" v-if="index + Math.ceil(orders.length / 2) < orders.length" style="margin-left: 5%"/>
   </div>
+
+  <!-- 渲染第二列 -->
+  <div v-if="orders.length > Math.ceil(orders.length / 2)" v-for="(order, index) in orders.slice(Math.ceil(orders.length / 2))" :key="order.order_id" style="display: flex">
+    <OrderCard :order="order"/>
+    <OrderCard :order="orders[index + Math.ceil(orders.length / 2)]" v-if="index + Math.ceil(orders.length / 2) < orders.length" style="margin-left: 5%"/>
+  </div>
+</div>
+
   <div v-else class="no-trip-card">
     <NoOrder/>
   </div>
