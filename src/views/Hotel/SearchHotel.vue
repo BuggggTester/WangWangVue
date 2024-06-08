@@ -4,9 +4,8 @@
       <el-image style="width:100%;" :fit="contain" :src="require('@/assets/images/Hotel/topPic.jpg')" class="hotel-image" alt="顶部图片" />
       <!-- 搜索栏 -->
       <div class="hotel-search-input">
-        <span class="search-bar-text">在 </span>
         <el-input
-            placeholder="请输入地址"
+            placeholder="在附近寻找酒店"
             v-model="searchAddress"
             class="search-bar"
             suffix-icon="el-icon-search"
@@ -34,11 +33,11 @@
 
       <!-- 无限滚动列表 -->
       <ul v-infinite-scroll="handleScroll" class="hotel-list" style="overflow: auto">
-        <li v-for="hotel in hotels" class="infinite-list-item">
+        <li v-for="hotel in hotelsInfo" class="infinite-list-item">
           <el-cards class="hotel-card" @click="handleViewDetails">
             <el-row style="margin-top: 2%; margin-left: 1%; margin-right: 1%;" class="hotel-row">
               <el-col :span="10">
-                <el-image :fit="cover" :src="hotel.picturePath" class="hotel-image" alt="酒店图片" />
+                <el-image :fit="cover" :src="getServerUrl() + hotel.picture_path" class="hotel-image" alt="酒店图片" />
               </el-col>
               <el-col :span="9">
                 <div class="hotel-info">
@@ -46,10 +45,11 @@
                   <div class="rating">
                     <el-rate
                         v-model="hotel.score"
-                        :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                        :colors="['#ffffff', '#F7BA2A', '#FF9900']"
                         :low-threshold="3"
                         :high-threshold="5"
                         show-score
+                        text-color="#ffffff"
                         disabled
                     ></el-rate>
                   </div>
@@ -89,76 +89,20 @@
 import { ref, onMounted, watch } from 'vue';
 import requestUtil from "@/util/request"
 import cookieUtil from "@/util/cookie"
-
+import {getServerUrl} from "@/util/request";
+const url = ref('');
+const hotelsInfo = ref([]);
+onMounted(async()=> {
+  const res = await requestUtil.get(`/hotels/selectHotelByAddress`, {
+    "address": "北京市/海淀区"
+  });
+  hotelsInfo.value = res.data;
+  url.value = res.data;
+  console.log(hotelsInfo.value);
+})
 // 使用 ref 创建响应式数据
 const searchAddress = ref('');
 const selectedSort = ref('price_asc'); // 默认排序方式
-const hotels = ref([
-  {
-    picturePath: require('@/assets/images/carousel/image1.png'),
-    score: 4.9,
-    name: "北京第十四酒店",
-    description: "北京第十四家酒店，不是北京第四十号酒店，也不是北京第四十四号酒店",
-    address: "北京市海淀区",
-    price: 329,
-  },
-  {
-    picturePath: require('@/assets/images/carousel/image1.png'),
-    score: 4.9,
-    name: "北京第十四酒店",
-    description: "北京第十四家酒店，不是北京第四十号酒店，也不是北京第四十四号酒店",
-    address: "北京市海淀区",
-    price: 329,
-  },
-  {
-    picturePath: require('@/assets/images/carousel/image1.png'),
-    score: 4.9,
-    name: "北京第十四酒店",
-    description: "北京第十四家酒店，不是北京第四十号酒店，也不是北京第四十四号酒店",
-    address: "北京市海淀区",
-    price: 329,
-  },
-  {
-    picturePath: require('@/assets/images/carousel/image1.png'),
-    score: 4.9,
-    name: "北京第十四酒店",
-    description: "北京第十四家酒店，不是北京第四十号酒店，也不是北京第四十四号酒店",
-    address: "北京市海淀区",
-    price: 329,
-  },
-  {
-    picturePath: require('@/assets/images/carousel/image1.png'),
-    score: 4.9,
-    name: "北京第十四酒店",
-    description: "北京第十四家酒店，不是北京第四十号酒店，也不是北京第四十四号酒店",
-    address: "北京市海淀区",
-    price: 329,
-  },
-  {
-    picturePath: require('@/assets/images/carousel/image1.png'),
-    score: 4.9,
-    name: "北京第十四酒店",
-    description: "北京第十四家酒店，不是北京第四十号酒店，也不是北京第四十四号酒店",
-    address: "北京市海淀区",
-    price: 329,
-  },
-  {
-    picturePath: require('@/assets/images/carousel/image1.png'),
-    score: 4.9,
-    name: "北京第十四酒店",
-    description: "北京第十四家酒店，不是北京第四十号酒店，也不是北京第四十四号酒店",
-    address: "北京市海淀区",
-    price: 329,
-  },
-  {
-    picturePath: require('@/assets/images/carousel/image1.png'),
-    score: 4.9,
-    name: "北京第十四酒店",
-    description: "北京第十四家酒店，不是北京第四十号酒店，也不是北京第四十四号酒店",
-    address: "北京市海淀区",
-    price: 329,
-  },
-]); // 酒店列表
 const tableScrollY = ref(300); // 表格滚动高度
 
 // 使用 defineEmits 定义事件
@@ -172,10 +116,8 @@ const handleSearch = async () => {
   console.log(searchAddress.value);
 
   console.log(hot.data);
-  hotels.value = hot.data;
-  console.log(hotels.value);
-  hotels.value.picturePath = "require(" + hotels.value.picturePath + ")";
-  console.log(hotels.value);
+  hotelsInfo.value = hot.data;
+  console.log(hotelsInfo.value);
 };
 
 const handleSortChange = (value) => {
@@ -209,6 +151,7 @@ const handleViewDetails = (hotel) => {
   left: 0px;
   background-color: #101e41;
   overflow: auto;
+  padding-top: -50px;
 }
 
 .hotel-search-container {
@@ -260,7 +203,7 @@ const handleViewDetails = (hotel) => {
 
 .hotel-image {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
   border-radius: 4px;
 }
@@ -296,8 +239,12 @@ const handleViewDetails = (hotel) => {
   margin-top: 20%;
 }
 
+.el-main {
+  --el-main-padding: 0 !important;
+}
 .price span {
   font-size: 35px;
   color: #ff681d;
 }
+
 </style>

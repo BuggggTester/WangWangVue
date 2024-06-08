@@ -89,6 +89,7 @@
 <script setup>
 import {onMounted, ref, watch} from 'vue'
 import requestUtil from "@/util/request";
+import cookieUtil from "@/util/cookie"
 import NoOrder from "@/views/NoOrder.vue";
 const value1 = ref('')
 const value2 = ref('')
@@ -136,9 +137,10 @@ const searchOrders =  async () => {
   console.log(value1.value)
   const params = {};
   params[value1.value] = formatDate(value2.value); // 将key参数添加到params对象中
+  const userId = cookieUtil.getCookie("userId");
   console.log(formatDate(value2.value))
   try {
-    const results = await requestUtil.get(`/order/select/notdeparture/1/orderTime`, params); // 将params对象作为第二个参数传递给get方法
+    const results = await requestUtil.get(`/order/select/notdeparture/${userId}/orderTime`, params); // 将params对象作为第二个参数传递给get方法
     orders.value = results.data;
     console.log(orders.value.length);
     if(orders.value.length === 0) {

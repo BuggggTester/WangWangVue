@@ -197,7 +197,7 @@ const handleViewDetails = (hotel) => {
 
 .hotel-image {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
   border-radius: 4px;
   border: 1px solid white;
