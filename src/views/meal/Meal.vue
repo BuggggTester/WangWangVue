@@ -1,9 +1,8 @@
 <script setup>
 import {onMounted, ref} from "vue";
-import requestUtil from "@/util/request"
+import requestUtil, {getServerUrl} from "@/util/request"
 import {inputNumberEmits} from "element-plus";
 const trip_id = 1
-let name = '宫保鸡丁'
 let foods = ref('')
 let number = ref(0)
 let rows = ref(0)
@@ -35,7 +34,7 @@ onMounted(async () => {
             <template #header><p style="font-size: 20px">{{ foods[j - 1 + (i-1) * 3].name}}</p></template>
             <el-row :gutter="50">
               <el-col :span="10">
-                <img :src='foods[j - 1 + (i-1) * 3].picture_path' width="170"/>
+                <img :src="getServerUrl() + foods[j - 1 + (i-1) * 3].picture_path" width="170"/>
               </el-col>
               <el-col :span="13">
                 <p style="color: #6b778c">{{ foods[j - 1 + (i-1) * 3].description}}</p>

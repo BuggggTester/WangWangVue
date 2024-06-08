@@ -1,5 +1,5 @@
 <template>
-  <el-card style="width: 70%">
+  <el-card style="width: 100%">
     <div style="display: flex">
       <div style="width: 80%">
         <div class="component">

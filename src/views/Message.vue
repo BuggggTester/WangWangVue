@@ -91,7 +91,7 @@ const catchChange = async () => {
   resetDialogState(messages)
 }
 const createTest = async () => {
-  await messageUtil.createMessage("Crow_D", 1, "推送测试", "test")
+  await messageUtil.createMessage("Crow_D", cookieUtil.getCookie("userId"), "推送测试", "test")
 }
 onMounted( async () => {
   await getAllMessages()
@@ -99,10 +99,16 @@ onMounted( async () => {
 </script>
 
 <template>
-  <el-container>
-    <el-header class="header" style="margin-left: 2.5%">消息中心</el-header>
+  <el-card style="padding-left: 5%; padding-right: 5%">
+    <template #header>
+    <el-page-header  @back="goBack">
+      <template #content>
+        <span style="font-size: larger; font-weight: 600; margin-right: 3%; white-space: nowrap;">消息中心</span>
+      </template>
+    </el-page-header>
+    </template>
     <el-row justify="space-between">
-      <el-col :span="7"><el-button style="font-family: 'Microsoft Yahei'" @click="setAllRead">全部设为已读</el-button></el-col>
+      <el-col :span="3"><el-button style="font-family: 'Microsoft Yahei'" @click="setAllRead">全部设为已读</el-button></el-col>
       <el-col :span="3"><el-checkbox v-model="onlyunread" @change="catchChange">只看未读消息</el-checkbox></el-col>
       <el-col :span="7">
         <div>
@@ -127,20 +133,19 @@ onMounted( async () => {
     <el-divider style="margin: 5px"/>
     <ul v-infinite-scroll="load" style="overflow: auto">
       <li v-for="message in messages" class="infinite-list-item">
-        <div :class="[message.ifread ? 'message-row-read' : 'message-row-unread']">
+        <div :class="[message.ifread ? 'message-row-read' : 'message-row-unread']" @click="dialogVisible[messages.indexOf(message)] = true; setRead(message)">
           <el-row justify="space-around" class="message-row">
             <el-col :span="6">
-              <el-button plain size="small"@click="dialogVisible[messages.indexOf(message)] = true; setRead(message)">
+              <p>
                 {{ message.title }}
-              </el-button>
+              </p>
               <el-dialog
                   v-model="dialogVisible[messages.indexOf(message)]"
                   :title="message.title"
                   width="500"
               >
-                <span class="mainbody">{{ message.body }}</span>
-                <el-divider direction="hidden" style="margin: 10px"/>
-                <span class="foot">发送时间：{{message.send_date}} {{ message.send_time }}</span>
+                <div class="mainbody">{{ message.body }}</div>
+                <div class="foot">发送时间：{{message.send_date}} {{ message.send_time }}</div>
               </el-dialog>
             </el-col>
             <el-col :span="5"><p>&emsp;&emsp;{{message.send_date}}</p></el-col>
@@ -153,7 +158,7 @@ onMounted( async () => {
       </li>
     </ul>
     <el-button @click="createTest">press to create a message</el-button>
-  </el-container>
+  </el-card>
 </template>
 
 <style scoped>
@@ -177,7 +182,8 @@ onMounted( async () => {
   margin-top: 10px;
 }
 .message-row{
-  margin-top: 6px;
+  margin-top: 3px;
+  margin-bottom: 6px;
 }
 .message-row-unread {
   background-color: rgba(137, 193, 246, 0.44);
@@ -194,15 +200,24 @@ onMounted( async () => {
   overflow:hidden !important
 }
 .divider{
-  margin-top: 0px;
-  margin-bottom: 5px;
-  border-bottom: 1px;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  border-bottom: 10px;
 }
 .mainbody{
   font-family: Arial, "Microsoft Yahei", "Helvetica Neue", Helvetica, sans-serif;
   font-size: 16px;
+  width: 100%;
 }
 .foot{
   color: #8c939d;
+  width: 100%;
+  margin-top: 20px;
+}
+p{
+  margin-top: 6px
+}
+button{
+  margin-top: 0px;
 }
 </style>

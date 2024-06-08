@@ -59,7 +59,10 @@ const props = defineProps({
 
 const goToTicketDetail = () => {
   let param = {
-    "trip_id": props.ticket.trip_id
+    "trip_id": props.ticket.trip_id,
+    "fromPlace": props.ticket.from_place,
+    "toPlace": props.ticket.to_place,
+    "startTime": route.query.startTime
   };
   router.push({path:'/TicketDetail',query: param});
 }
