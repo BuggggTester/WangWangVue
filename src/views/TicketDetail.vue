@@ -44,7 +44,7 @@
           </el-col>
           <el-col :span="8" class="buy-nutton">
             <div class="button-container">
-              <el-button @click="goToTicketOrderPrepare" type="primary" size="mini" style="height:40px;width:130px">
+              <el-button @click="goToTicketOrderPrepare('second_class')" type="primary" size="mini" style="height:40px;width:130px">
                 订购
               </el-button>
             </div>
@@ -65,7 +65,7 @@
           </el-col>
           <el-col :span="8" class="buy-nutton">
             <div class="button-container">
-              <el-button @click="goToTicketOrderPrepare" type="primary" size="mini" style="height:40px;width:130px">
+              <el-button @click="goToTicketOrderPrepare('first_class')" type="primary" size="mini" style="height:40px;width:130px">
                 订购
               </el-button>
             </div>
@@ -87,7 +87,7 @@
           </el-col>
           <el-col :span="8" class="buy-nutton">
             <div class="button-container">
-              <el-button @click="goToTicketOrderPrepare" type="primary" size="mini" style="height:40px;width:130px">
+              <el-button @click="goToTicketOrderPrepare('business_class')" type="primary" size="mini" style="height:40px;width:130px">
                 订购
               </el-button>
             </div>
@@ -233,30 +233,15 @@ const addPassenger = async () => {
 
 }
 
-const orderDialogVisible = ref(false);
-const selectedPaymentMethod = ref(null);
 
-const order = () => {
-  if (selectedPaymentMethod.value === 'wechat') {
-    console.log('使用微信支付');
-  } else if (selectedPaymentMethod.value === 'alipay') {
-    console.log('使用支付宝支付');
-  } else if (selectedPaymentMethod.value === 'bank') {
-    console.log('使用银行卡支付');
-  } else {
-    console.log('请选择支付方式');
-  }
-
-  orderDialogVisible.value = false;
-};
-
-const goToTicketOrderPrepare = () => {
+const goToTicketOrderPrepare = (seatType) => {
   let param = {
     "trip_id": tripId.value,
     "fromPlace": route.query.fromPlace,
     "toPlace": route.query.toPlace,
     "startTime": route.query.startTime,
-    "price":price.value
+    "price":price.value,
+    "seatType": seatType
   };
   router.push({path: '/TicketOrderPrepare', query: param});
 }
