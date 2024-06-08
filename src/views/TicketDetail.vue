@@ -41,7 +41,7 @@
             </el-col>
             <el-col :span="8" class="buy-nutton">
                 <div class="button-container">                    
-                    <el-button @click="order" type="primary" size="mini" style="height:40px;width:130px">订购</el-button>                    
+                    <el-button @click="orderDialogVisible = true" type="primary" size="mini" style="height:40px;width:130px">订购</el-button>                    
                 </div>
             </el-col>
         </el-row>
@@ -60,7 +60,7 @@
             </el-col>
             <el-col :span="8" class="buy-nutton">
                 <div class="button-container">
-                    <el-button @click="order" type="primary" size="mini" style="height:40px;width:130px">订购</el-button>
+                    <el-button @click="orderDialogVisible = true" type="primary" size="mini" style="height:40px;width:130px">订购</el-button>
                 </div>
             </el-col>
         </el-row>
@@ -72,6 +72,7 @@
                 <span style="align-items: center">商务座 
                     <span class="availability" v-if="trip.first_seat > 0 || trip.second_seat > 0">有票</span>
                     <span :span="6" class="unavailability" v-else>无票</span>
+
                 </span>
             </el-col>
             <el-col :span="8" class="ticket-price">
@@ -79,11 +80,36 @@
             </el-col>
             <el-col :span="8" class="buy-nutton">
                 <div class="button-container">
-                    <el-button @click="order" type="primary" size="mini" style="height:40px;width:130px">订购</el-button>
+                    <el-button @click="orderDialogVisible = true" type="primary" size="mini" style="height:40px;width:130px">订购</el-button>
                 </div>
             </el-col>
         </el-row>
     </div>
+
+    <el-dialog v-model="orderDialogVisible" title="请选择支付方式：">
+        <el-radio-group v-model="selectedPaymentMethod">
+            <!-- <el-radio label="wechat">微信支付</el-radio>
+            <el-radio label="alipay">支付宝支付</el-radio>
+            <el-radio label="bank">银行卡支付</el-radio> -->
+
+            <el-radio-button label="wechat">
+                <i class="icon-wechat"></i>
+            </el-radio-button>
+            <el-radio-button label="alipay">
+                <i class="icon-alipay"></i>
+            </el-radio-button>
+            <el-radio-button label="bank">
+                <i class="icon-bank"></i>
+            </el-radio-button>
+
+        </el-radio-group>
+
+        
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="order" type="primary" style="margin-right: 10px;margin-left:150px;margin-top:10px;">确认支付</el-button>
+            <el-button @click="orderDialogVisible = false" style="margin-right: 10px;margin-left:150px;margin-top:10px;">取消</el-button>
+        </div>
+    </el-dialog>
     
     <div class="component">
         <el-button style="width: 100%;height:60px;" @click="chooseVisible = true"> + 点击选择乘车人</el-button>
@@ -213,7 +239,22 @@ const addPassenger = async() => {
 
 }
 
+const orderDialogVisible = ref(false);
+const selectedPaymentMethod = ref(null);
 
+const order = () => {
+    if (selectedPaymentMethod.value === 'wechat') {
+        console.log('使用微信支付');
+    } else if (selectedPaymentMethod.value === 'alipay') {
+        console.log('使用支付宝支付');
+    } else if (selectedPaymentMethod.value === 'bank') {
+        console.log('使用银行卡支付');
+    } else {
+        console.log('请选择支付方式');
+    }
+
+    orderDialogVisible.value = false;
+};
 </script>
 
 <style scoped>
@@ -349,6 +390,34 @@ background-size:auto;
     z-index: 1;
     font-size: 20px;
 }
+
+.icon-wechat {
+    background-image: url('~@/assets/images/payMethod/wechat.png'); /* 使用webpack的别名指向图片路径 */
+    background-size: contain; /* 调整图片尺寸 */
+    background-repeat: no-repeat; /* 禁止背景图片重复 */
+    width:160px; /* 设置图标宽度 */
+    height: 200px; /* 设置图标高度 */
+    display: inline-block; /* 将图标设置为行内块元素 */
+}
+
+.icon-alipay {
+    background-image: url('~@/assets/images/payMethod/alipay.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 160px;
+    height: 200px;
+    display: inline-block;
+}
+
+.icon-bank {
+    background-image: url('~@/assets/images/payMethod/bank.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 160px;
+    height: 200px;
+    display: inline-block;
+}
+
 
 @import "@/assets/css/card-order.css";
 </style>
