@@ -79,11 +79,16 @@ const routes = [
             name: 'Foods',
             component: () => import('../views/manager/Food.vue'),
         },
-            {
-                path: '/message',
-                name: 'Message',
-                component: () => import('../views/Message.vue'),
-            }
+        {
+            path: '/message',
+            name: 'Message',
+            component: () => import('../views/Message.vue'),
+        },
+        {
+            path: '/meal',
+            name: 'Meal',
+            component: () => import('../views/meal/Meal.vue'),
+        }
         ]
     },
     {
