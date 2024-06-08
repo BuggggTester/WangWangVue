@@ -93,7 +93,7 @@ const routes = [
             path: '/meal',
             name: 'Meal',
             component: () => import('../views/meal/Meal.vue'),
-        }
+        },
         {
             path: '/message',
             name: 'Message',
