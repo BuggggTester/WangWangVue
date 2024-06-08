@@ -55,11 +55,12 @@ onMounted(()=> {
 .el-header{
   padding-left: 0px;
   padding-right: 0px;
-  height: 100px;
+  height: 60px;
 }
 .el-main {
   position: relative;
-  padding-top: 50px;
+  padding-top: 30px;
+  padding-bottom: 0px;
 }
 
 :deep(ul.el-menu){

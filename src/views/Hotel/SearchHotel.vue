@@ -27,7 +27,6 @@
         >
           <el-option label="价格最低" value="price_asc"></el-option>
           <el-option label="价格最高" value="price_desc"></el-option>
-          <el-option label="距离最近" value="distance_asc"></el-option>
           <el-option label="评分最高" value="rating_desc"></el-option>
         </el-select>
       </div>
@@ -146,13 +145,13 @@ const handleViewDetails = (hotel) => {
 <style scoped>
 .home-box {
   position: relative;
-  width: 100%;
-  height: 100%;
-  top: 0px;
-  left: 0px;
+  width: 102.9%;
+  height: 107%;
+  margin-top: -50px;
+  margin-left: -20px;
+  margin-right: -20px;
   background-color: #101e41;
   overflow: auto;
-  padding-top: -50px;
 }
 
 .hotel-search-container {

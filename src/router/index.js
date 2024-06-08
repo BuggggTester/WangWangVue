@@ -39,6 +39,11 @@ const routes = [
             component: ()=> import ('../views/TicketDetail.vue')
         },
         {
+            path: '/ticketorderprepare',
+            name: 'TicketOrderPrepare',
+            component: ()=> import ('../views/TicketOrderPrepare.vue')
+        },
+        {
           path: '/user',
           name: 'User',
           component: () => import('../views/user/User.vue'),
@@ -88,6 +93,16 @@ const routes = [
             path: '/meal',
             name: 'Meal',
             component: () => import('../views/meal/Meal.vue'),
+        }
+        {
+            path: '/message',
+            name: 'Message',
+            component: () => import('../views/Message.vue'),
+        },
+        {
+            path: '/payment',
+            name: "Payment",
+            component: () => import('../views/payment.vue'),
         }
         ]
     },

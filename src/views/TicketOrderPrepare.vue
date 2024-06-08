@@ -1,100 +1,23 @@
 <template>
-    <div class="page-container">
-    <el-page-header :icon="ArrowLeft" @back="$router.push('/ticketinfo')">
+<div class="page-container">
+
+    <el-page-header :icon="ArrowLeft" @back="$router.push('/ticketdetail')">
         <template #content>
-            <span class="head-trip-info">车次详情</span>
+            <span class="head-trip-info">车票预定</span>
         </template>
     </el-page-header>
 
-    <div class="spacer"></div> <!-- 空的div调整间距用 -->
+    <div class="spacer"></div> 
 
-    <div>
-        <div class="ticket-info">
-        <el-row class="component">
-            <el-col :span="8" class="ticket-time">{{trip.start_time }}</el-col>
-            <el-col :span="8" class="trip-no">
-                <div class="underline-container">
-                    <span class="underline-text">时刻表</span>
-                </div>
-            </el-col>
-            <el-col :span="8" class="ticket-time">{{ trip.end_time }}</el-col>
-        </el-row>
-        <el-row class="component">
-            <el-col :span="8" class="ticket-place">{{ trip.from_place }}</el-col>
-            <el-col :span="8" class="time">{{trip.train_id }} · {{ duration }}</el-col>
-            <el-col :span="8" class="ticket-place">{{trip.to_place}}</el-col>
-        </el-row>
-    </div>
-
-
-
-    <div class="buy-boarder">
-        <el-row>
-            <el-col :span="8" class="ticket-level">
-                <span style="align-items: center">二等座 
-                    <span class="availability" v-if="trip.first_seat > 0 || trip.second_seat > 0">有票</span>
-                    <span :span="6" class="unavailability" v-else>无票</span>
-                </span>
-            </el-col>
-            <el-col :span="8" class="ticket-price">
-                ￥{{ price }}
-            </el-col>
-            <el-col :span="8" class="buy-nutton">
-                <div class="button-container">                    
-                    <el-button @click="goToTicketOrderPrepare" type="primary" size="mini" style="height:40px;width:130px">订购</el-button>                    
-                </div>
-            </el-col>
-        </el-row>
-    </div>
-
-    <div class="buy-boarder">
-        <el-row>
-            <el-col :span="8" class="ticket-level">
-                <span style="align-items: center">一等座 
-                    <span class="availability" v-if="trip.first_seat > 0 || trip.second_seat > 0">有票</span>
-                    <span :span="6" class="unavailability" v-else>无票</span>
-                </span>
-            </el-col>
-            <el-col :span="8" class="ticket-price">
-                ￥{{ (price * 1.2).toFixed(2) }}
-            </el-col>
-            <el-col :span="8" class="buy-nutton">
-                <div class="button-container">
-                    <el-button @click="goToTicketOrderPrepare" type="primary" size="mini" style="height:40px;width:130px">订购</el-button>
-                </div>
-            </el-col>
-        </el-row>
-    </div>
-
-    <div class="buy-boarder">
-        <el-row>
-            <el-col :span="8" class="ticket-level">
-                <span style="align-items: center">商务座 
-                    <span class="availability" v-if="trip.first_seat > 0 || trip.second_seat > 0">有票</span>
-                    <span :span="6" class="unavailability" v-else>无票</span>
-
-                </span>
-            </el-col>
-            <el-col :span="8" class="ticket-price">
-                ￥{{ (price * 1.5).toFixed(2)}}
-            </el-col>
-            <el-col :span="8" class="buy-nutton">
-                <div class="button-container">
-                    <el-button @click="goToTicketOrderPrepare" type="primary" size="mini" style="height:40px;width:130px">订购</el-button>
-                </div>
-            </el-col>
-        </el-row>
-    </div>
-
-    
-    <div class="component">
-        <el-button style="width: 100%;height:60px;" @click="chooseVisible = true"> + 点击选择乘车人</el-button>
-    </div>
-
-    <el-dialog v-model="chooseVisible"> 
+    <el-card style="width: 100%;">
+        <span>请选择乘车人:</span>
         <div v-if="passengers.length > 0" v-for="passenger in passengers" :key="passenger.pid" style="margin-top: 3%">
             <IdentityCard :passenger="passenger"/>
         </div>
+        <div v-else>
+            <NoIdentity/>
+        </div>
+
         <div class="component">
             <el-button style="width: 100%;" @click="addVisible = true"> + 点击添加乘车人</el-button>
         </div>
@@ -119,9 +42,60 @@
                 <el-button type="primary" @click="addPassenger">添加乘车人</el-button>
             </template>
         </el-dialog>
-    </el-dialog>
+    </el-card>
+
+    <el-card>
+        <span>请选择支付方式:  </span>
+        <el-radio-group v-model="selectedPaymentMethod">
+
+            <el-radio-button label="wechat">
+                <i class="icon-wechat"></i>
+            </el-radio-button>
+            <el-radio-button label="alipay">
+                <i class="icon-alipay"></i>
+            </el-radio-button>
+            <el-radio-button label="bank">
+                <i class="icon-bank"></i>
+            </el-radio-button>
+
+        </el-radio-group>        
+    </el-card>
+    
+
+    <el-card>
+        <span>请选择座位:  </span>
+        <el-radio-group v-model="selectedSeatPlace">
+            <el-radio label="window" disabled>窗户</el-radio>
+            <el-radio-button>
+                <i class="icon-seat"></i>
+            </el-radio-button>
+            <el-radio-button>
+                <i class="icon-seat"></i>
+            </el-radio-button>
+            <el-radio-button>
+                <i class="icon-seat"></i>
+            </el-radio-button>  
+            <el-radio label="aisle" disabled>过道</el-radio>
+            <el-radio-button>
+                <i class="icon-seat"></i>
+            </el-radio-button>
+            <el-radio-button>
+                <i class="icon-seat"></i>
+            </el-radio-button>
+            <el-radio label="window" disabled>窗户</el-radio>
+        </el-radio-group>        
+    </el-card>
+    
+    <div>
+        <el-button @click="order" type="primary" style="margin-left:20%;margin-top:20px;height:40px;width:200px">预定</el-button>
+        <el-button @click="decideVisible = false" style="margin-left:20%;margin-top:20px;height:40px;width:200px">取消</el-button>
     </div>
+    <el-dialog v-model="decideVisible">
+        
+    </el-dialog>
+
 </div>
+
 </template>
 
 <script setup>
@@ -134,54 +108,11 @@ import {ElMessage} from "element-plus";
 import cookieUtil from "@/util/cookie"
 import router from "@/router";
 import time from '@/util/time';
-const route = useRoute();
-const tripId = ref(route.query.trip_id);
-const trip = ref("");
-const duration = ref("");
-const price = ref("");
-const chooseVisible = ref(false);
 const passengers = ref([]);
 const addVisible = ref(false);
 const newName = ref("");
 const newPhone = ref("");
 const newIdentity = ref("");
-
-onMounted(async () => {
-    try{
-    const res4 = await requestUtil.get('/trip/select/tripId', {
-        "tripId": tripId.value,
-    });
-    trip.value = res4.data;
-    trip.value.start_time = timeUtil.stampToTime(timeUtil.formatDate(trip.value.start_time));
-    trip.value.end_time = timeUtil.stampToTime(timeUtil.formatDate(trip.value.end_time));
-    }catch(e){
-        console.error(e);
-    }
-    console.log(trip);
-    const res5 = await requestUtil.get('/trip/sum', {
-    "tripId": tripId.value,
-    "fromPlace": trip.value.from_place,
-    "toPlace": trip.value.to_place
-    })
-    const res6 = await requestUtil.get('/trip/minPrice', {
-    "tripId": tripId.value,
-    "fromPlace": trip.value.from_place,
-    "toPlace": trip.value.to_place
-    })
-    trip.first_seat = res5.data.firstSeats;
-    trip.second_seat = res5.data.secondSeats;
-    duration.value = res5.data.time;
-    price.value = res6.data.minPrice;
-
-    const res = await requestUtil.get('/passenger/select/userId', {
-        "userId": cookieUtil.getCookie("userId")
-    })
-    passengers.value = res.data;
-    passengers.value.forEach(item=> {
-        item.dialogVisible = false;
-    })
-    console.log(passengers.value);
-});
 
 const addPassenger = async() => {
     try {
@@ -217,6 +148,7 @@ const addPassenger = async() => {
 
 const orderDialogVisible = ref(false);
 const selectedPaymentMethod = ref(null);
+const selectedSeatPlace = ref(null);
 
 const order = () => {
     if (selectedPaymentMethod.value === 'wechat') {
@@ -232,12 +164,6 @@ const order = () => {
     orderDialogVisible.value = false;
 };
 
-const goToTicketOrderPrepare = () => {
-    let param = {
-        "trip_id": tripId
-    };
-    router.push({path:'/TicketOrderPrepare',query: param});
-}
 </script>
 
 <style scoped>
@@ -401,7 +327,14 @@ background-size:auto;
     display: inline-block;
 }
 
-
+.icon-seat{
+    background-image: url('~@/assets/images/jinmao_seat.jpeg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 80px;
+    height: 100px;
+    display: inline-block;
+}
 @import "@/assets/css/card-order.css";
 </style>
 

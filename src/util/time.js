@@ -32,7 +32,14 @@ export function stampToTime(timestamp) {
      // 格式化时间，例如：04:00
     return hours + ':' + minutes;
 }
+export function formToDate(inputDate) {
+    const date = new Date(inputDate);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${month}月${day}日`;
+}
 export default {
     formatDate,
-    stampToTime
+    stampToTime,
+    formToDate
 }

@@ -3,9 +3,12 @@ import { ref, onMounted, watch } from 'vue';
 import requestUtil from "@/util/request"
 import cookieUtil from "@/util/cookie"
 
+// document.getElementsByClassName("main").style['padding'] = '0px';
 // 使用 ref 创建响应式数据
 const searchAddress = ref('');
-const selectedSort = ref('price_asc'); // 默认排序方式
+const defaultTime = new Date(2000, 1, 1, 12, 0, 0)
+const startTime = ref([])
+const endTime = ref([])
 const hotel = ref({
   image: require('@/assets/images/carousel/image1.png'),
   rating: 4.9,
@@ -17,8 +20,20 @@ const rooms = ref([
   {
     image: require('@/assets/images/carousel/image1.png'),
     rating: 4.9,
-    name: "北京第十四酒店",
-    description: "北京第十四家酒店，不是北京第四十号酒店，也不是北京第四十四号酒店",
+    roomType: "DOUBLE",
+    description: "非常舒适的双床房，可供5个人（？）居住。当然3个人也可以。",
+    price: 329.15,
+  },{
+    image: require('@/assets/images/carousel/image1.png'),
+    rating: 4.9,
+    roomType: "双床房",
+    description: "非常舒适的双床房，可供5个人（？）居住。当然3个人也可以。",
+    price: 329.15,
+  },{
+    image: require('@/assets/images/carousel/image1.png'),
+    rating: 4.9,
+    roomType: "双床房",
+    description: "非常舒适的双床房，可供5个人（？）居住。当然3个人也可以。",
     price: 329.15,
   }
 ]); // 酒店列表
@@ -57,52 +72,65 @@ const handleViewDetails = (hotel) => {
 
 <template>
   <div class="home-box">
-    <el-image style="width:100%;" :fit="contain" :src="require('@/assets/images/Hotel/topPic.jpg')" class="hotel-image" alt="顶部图片" />
+    <el-image style="width:100%;" :fit="contain" :src="require('@/assets/images/Hotel/topPic.jpg')" class="hotel-page-image" alt="顶部图片" />
     <div class="hotel-detail-page">
       <div class="hotel-name">
         <div>{{ hotel.name }}</div>
       </div>
 
-      <el-card class="hotel-image-and-rate">
+      <div class="hotel-image-and-rate">
         <el-row>
-          <el-col :span="19">
+          <el-col :span="17">
             <el-image :fit="cover" :src="hotel.image" class="hotel-image" alt="酒店图片" />
           </el-col>
-          <el-col :span="5">
+          <el-col :span="7">
             <p class="rate-number">{{ hotel.rating }}</p>
           </el-col>
         </el-row>
-      </el-card>
+      </div>
 
+      <div class="date-selector">
+        <span class="demonstration">从</span>
+        <el-date-picker
+            v-model="startTime"
+            type="date"
+            placeholder="选择入住时间"
+            :default-time="defaultTime"
+            style="padding-left: 2%; padding-right: 2%; width: 30%;"
+        />
+        <span class="demonstration">到</span>
+        <el-date-picker
+            v-model="endTime"
+            type="date"
+            placeholder="选择离开时间"
+            :default-time="defaultTime"
+            style="padding-left: 2%; padding-right: 2%; width: 30%;"
+        />
+      </div>
       <div class="room-select">
         <div class="room-select-name">
           房型选择
         </div>
         <ul class="room-list" style="overflow: auto">
           <li v-for="room in rooms" class="list-room-item">
-            <el-card class="room-card" >
+            <div class="room-card" >
               <el-row class="room-row">
-                <el-col :span="7">
-                  <el-image :fit="contain" :src="room.image" class="room-image" alt="房间图片" />
+                <el-col :span="6">
+                  <el-image :fit="cover" :src="room.image" class="room-image" alt="房间图片" />
                 </el-col>
-                <el-col :span="9">
+                <el-col :span="8">
                   <div class="room-info">
-                    <h3 style="font-family: 微软雅黑; font-size: 20px; margin-bottom: 2%">{{ room.name }}</h3>
-                    <div class="rating">
-                      <el-rate
-                          v-model="room.rating"
-                          :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                          :low-threshold="3"
-                          :high-threshold="5"
-                          show-score
-                          disabled
-                      ></el-rate>
-                    </div>
-                    <p style="color: #74767c;
+                    <h3 style="color: white; font-family: 微软雅黑; font-size: 24px; margin-bottom: 2%">{{ room.roomType }}</h3>
+                    <p style="color: #adb1b9;
                       font-family: 微软雅黑;
                       font-size: 16px;
                       margin-bottom: 2%;
                       line-height: 24px">{{ room.description }}</p>
+                  </div>
+                </el-col>
+                <el-col :span="3">
+                  <div class="capable">
+                    <span>4人</span>
                   </div>
                 </el-col>
                 <el-col :span="4">
@@ -111,13 +139,13 @@ const handleViewDetails = (hotel) => {
                     <span>{{ room.price }}</span>
                   </div>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="3">
                   <div class="price-details">
                     <el-button style="margin-top: 15%" size="large" round type="danger" @click="handleViewDetails">查看详情</el-button>
                   </div>
                 </el-col>
               </el-row>
-            </el-card>
+            </div>
           </li>
         </ul>
       </div>
@@ -129,10 +157,12 @@ const handleViewDetails = (hotel) => {
 
 <style scoped>
 .home-box {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0px;
+  position: relative;
+  width: 102.9%;
+  height: 107%;
+  margin-top: -50px;
+  margin-left: -20px;
+  margin-right: -20px;
   background-color: #101e41;
   overflow: auto;
 }
@@ -147,15 +177,22 @@ const handleViewDetails = (hotel) => {
   font-family: 微软雅黑;
   font-size: 40px;
   margin-bottom: 3%;
-  margin-top: 1%;
-  color: white;
+  margin-top: 2%;
+  color: #9eb5ff;
   width:100%;
-  align-items: center;
+  text-align: center;
 }
 
 .hotel-image-and-rate {
   width: 100%;
   height: 40%;
+  background: linear-gradient(#101e41, #1e2548);
+}
+
+.hotel-page-image {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .hotel-image {
@@ -163,6 +200,43 @@ const handleViewDetails = (hotel) => {
   height: 100%;
   display: block;
   border-radius: 4px;
+  border: 1px solid white;
+}
+
+.rate-number {
+  margin-left: 3%;
+  font-size: 30px;
+  color: white;
+  font-family: 微软雅黑;
+}
+
+.date-selector {
+  font-family: 微软雅黑;
+  font-size: 20px;
+  margin-top: 3%;
+  margin-bottom: 3%;
+}
+
+/deep/ .el-input__wrapper {
+  background-color: #6fa2a8;
+}
+
+/deep/ .el-input__inner {
+  color: #000000;
+}
+
+/deep/ .el-input__inner::placeholder {
+  color: #000000;
+}
+
+.demonstration {
+  color: #9eb5ff;
+}
+
+.room-select-name {
+  color: #9eb5ff;
+  font-family: 微软雅黑;
+  font-size: 24px;
 }
 
 .room-list {
@@ -191,6 +265,8 @@ const handleViewDetails = (hotel) => {
   flex-direction: column;
   height: 13%;
   margin-bottom: 1%;
+  padding: 2%;
+  background: linear-gradient(#101e41, #1e2548);
 }
 
 .room-card:hover {
@@ -198,7 +274,8 @@ const handleViewDetails = (hotel) => {
   flex-direction: column;
   height: 13%;
   margin-bottom: 1%;
-  background-color: #ffd7c1;
+  padding: 2%;
+  background: #141b3a;
 }
 
 .room-info {
@@ -208,18 +285,26 @@ const handleViewDetails = (hotel) => {
 .price-details {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   padding: 10px;
   margin-top: 15%;
 }
 
 .price {
-  margin-top: 20%;
+  margin-top: 27%;
 }
 
 .price span {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 35px;
+  color: #ff681d;
+}
+
+.capable {
+  margin-top: 27%;
+}
+
+.capable span {
+  font-size: 35px;
   color: #ff681d;
 }
 
