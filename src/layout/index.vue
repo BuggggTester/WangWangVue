@@ -61,6 +61,7 @@ onMounted(()=> {
   position: relative;
   padding-top: 50px;
 }
+
 :deep(ul.el-menu){
   border-right-width: 0px
 }

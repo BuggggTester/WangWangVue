@@ -1,7 +1,7 @@
 <template>
   <div class="center">
     <el-card style="width: 60%">
-      <el-page-header :icon="ArrowLeft">
+      <el-page-header :icon="ArrowLeft" @back="$router.push('/user/hotelOrders')">
         <template #content>
           <el-row>
           <span class="text-large font-600 mr-3">订单号:{{ hotelOrderId }}</span>
@@ -41,11 +41,34 @@
             <span>入住人：王思翔</span>
           </el-col>
         </el-row>
+      <el-row style="margin-top: 2%; color: #6b778c">
+        <el-col :offset="1" :span="20">
+          <span>手机号：18843331089</span>
+        </el-col>
+      </el-row>
+      <el-row style="margin-top: 2%; color: #6b778c">
+        <el-col :offset="1" :span="20">
+          <span>身份信息：{{ maskedIdentity }}</span>
+        </el-col>
+      </el-row>
         <el-row style="margin-top: 2%; color: #6b778c">
           <el-col :offset="1" :span="20">
             <span>支付金额：￥1145</span>
           </el-col>
         </el-row>
+      <el-row style="margin-top: 2%; color: #6b778c">
+        <el-col :offset="1" :span="20">
+          <span>入住房型：单人间</span>
+        </el-col>
+      </el-row>
+      <div class="component">
+      <hr>
+      </div>
+      <el-row style="margin-top: 2%; color: #6b778c">
+        <el-col :offset="1" :span="20">
+          <span>酒店详情：</span>
+        </el-col>
+      </el-row>
       <el-card class="hotel-card" @click="handleViewDetails" style="margin-top: 5%">
         <el-row style="margin-top: 2%; margin-left: 1%; margin-right: 1%;" class="hotel-row">
           <el-col :span="10">
@@ -104,12 +127,30 @@
 <script setup>
 import { useRoute } from "vue-router";
 import { ArrowLeft } from "@element-plus/icons-vue";
-import {ref} from "vue";
-
+import {computed, onMounted, ref} from "vue";
+import requestUtil from "@/util/request"
 const route = useRoute();
 const hotelOrderId = route.query.hotelOrderId;
 const deleteVisible = ref(false);
-const hotel = ref(  {
+const passenger = ref([]);
+onMounted(async()=> {
+  const res = await requestUtil.get('')
+})
+// 计算身份证号码的掩码形式
+const maskedIdentity = computed(() => {
+  // 将身份证号码转换为字符串
+  const identity = passenger.identity.toString();
+  // 获取身份证号码的长度
+  const length = identity.length;
+  // 如果身份证号码长度小于3，则返回原始身份证号码
+  if (length < 3) return identity;
+  // 获取需要替换为"*"的长度（身份证号码中间部分）
+  const replaceLength = length - 7;
+  // 构建掩码字符串
+  const maskedString = "*".repeat(replaceLength);
+  // 将身份证号码的中间部分替换为掩码字符串
+  return identity.substring(0, 3) + maskedString + identity.substring(length - 4);
+});const hotel = ref(  {
   picturePath: require('@/assets/images/carousel/image1.png'),
   score: 4.9,
   name: "北京第十四酒店",

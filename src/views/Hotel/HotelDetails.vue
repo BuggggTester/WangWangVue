@@ -83,7 +83,7 @@ const handleViewDetails = (hotel) => {
             <el-card class="room-card" >
               <el-row class="room-row">
                 <el-col :span="7">
-                  <el-image :fit="cover" :src="room.image" class="room-image" alt="房间图片" />
+                  <el-image :fit="contain" :src="room.image" class="room-image" alt="房间图片" />
                 </el-col>
                 <el-col :span="9">
                   <div class="room-info">
@@ -160,7 +160,7 @@ const handleViewDetails = (hotel) => {
 
 .hotel-image {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
   border-radius: 4px;
 }
