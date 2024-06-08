@@ -208,6 +208,7 @@ onMounted( async () => {
   font-family: Arial, "Microsoft Yahei", "Helvetica Neue", Helvetica, sans-serif;
   font-size: 16px;
   width: 100%;
+  line-height: 24px;
 }
 .foot{
   color: #8c939d;
@@ -215,7 +216,7 @@ onMounted( async () => {
   margin-top: 20px;
 }
 p{
-  margin-top: 6px
+  margin-top: 6px;
 }
 button{
   margin-top: 0px;
