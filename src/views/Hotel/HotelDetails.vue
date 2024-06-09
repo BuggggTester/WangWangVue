@@ -4,6 +4,7 @@ import requestUtil from "@/util/request"
 import cookieUtil from "@/util/cookie"
 import {useRoute} from "vue-router";
 import {getServerUrl} from "@/util/request";
+import router from "@/router";
 
 // document.getElementsByClassName("main").style['padding'] = '0px';
 // 使用 ref 创建响应式数据
@@ -62,10 +63,28 @@ const handleScroll = (event) => {
   }
 };
 
-const handleViewDetails = (hotel) => {
-  console.log('View details for hotel:', hotel);
-  emit('view-details', hotel); // 触发外部定义的事件
-  // TODO: 打开查看酒店详情的页面或对话框
+const handleBookRoom = async (room) => {
+  const res_id = await requestUtil.post('/hotels/book', {
+    "userId": cookieUtil.getCookie("userId"),
+    "hotelId": hotel_id.value,
+    "roomType": room.room_type,
+    "startDate": startTime.value,
+    "endDate": endTime.value,
+  });
+  let reser_id = res_id.data.reservationId;
+  const order = await requestUtil.post('/totalorder/create', {
+    "userId": cookieUtil.getCookie("userId"),
+    "order_type": "Hotel",
+    "reservation_id": reser_id,
+    "payment": room.price,
+  });
+
+  try{
+    await router.push({path: '/hotelorderprepare', query:
+          {"res_id" : order.data.id}});
+  }catch (e) {
+    console.error(e);
+  }
 };
 
 const nameIs = (a) => {
@@ -177,7 +196,7 @@ const isDateCorrect = computed(() => {
                                size="large"
                                round
                                type="danger"
-                               @click="handleViewDetails"
+                               @click="handleBookRoom(room)"
                                :disabled=isDateCorrect
                     >预订</el-button>
                   </div>
