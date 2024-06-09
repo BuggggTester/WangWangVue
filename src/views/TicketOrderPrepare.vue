@@ -83,6 +83,8 @@
           </el-radio-button>
 
         </el-radio-group>
+
+        <span class="ticket-price">支付总额：￥{{ route.query.price }}</span>
       </el-card>
       </div>
       <div class="component">
@@ -249,7 +251,7 @@ const openDialog = async () => {
     }
       await createOrder(); // 在打开对话框前执行createOrder
       dialogVisible.value = true;
-    };
+};
 
 const createOrder = async() =>{
 
@@ -371,8 +373,8 @@ const cancelOrder = async() =>{
 }
 
 .ticket-price {
-  text-align: center;
-  font-size: 30px;
+  margin-left: 15%;
+  font-size: 40px;
   font-weight: bold;
   color: #f6392bd0;
 }
@@ -472,8 +474,8 @@ const cancelOrder = async() =>{
   background-image: url('~@/assets/images/payMethod/wechat.png'); /* 使用webpack的别名指向图片路径 */
   background-size: contain; /* 调整图片尺寸 */
   background-repeat: no-repeat; /* 禁止背景图片重复 */
-  width: 160px; /* 设置图标宽度 */
-  height: 200px; /* 设置图标高度 */
+  width: 120px; /* 设置图标宽度 */
+  height: 150px; /* 设置图标高度 */
   display: inline-block; /* 将图标设置为行内块元素 */
 }
 
@@ -481,8 +483,8 @@ const cancelOrder = async() =>{
   background-image: url('~@/assets/images/payMethod/alipay.png');
   background-size: contain;
   background-repeat: no-repeat;
-  width: 160px;
-  height: 200px;
+  width: 120px;
+  height: 150px;
   display: inline-block;
 }
 
@@ -490,8 +492,8 @@ const cancelOrder = async() =>{
   background-image: url('~@/assets/images/payMethod/bank.png');
   background-size: contain;
   background-repeat: no-repeat;
-  width: 160px;
-  height: 200px;
+  width: 120px;
+  height: 150px;
   display: inline-block;
 }
 
