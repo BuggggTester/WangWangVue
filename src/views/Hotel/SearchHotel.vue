@@ -127,6 +127,9 @@ const emit = defineEmits(['sort-change', 'view-details']);
 
 // 定义方法
 const handleSearch = async () => {
+  if (searchAddress.value === "") {
+    searchAddress.value = "传奇机长";
+  }
   const hot = await requestUtil.get('/hotels/selectHotelByAddress', {
     address: searchAddress.value
   });
@@ -137,6 +140,10 @@ const handleSearch = async () => {
   } else {
     ifempty.value = true
   }
+
+  searchAddress.value = "";
+
+  console.log(hotelsInfo.value)
 };
 
 const handleSortChange = async (value) => {

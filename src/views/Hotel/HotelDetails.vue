@@ -74,14 +74,14 @@ const handleBookRoom = async (room) => {
   let reser_id = res_id.data.reservationId;
   const order = await requestUtil.post('/totalorder/create', {
     "userId": cookieUtil.getCookie("userId"),
-    "order_type": "Hotel",
+    "order_type": "HOTEL",
     "reservation_id": reser_id,
     "payment": room.price,
   });
 
   try{
     await router.push({path: '/hotelorderprepare', query:
-          {"res_id" : order.data.id}});
+          {"res_id" : order.data.id, "hotel_id": hotel_id.value, "room_type": room.room_type}});
   }catch (e) {
     console.error(e);
   }
