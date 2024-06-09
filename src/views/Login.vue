@@ -33,7 +33,7 @@
         <el-button
             size="large"
             type="primary"
-            style="width:47%;"
+            style="width:40%;margin-left: 5%"
             @click.prevent="handleLogin"
         >
           <span>登 录</span>
@@ -41,7 +41,7 @@
         <el-button
             size="large"
             type="default"
-            style="width:47%;"
+            style="width:40%; margin-left: 10%"
             @click.prevent="handleRegister"
         >
           <span>注 册</span>
