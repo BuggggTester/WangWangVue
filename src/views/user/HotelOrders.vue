@@ -2,7 +2,7 @@
   <!--  TODO: 加上下拉菜单选择排序方式 -->
   <div></div>
 
-  <el-card v-if="hotelOrders.length > 0" v-for="hotelOrder in hotelOrders " :key="hotelOrder.id" class="hotelCard" @click="showDetailInfo(hotelOrder.id)">
+  <el-card v-if="hotelOrders.length > 0" v-for="hotelOrder in hotelOrders " :key="hotelOrder.id" class="hotelCard" >
     <template #header>
       <el-row style="display: flex">
         <el-col :span="0.5">
@@ -32,7 +32,8 @@
       </div>
     </div>
     <template #footer>
-      <el-button>删除订单</el-button>
+      <el-button @click="delete" style="border-radius: 10px">删除订单</el-button>
+      <el-button @click="showDetailInfo(hotelOrder.id)" type="primary" style="border-radius: 10px">查看订单详情</el-button>
     </template>
   </el-card>
 </template>
