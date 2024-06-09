@@ -1,14 +1,17 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import requestUtil from "@/util/request"
 import cookieUtil from "@/util/cookie"
+import {useRoute} from "vue-router";
+import {getServerUrl} from "@/util/request";
+import router from "@/router";
 
 // document.getElementsByClassName("main").style['padding'] = '0px';
 // 使用 ref 创建响应式数据
 const searchAddress = ref('');
 const defaultTime = new Date(2000, 1, 1, 12, 0, 0)
-const startTime = ref([])
-const endTime = ref([])
+const startTime = ref("2024-06-09")
+const endTime = ref("2024-06-10")
 const hotel = ref({
   image: require('@/assets/images/carousel/image1.png'),
   rating: 4.9,
@@ -16,42 +19,39 @@ const hotel = ref({
   description: "北京第十四家酒店，不是北京第四十号酒店，也不是北京第四十四号酒店。",
   price: 329.15,
 })
-const rooms = ref([
-  {
-    image: require('@/assets/images/carousel/image1.png'),
-    rating: 4.9,
-    roomType: "DOUBLE",
-    description: "非常舒适的双床房，可供5个人（？）居住。当然3个人也可以。",
-    price: 329.15,
-  },{
-    image: require('@/assets/images/carousel/image1.png'),
-    rating: 4.9,
-    roomType: "双床房",
-    description: "非常舒适的双床房，可供5个人（？）居住。当然3个人也可以。",
-    price: 329.15,
-  },{
-    image: require('@/assets/images/carousel/image1.png'),
-    rating: 4.9,
-    roomType: "双床房",
-    description: "非常舒适的双床房，可供5个人（？）居住。当然3个人也可以。",
-    price: 329.15,
-  }
-]); // 酒店列表
+const route = useRoute();
+const hotel_id = ref(route.query.hotel_id);
+
+const rooms = ref([]); // 房间列表
+
+onMounted(async() => {
+  const res = await requestUtil.get('/hotels/'+ hotel_id.value);
+  hotel.value = res.data;
+
+
+  const res_room = await requestUtil.post('/hotels/hotel/getRoom', {
+    "hotelId": hotel_id.value,
+    "startDate": startTime.value,
+    "endDate": endTime.value,
+  })
+  rooms.value = res_room.data;
+
+})
+
+
 const tableScrollY = ref(300); // 表格滚动高度
 
 // 使用 defineEmits 定义事件
 const emit = defineEmits(['sort-change', 'view-details']);
 
 // 定义方法
-const handleSearch = () => {
-  console.log('Search by address:', searchAddress.value);
-  // TODO: 根据searchAddress发起搜索请求
-};
-
-const handleSortChange = (value) => {
-  console.log('Sort by:', value);
-  emit('sort-change', value); // 触发外部定义的事件
-  // TODO: 根据selectedSort发起排序请求
+const handleSearchRoom = async () => {
+  const res_room = await requestUtil.post('/hotels/hotel/getRoom', {
+    "hotelId": hotel_id.value,
+    "startDate": startTime.value,
+    "endDate": endTime.value,
+  })
+  rooms.value = res_room.data;
 };
 
 const handleScroll = (event) => {
@@ -63,11 +63,45 @@ const handleScroll = (event) => {
   }
 };
 
-const handleViewDetails = (hotel) => {
-  console.log('View details for hotel:', hotel);
-  emit('view-details', hotel); // 触发外部定义的事件
-  // TODO: 打开查看酒店详情的页面或对话框
+const handleBookRoom = async (room) => {
+  const res_id = await requestUtil.post('/hotels/book', {
+    "userId": cookieUtil.getCookie("userId"),
+    "hotelId": hotel_id.value,
+    "roomType": room.room_type,
+    "startDate": startTime.value,
+    "endDate": endTime.value,
+  });
+  let reser_id = res_id.data.reservationId;
+  const order = await requestUtil.post('/totalorder/create', {
+    "userId": cookieUtil.getCookie("userId"),
+    "order_type": "Hotel",
+    "reservation_id": reser_id,
+    "payment": room.price,
+  });
+
+  try{
+    await router.push({path: '/hotelorderprepare', query:
+          {"res_id" : order.data.id}});
+  }catch (e) {
+    console.error(e);
+  }
 };
+
+const nameIs = (a) => {
+  if (a === "SINGLE") return "单人间"
+  else if (a === "DOUBLE") return "双人间"
+  else return "套房"
+};
+
+const isDateCorrect = computed(() => {
+  let date1 = new Date(startTime.value);
+  let date2 = new Date(endTime.value);
+  if (date1 >= date2) {
+    return true;
+  } else {
+    return false;
+  }
+});
 </script>
 
 <template>
@@ -81,12 +115,12 @@ const handleViewDetails = (hotel) => {
       <div class="hotel-image-and-rate">
         <el-row>
           <el-col :span="17">
-            <el-image :fit="cover" :src="hotel.image" class="hotel-image" alt="酒店图片" />
+            <el-image :fit="cover" :src="getServerUrl() + hotel.picture_path" class="hotel-image" alt="酒店图片" />
           </el-col>
           <el-col :span="7">
             <div class="hotel-class">
-              <span class="rate-number">{{ hotel.rating }}</span>
-              <span>分</span>
+              <span class="rate-number">{{ hotel.score }}</span>
+              <span class="rate-number-fen">分</span>
               <p class="hotel-description">{{ hotel.description }}</p>
             </div>
           </el-col>
@@ -101,6 +135,7 @@ const handleViewDetails = (hotel) => {
             placeholder="选择入住时间"
             :default-time="defaultTime"
             style="padding-left: 2%; padding-right: 2%; width: 30%;"
+            value-format="YYYY-MM-DD"
         />
         <span class="demonstration">到</span>
         <el-date-picker
@@ -109,7 +144,19 @@ const handleViewDetails = (hotel) => {
             placeholder="选择离开时间"
             :default-time="defaultTime"
             style="padding-left: 2%; padding-right: 2%; width: 30%;"
+            value-format="YYYY-MM-DD"
         />
+        <el-button
+            type="primary"
+            style="margin-left: 3%"
+            @click="handleSearchRoom"
+        >查询</el-button>
+        <span
+            style="margin-left: 3%; color: red;"
+            v-show="isDateCorrect"
+        >
+          日期错误！
+        </span>
       </div>
       <div class="room-select">
         <div class="room-select-name">
@@ -124,7 +171,7 @@ const handleViewDetails = (hotel) => {
                 </el-col>
                 <el-col :span="8">
                   <div class="room-info">
-                    <h3 style="color: white; font-family: 微软雅黑; font-size: 24px; margin-bottom: 2%">{{ room.roomType }}</h3>
+                    <h3 style="color: white; font-family: 微软雅黑; font-size: 24px; margin-bottom: 2%">{{ nameIs(room.room_type) }}</h3>
                     <p style="color: #adb1b9;
                       font-family: 微软雅黑;
                       font-size: 16px;
@@ -134,7 +181,7 @@ const handleViewDetails = (hotel) => {
                 </el-col>
                 <el-col :span="3">
                   <div class="capable">
-                    <span>4人</span>
+                    <span>剩余{{room.availableQuantity}}</span>
                   </div>
                 </el-col>
                 <el-col :span="4">
@@ -145,7 +192,13 @@ const handleViewDetails = (hotel) => {
                 </el-col>
                 <el-col :span="3">
                   <div class="price-details">
-                    <el-button style="margin-top: 15%" size="large" round type="danger" @click="handleViewDetails">查看详情</el-button>
+                    <el-button style="margin-top: 15%"
+                               size="large"
+                               round
+                               type="danger"
+                               @click="handleBookRoom(room)"
+                               :disabled=isDateCorrect
+                    >预订</el-button>
                   </div>
                 </el-col>
               </el-row>
@@ -215,9 +268,22 @@ const handleViewDetails = (hotel) => {
 
 .rate-number {
   margin-left: 3%;
-  font-size: 30px;
-  color: white;
+  font-size: 35px;
+  color: #ff681d;
   font-family: 微软雅黑;
+}
+
+.rate-number-fen {
+  margin-left: 3%;
+  font-size: 20px;
+  color: #ff681d;
+  font-family: 微软雅黑;
+}
+
+.hotel-description {
+  margin-left: 3%;
+  margin-top: 5%;
+  color: white;
 }
 
 .date-selector {
@@ -310,12 +376,12 @@ const handleViewDetails = (hotel) => {
 }
 
 .capable {
-  margin-top: 39%;
+  margin-top: 41%;
   text-align: center;
 }
 
 .capable span {
-  font-size: 25px;
+  font-size: 20px;
   color: #ffffff;
 }
 

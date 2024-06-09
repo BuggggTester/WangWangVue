@@ -209,9 +209,11 @@ const goToTicketOrderPrepare = (seatType) => {
     "trip_id": tripId.value,
     "fromPlace": route.query.fromPlace,
     "toPlace": route.query.toPlace,
-    "startTime": route.query.startTime,
+    "startTime": trip.value.start_time,
+    "endTime":trip.value.end_time,
     "price":price.value,
-    "seatType": seatType
+    "seatType": seatType,
+    "train_id":route.query.train_id
   };
   router.push({path: '/TicketOrderPrepare', query: param});
 }
