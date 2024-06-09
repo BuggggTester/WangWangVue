@@ -83,17 +83,24 @@ onMounted(async () => {
     props.ticket.first_seat = res2.data.firstSeats;
     props.ticket.firstSeats = res2.data.firstSeats + "张";
   }else{
+    props.ticket.first_seat = res2.data.firstSeats;
     props.ticket.firstSeats = "有座";
   }
   if(res2.data.secondSeats < 20) {
     props.ticket.second_seat = res2.data.secondSeats;
     props.ticket.secondSeats = res2.data.secondSeats + "张";
   }else{
+<<<<<<< HEAD
+=======
+    props.ticket.second_seat = res2.data.secondSeats;
+>>>>>>> 4b8f795e4a920b6f42cd6db3e9e02459159d3c7c
     props.ticket.secondSeats = "有座";
   }
   props.ticket.duration = res2.data.time;
   props.ticket.price = res3.data.minPrice;
 })
+console.log(props.ticket.second_seat);
+console.log(props.ticket.first_seat);
 </script>
 
 <style scoped>
