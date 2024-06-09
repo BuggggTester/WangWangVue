@@ -2,6 +2,8 @@
 import { ref, onMounted, watch } from 'vue';
 import requestUtil from "@/util/request"
 import cookieUtil from "@/util/cookie"
+import {useRoute} from "vue-router";
+import {getServerUrl} from "@/util/request";
 
 // document.getElementsByClassName("main").style['padding'] = '0px';
 // 使用 ref 创建响应式数据
@@ -16,6 +18,14 @@ const hotel = ref({
   description: "北京第十四家酒店，不是北京第四十号酒店，也不是北京第四十四号酒店。",
   price: 329.15,
 })
+const route = useRoute();
+const hotel_id = ref(route.query.hotel_id);
+
+onMounted(async() => {
+  const res = await requestUtil.get(`/hotels/`+ hotel_id.value);
+  hotel.value = res.data;
+})
+
 const rooms = ref([
   {
     image: require('@/assets/images/carousel/image1.png'),
@@ -81,12 +91,12 @@ const handleViewDetails = (hotel) => {
       <div class="hotel-image-and-rate">
         <el-row>
           <el-col :span="17">
-            <el-image :fit="cover" :src="hotel.image" class="hotel-image" alt="酒店图片" />
+            <el-image :fit="cover" :src="getServerUrl() + hotel.picture_path" class="hotel-image" alt="酒店图片" />
           </el-col>
           <el-col :span="7">
             <div class="hotel-class">
-              <span class="rate-number">{{ hotel.rating }}</span>
-              <span>分</span>
+              <span class="rate-number">{{ hotel.score }}</span>
+              <span class="rate-number-fen">分</span>
               <p class="hotel-description">{{ hotel.description }}</p>
             </div>
           </el-col>
@@ -215,9 +225,22 @@ const handleViewDetails = (hotel) => {
 
 .rate-number {
   margin-left: 3%;
-  font-size: 30px;
-  color: white;
+  font-size: 35px;
+  color: #ff681d;
   font-family: 微软雅黑;
+}
+
+.rate-number-fen {
+  margin-left: 3%;
+  font-size: 20px;
+  color: #ff681d;
+  font-family: 微软雅黑;
+}
+
+.hotel-description {
+  margin-left: 3%;
+  margin-top: 5%;
+  color: white;
 }
 
 .date-selector {
