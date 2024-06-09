@@ -87,7 +87,7 @@
           </el-cards>
         </li>
       </ul>
-      <div v-else style="margin-top:150px; text-align:center; line-height: 100px; font-size: 80px; color: white">前面的内容，以后再来探索吧~</div>
+      <div v-else style="margin-top:100px; text-align:center; line-height: 100px; font-size: 60px; color: white">前面的内容，以后再来探索吧~</div>
     </div>
   </div>
 </template>
@@ -131,6 +131,12 @@ const handleSearch = async () => {
     address: searchAddress.value
   });
   hotelsInfo.value = hot.data;
+
+  if(hotelsInfo.value.length === 0){
+    ifempty.value = false
+  } else {
+    ifempty.value = true
+  }
 };
 
 const handleSortChange = async (value) => {
