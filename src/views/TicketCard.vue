@@ -11,18 +11,17 @@
           </el-col>
           <el-col :span="6" class="ticket-time">{{ ticket.end_time }}</el-col>
           <el-col :span="6" class="ticket-price">￥{{ ticket.price }}起</el-col>
-          <!--TODO: 等后端完善，传入price属性-->
         </el-row>
         <el-row class="component">
           <el-col :span="6" class="ticket-place">
-            <span v-if="ticket.departureHighlight" class="highlight-orange-text">始</span>{{ ticket.from_place }}
+            <span v-if="ticket.departureHighlight" class="highlight-orange-text">始</span>{{ props.ticket.from_place }}
           </el-col>
-          <el-col :span="6" class="time">{{ ticket.duration }}</el-col>
+          <el-col :span="6" class="time">{{ props.ticket.duration }}</el-col>
           <!--TODO: 等后端完善，传入时间属性-->
           <el-col :span="6" class="ticket-place">
-            <span v-if="ticket.arrivalHighlight" class="highlight-green-text">终</span>{{ ticket.to_place }}
+            <span v-if="ticket.arrivalHighlight" class="highlight-green-text">终</span>{{ props.ticket.to_place }}
           </el-col>
-          <el-col :span="6" class="availability" v-if="ticket.first_seat > 0 || ticket.second_seat > 0">有票</el-col>
+          <el-col :span="6" class="availability" v-if="props.ticket.firstSeats == '有座' || props.ticket.secondSeats == '有座' ">有票</el-col>
           <el-col :span="6" class="unavailability" v-else>无票</el-col>
         </el-row>
       </div>
@@ -56,7 +55,7 @@ const props = defineProps({
     required: true
   }
 });
-
+const duration = ref("");
 const goToTicketDetail = () => {
   let param = {
     "trip_id": props.ticket.trip_id,
@@ -73,7 +72,10 @@ onMounted(async () => {
     "fromPlace": route.query.fromPlace,
     "toPlace": route.query.toPlace
 
-  })
+  });
+  duration.value = res2.data.time;
+  console.log(res2.data);
+  console.log(duration.value);
   const res3 = await requestUtil.get('/trip/minPrice', {
     "tripId": props.ticket.trip_id,
     "fromPlace": route.query.fromPlace,
