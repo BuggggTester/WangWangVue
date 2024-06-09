@@ -11,7 +11,6 @@
           </el-col>
           <el-col :span="6" class="ticket-time">{{ ticket.end_time }}</el-col>
           <el-col :span="6" class="ticket-price">￥{{ ticket.price }}起</el-col>
-          <!--TODO: 等后端完善，传入price属性-->
         </el-row>
         <el-row class="component">
           <el-col :span="6" class="ticket-place">
