@@ -61,7 +61,8 @@ const goToTicketDetail = () => {
     "trip_id": props.ticket.trip_id,
     "fromPlace": props.ticket.from_place,
     "toPlace": props.ticket.to_place,
-    "startTime": route.query.startTime
+    "startTime": route.query.startTime,
+    "train_id":props.ticket.train_id
   };
   router.push({path:'/TicketDetail',query: param});
 }

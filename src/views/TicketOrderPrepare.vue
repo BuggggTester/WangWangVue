@@ -123,6 +123,54 @@
       </div>
 
       <el-dialog v-model="dialogVisible">
+        <div class="trip-info">
+      <el-row class="component">
+        <el-col :span="6" class="trip-time">{{ route.query.startTime }}</el-col>
+        <el-col :span="6" class="trip-no">
+          <div class="underline-container">
+            <span class="underline-text">{{ route.query.train_id }}</span>
+          </div>
+        </el-col>
+        <el-col :span="6" class="trip-time">{{ route.query.endTime }}</el-col>
+        <el-col :span="6" class="trip-price">￥{{ route.query.price }}</el-col>
+      </el-row>
+      <el-row class="component">
+        <el-col :span="6" class="trip-place">{{ route.query.fromPlace }}</el-col>
+        <el-col :span="6" :offset="6" class="trip-place">{{ route.query.toPlace }}</el-col>
+        <el-col :span="6" class="ticket-level">
+          <span style="align-items: center">{{ seatTypeText }}</span></el-col>
+      </el-row>
+    </div>
+    <hr>
+    <div class="component">
+    <span style="font-size:20px;">乘车人信息：</span>
+    </div>
+    <el-card style="width: 100%">
+    <div style="display: flex">
+      <div style="width: 80%">
+        <div class="component">
+          <el-row>
+            <el-col :span="4">
+              <span style="font-size: larger; color: #12a72b">{{ passengers[0].name }}</span>
+            </el-col>
+          </el-row>
+        </div>
+        <div class="component">
+          <hr style="color: #6b778c">
+        </div>
+        <div class="component">
+          <el-row>
+            <span>手机号: {{ passengers[0].phone_number }}</span>
+          </el-row>
+        </div>
+        <div class="component">
+          <el-row>
+            <span>身份证号: {{ passengers[0].identity }}</span>
+          </el-row>
+        </div>
+      </div>
+    </div>
+  </el-card>
         <el-button @click="confirmOrder" type="primary" style="margin-left:15%;margin-top:10px;height:40px;width:200px">确认支付
         </el-button>
         <el-button @click="cancelOrder" style="margin-left:20%;margin-top:10px;height:40px;width:200px">取消订单
@@ -457,8 +505,8 @@ const cancelOrder = async() =>{
 .underline-container::after {
   content: "";
   position: absolute;
-  left: -500%; /* 左侧超出文本部分的长度 */
-  right: -500%; /* 右侧超出文本部分的长度 */
+  left: -100%; /* 左侧超出文本部分的长度 */
+  right: -100%; /* 右侧超出文本部分的长度 */
   bottom: -20px; /* 控制下划线距离文本的位置 */
   height: 2px; /* 下划线的高度 */
   background-color: darkgray; /* 下划线颜色 */
@@ -506,7 +554,13 @@ const cancelOrder = async() =>{
   display: inline-block;
 }
 
-@import "@/assets/css/card-order.css";
+.trip-place {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* @import "@/assets/css/card-order.css"; */
 </style>
 
 
