@@ -83,6 +83,8 @@
           </el-radio-button>
 
         </el-radio-group>
+
+        <span class="ticket-price">支付总额：￥{{ route.query.price }}</span>
       </el-card>
       </div>
       <div class="component">
@@ -153,7 +155,7 @@ const newIdentity = ref("");
 const route = useRoute();
 const chooseVisible = ref(false);
 const oldPassengers = ref([]);
-
+const passengerId = ref('');
 onMounted(async()=> {
   const res = await requestUtil.get('/passenger/select/userId', {
     "userId": cookieUtil.getCookie("userId")
@@ -166,7 +168,7 @@ onMounted(async()=> {
 });
 
 const addOldPassenger = (passenger) => {
-  if(passengers.value.length <3) {
+  if(passengers.value.length < 1) {
     if (passengers.value.some(p => p.name === passenger.name)) {
       ElMessage({
         message: "乘车人已存在！",
@@ -175,6 +177,7 @@ const addOldPassenger = (passenger) => {
     } else {
       setTimeout(function () {
         passengers.value.push(passenger);
+        passengerId.value = passenger.pid;
         ElMessage({
           message: "添加乘车人成功！",
           type: "success"
@@ -184,7 +187,7 @@ const addOldPassenger = (passenger) => {
   } else {
     setTimeout(function() {
       ElMessage({
-        message: "最多只能添加3个乘车人！",
+        message: "最多只能添加1个乘车人！",
         type: "warning"
       })
     }, 300)
@@ -193,11 +196,12 @@ const addOldPassenger = (passenger) => {
 
 const addPassenger = async () => {
   try {
+    console.log(route.query.seatType);
     const res = await requestUtil.post("/passenger/create", {
-        "phoneNum": newPhone.value,
+      "phoneNum": newPhone.value,
       "userId": cookieUtil.getCookie("userId"),
       "identity": newIdentity.value,
-      "name": newName.value
+      "name": newName.value,
     })
     console.log(res.data);
     if (res.data.msg == "create passenger success") {
@@ -247,7 +251,7 @@ const openDialog = async () => {
     }
       await createOrder(); // 在打开对话框前执行createOrder
       dialogVisible.value = true;
-    };
+};
 
 const createOrder = async() =>{
 
@@ -258,6 +262,7 @@ const createOrder = async() =>{
         chosenSeat.value = selectedSeatPlace.value;
     }
     console.log(selectedSeatPlace.value);
+    console.log(passengerId.value);
     // 发送创建订单的请求
     const res = await requestUtil.post('/order/create', {
         order_time: timeUtil.getCurrentTime(),
@@ -269,16 +274,11 @@ const createOrder = async() =>{
         payment: route.query.price,
         trip_id: route.query.trip_id,
         seat: chosenSeat.value,
-        payway: selectedPaymentMethod.value
+        payway: selectedPaymentMethod.value,
+        "seat_type": route.query.seatType,
+        "pid": 1
     })
-    .then(response => {
-      // 请求成功处理
-      console.log(response.data);
-    })
-    .catch(error => {
-      // 请求失败
-      console.error(error);
-    });
+   console.log(res.data);
 }
 
 const confirmMessage = async () => {
@@ -373,8 +373,8 @@ const cancelOrder = async() =>{
 }
 
 .ticket-price {
-  text-align: center;
-  font-size: 30px;
+  margin-left: 15%;
+  font-size: 40px;
   font-weight: bold;
   color: #f6392bd0;
 }
@@ -474,8 +474,8 @@ const cancelOrder = async() =>{
   background-image: url('~@/assets/images/payMethod/wechat.png'); /* 使用webpack的别名指向图片路径 */
   background-size: contain; /* 调整图片尺寸 */
   background-repeat: no-repeat; /* 禁止背景图片重复 */
-  width: 160px; /* 设置图标宽度 */
-  height: 200px; /* 设置图标高度 */
+  width: 120px; /* 设置图标宽度 */
+  height: 150px; /* 设置图标高度 */
   display: inline-block; /* 将图标设置为行内块元素 */
 }
 
@@ -483,8 +483,8 @@ const cancelOrder = async() =>{
   background-image: url('~@/assets/images/payMethod/alipay.png');
   background-size: contain;
   background-repeat: no-repeat;
-  width: 160px;
-  height: 200px;
+  width: 120px;
+  height: 150px;
   display: inline-block;
 }
 
@@ -492,8 +492,8 @@ const cancelOrder = async() =>{
   background-image: url('~@/assets/images/payMethod/bank.png');
   background-size: contain;
   background-repeat: no-repeat;
-  width: 160px;
-  height: 200px;
+  width: 120px;
+  height: 150px;
   display: inline-block;
 }
 

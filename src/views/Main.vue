@@ -65,7 +65,37 @@
               </el-input>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="订餐" name="third">订餐</el-tab-pane>
+
+          <el-tab-pane label="订餐" name="third">
+            <div class="component">
+              <span class="demonstration">发车时间</span>
+              <el-date-picker
+                  v-model="searchMealTime"
+                  type="date"
+                  placeholder="选择发车时间"
+                  :default-time="defaultTime"
+                  style="padding-left: 5%; width: 56%;"
+              />
+
+            </div>
+            
+            <div class="component">
+              <span class="demonstration">火车车次</span>
+              <el-input
+                    placeholder="火车车次"
+                    v-model="searchTrainId"
+                    class="search-bar"
+                    suffix-icon="el-icon-search"
+                    @keyup.enter="handleMealSearch"
+                    style="width:70%; margin-left: 3%"
+              >
+              </el-input>
+            </div>
+            <div class="component">
+              <el-button @click="gotoMealPage" type="primary" style="margin-left: 20px">订餐</el-button>
+            </div>
+          </el-tab-pane>
+
         </el-tabs>
       </div>
     </div>
@@ -83,6 +113,7 @@
         </el-col>
       </el-row>
     </div>
+
   </div>
 <!--  <div id="app">-->
 
@@ -94,10 +125,11 @@ import {pcTextArr} from 'element-china-area-data'
 import {onMounted, ref, watch} from 'vue'
 import { useRouter } from 'vue-router'
 import requestUtil from '@/util/request'
-import timeUtil from '@/util/time'
+import timeUtil, { formatDate } from '@/util/time'
 import cookieUtil from "@/util/cookie"
 import router from "@/router";
 import {ElMessage} from "element-plus";
+import messageUtil from "@/util/message"
 const tabPosition = ref('left')
 const departureOption = ref([])
 const selectedOption = ref([])
@@ -147,6 +179,7 @@ const searchTrips = async () => {
   }
 }
 
+
 const handleSearch = async () => {
   try{
     await router.push({path: '/search/hotel', query:
@@ -155,6 +188,47 @@ const handleSearch = async () => {
     console.error(e);
   }
 };
+
+const searchMealTime = ref("")
+const searchTrainId = ref("")
+const gotoMealPage = () =>{
+  if(searchMealTime.value == "") {
+        ElMessage({
+            message: "请输入用餐时间！",
+            type: "warning"
+        });
+        return;
+  }
+  if(searchTrainId.value == "") {
+        ElMessage({
+            message: "请输入车次号！",
+            type: "warning"
+        });
+        return;
+  }
+  console.log(searchMealTime.value);
+  handleMealSearch();
+  console.log(timeUtil.formatDate(searchMealTime.value));
+  // router.push({path:'/meal'});
+  router.push({
+            path: '/meal',
+            query: {
+                "time": timeUtil.formatDate(searchMealTime.value),
+                "trainId": searchTrainId.value
+            }
+        });
+}
+
+const handleMealSearch = async () => {
+    try {
+        await 
+        console.log(searchMealTime.value);
+        console.log(searchTrainId.value);
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 
 const defaultTime = new Date(2000, 1, 1, 12, 0, 0)
 const shortcuts = [
