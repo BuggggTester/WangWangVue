@@ -3,7 +3,7 @@
     <el-container>
       <el-header>
         <el-tabs v-model="activeName" class="demo-tabs" router="true" >
-          <el-tab-pane label="未完成订单" name="first" index="1" @tab-click="showUnfinishedOrders">
+          <el-tab-pane label="火车餐订单" name="first" index="1" @tab-click="showFoodOrders">
 <!--            <NoOrder/>-->
           </el-tab-pane>
           <el-tab-pane label="未出行订单" name="second" index="2" @tab-click="showNoDepartureOrders">
@@ -28,8 +28,8 @@ const activeName = ref('first'); // 默认选中的选项卡名称
 const router = useRouter();
 const dialogVisible = ref(false);
 const orders = ref([]);
-const showHotelOrders = async() => {
-  await router.push('/user/hotelOrders');
+const showFoodOrders = async() => {
+  await router.push('/user/foodorders');
 }
 const showMyOrders = async () =>{
   await router.push('/user/orders')
@@ -52,13 +52,15 @@ const showDetailedOrder = async () => {
 const showUnfinishedOrders = async () => {
   await router.push('/user/unfinished')
 }
-
+const showHotelOrders = async()=> {
+  await  router.push('/user/hotelorders')
+}
 watch(activeName, (newVal, oldVal) => {
   // 根据新选中的选项卡名称执行相应的操作
   switch (newVal) {
     case 'first':
       // 执行 tab1 相关操作
-        showUnfinishedOrders();
+        showFoodOrders();
       break;
     case 'second':
       showNoDepartureOrders();

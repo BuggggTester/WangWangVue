@@ -63,6 +63,10 @@ const routes = [
               path: '/user/hotelorders',
               name: "HotelOrders",
               component: ()=> import('../views/user/HotelOrders.vue'),
+        },{
+              path: '/user/foodorders',
+              name: 'FoodOrders',
+              component: () => import ('../views/user/FoodOrders.vue')
         }
           ]
         },

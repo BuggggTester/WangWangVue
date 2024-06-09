@@ -24,8 +24,7 @@
       </el-row>
     </div>
     <template #footer>
-      <el-button>查看订单</el-button>
-      <el-button type="primary" plain @click="openModifyDialog(order)">修改订单</el-button>
+      <el-button type="primary" plain>查看订单</el-button>
       <el-button v-if="order.state !== 'canceled'" type="danger" plain @click="openCancelDialog(order)">取消订单</el-button>
       <el-button v-else type="danger" plain disabled>订单已被取消</el-button>
       <el-dialog
@@ -41,23 +40,6 @@
             <el-button type="primary" @click="closeCancelDialog(order)">返回</el-button>
             <el-button  @click="cancelOrder(order)">
               残忍取消~
-            </el-button>
-          </div>
-        </template>
-      </el-dialog>
-      <el-dialog
-          v-model="order.dialogVisible2"
-          :visible.sync="order.dialogVisible2"
-          title="修改订单"
-          width="1000"
-          :order="order"
-      >
-        <span>修改</span>
-        <template #footer>
-          <div class="dialog-footer">
-            <el-button type="primary" @click="closeModifyDialog(order)">返回</el-button>
-            <el-button @click="modifyOrder(order)">
-              提交修改
             </el-button>
           </div>
         </template>
