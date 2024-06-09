@@ -2,7 +2,7 @@
   <el-card class="trip-card">
     <template #header>
       <div class="card-header">
-        <span>订单日期：2024年5月1日</span>
+        <span>订单日期：{{ formToDate(order.order_time) }}</span>
       </div>
     </template>
 
@@ -105,7 +105,8 @@
 import requestUtil from "@/util/request";
 import { ElMessage } from "element-plus";
 import cookieUtil from "@/util/cookie";
-import {computed,ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
+import {formToDate} from "../util/time";
 
 export default {
   props: {
@@ -154,7 +155,21 @@ export default {
     const modifyOrder = (order) => {
       // 在这里添加修改订单的逻辑
     };
-
+    const seatTypeText = ref("");
+    switch (order.seat_type) {
+      case "first":
+        seatTypeText.value = "一等座";
+        break;
+      case "second":
+        seatTypeText.value = "二等座";
+        break;
+      case "business":
+        seatTypeText.value = "商务座";
+        break;
+      default:
+        seatTypeText.value = "未知";
+        break;
+    }
     const orderDetailDialog = ref(false);
 
     // 计算身份证号码的掩码形式
@@ -172,19 +187,7 @@ export default {
       // 将身份证号码的中间部分替换为掩码字符串
       return identity.substring(0, 3) + maskedString + identity.substring(length - 4);
     });
-
-    const seatTypeText = computed(() => {
-      switch (order.seat_type) {
-          case 'first':
-            return '一等座';
-          case 'second':
-            return '二等座';
-          case 'business':
-            return '商务座';
-          default:
-            return '未知座位类型';
-      }
-    });
+    console.log(order.seat_type);
 
 
     return {
@@ -201,6 +204,7 @@ export default {
   },
 
   methods: {
+    formToDate
     // 这里可以添加其他需要的方法
   }
 }
