@@ -4,7 +4,7 @@
       <div class="carousel-container">
         <!-- 这里放置走马灯的代码 -->
         <div style="width: 100%;height: 30%;">
-          <el-carousel :interval="4000" height="300px">
+          <el-carousel :interval="4000" height="400px">
             <el-carousel-item v-for="(item, index) in images" :key="index">
               <img :src="item.src" alt="carousel-image">
             </el-carousel-item>
@@ -12,9 +12,14 @@
         </div>
       </div>
       <div class="overlay">
-        <!-- 这里放置overlay的代码 -->
         <el-tabs :tab-position="tabPosition" v-model="searchType" style="height: 100%" class="demo-tabs" type="border-card">
           <el-tab-pane label="车票" name="first">
+            <template v-slot:label>
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <i class="el-icon"><Van style="font-size: 48px;" /></i>
+                <span style="margin-top: 5px;">车票</span>
+              </div>
+            </template>
             <div class="component">
               <span class="demonstration">出发地</span>
               <el-cascader
@@ -40,33 +45,75 @@
                   type="date"
                   placeholder="选择发车时间"
                   :default-time="defaultTime"
-                  style="padding-left: 5%; width: 56%;"
+                  style="padding-left: 5%; width: 70%;"
               />
             </div>
             <div class="component">
-              <el-checkbox v-model="checked1" label="学生" size="large" />
-              <el-button type="primary" @click="searchTrips" style="margin-left: 20px">查询</el-button>
+              <el-button type="primary" @click="searchTrips" style="margin-left: 70%">查询</el-button>
             </div>
           </el-tab-pane>
           <el-tab-pane label="酒店" name="second">
-            <div class="input-hotel">
-              <span>在</span>
+            <template v-slot:label>
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <i class="el-icon"><OfficeBuilding style="font-size: 48px;" /></i>
+                <span style="margin-top: 5px;">酒店</span>
+              </div>
+            </template>
+            <div class="component">
+              <span class="demonstration">住宿地</span>
               <el-input
-                  placeholder="目的地"
+                  placeholder="输入目的地"
                   v-model="searchAddress"
                   class="search-bar"
                   suffix-icon="el-icon-search"
                   @keyup.enter="handleSearch"
                   style="width:70%; margin-left: 3%"
               >
-                <template #append>
-                  <el-button icon="el-icon-search" @click="handleSearch">搜索酒店</el-button>
-                </template>
               </el-input>
+              <div class="component">
+                <span class="demonstration">入住时间：</span>
+                <el-radio-group v-model="selectStayDate">
+                  <el-radio label="today">今天</el-radio>
+                  <el-radio label="tomorrow">明天</el-radio>
+                  <el-radio label="tomomo">后天</el-radio>
+                </el-radio-group>
+              </div>
+              <div class="component">
+                <!-- <el-row> -->
+                <span class="demonstration">房间数</span>
+                <!-- <el-col :span="8"> -->
+                <el-select v-model="roomCount" placeholder="请选择房间数" style="padding-left: 3%; width: 28%;">
+                  <el-option label="1" value="1" />
+                  <el-option label="2" value="2" />
+                  <el-option label="3" value="3" />
+                  <!-- 其他房间数选项 -->
+                </el-select>           
+               <!--  </el-col> -->
+                <span class="demonstration" style="padding-left: 3%;">星级</span>
+                <!-- <el-col :span="8"> -->
+                  <el-select v-model="starRating" placeholder="请选择星级" style="padding-left: 3%; width: 28%;">                  
+                    <el-option label="★" value="1" />
+                    <el-option label="★★" value="2" />
+                    <el-option label="★★★" value="3" />
+                    <el-option label="★★★★" value="4" />
+                    <el-option label="★★★★★" value="5" />
+                  </el-select>
+                <!-- </el-col>
+              </el-row> -->
+              </div>
+            <div>
+              <el-button type="primary" style="margin-left: 70%" @click="handleSearch">搜索酒店</el-button>
+            </div>
             </div>
           </el-tab-pane>
 
           <el-tab-pane label="订餐" name="third">
+            <template v-slot:label>
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <i class="el-icon"><ForkSpoon style="font-size: 48px;" /></i>
+                <span style="margin-top: 5px;">餐食</span>
+              </div>
+            </template>
             <div class="component">
               <span class="demonstration">发车时间</span>
               <el-date-picker
@@ -74,7 +121,7 @@
                   type="date"
                   placeholder="选择发车时间"
                   :default-time="defaultTime"
-                  style="padding-left: 5%; width: 56%;"
+                  style="padding-left: 5%; width: 65%;"
               />
 
             </div>
@@ -82,17 +129,17 @@
             <div class="component">
               <span class="demonstration">火车车次</span>
               <el-input
-                    placeholder="火车车次"
+                    placeholder="请输入火车车次"
                     v-model="searchTrainId"
                     class="search-bar"
                     suffix-icon="el-icon-search"
                     @keyup.enter="handleMealSearch"
-                    style="width:70%; margin-left: 3%"
+                    style="width:60%; margin-left: 5%"
               >
               </el-input>
             </div>
             <div class="component">
-              <el-button @click="gotoMealPage" type="primary" style="margin-left: 20px">订餐</el-button>
+              <el-button @click="gotoMealPage" type="primary" style="margin-left: 70%;">订餐</el-button>
             </div>
           </el-tab-pane>
 
@@ -139,10 +186,10 @@ const startTime = ref([])
 const searchAddress = ref("")
 let user = ref('')
 const images = [
-  { src: require('@/assets/images/carousel/image1.png') }, // 假设图片资源存放在 assets 目录下
-  { src: require('@/assets/images/carousel/image2.png') },//
-  { src: require('@/assets/images/carousel/image3.png') },
-  { src: require('@/assets/images/carousel/image4.png') },
+  { src: require('@/assets/images/carousel/landscape1.jpg') }, // 假设图片资源存放在 assets 目录下
+  { src: require('@/assets/images/carousel/landscape2.jpg') },//
+  { src: require('@/assets/images/carousel/landscape3.jpg') },
+  { src: require('@/assets/images/carousel/landscape4.jpg') },
 ]
 const activeName = ref('first');
 const travelInf = ref([]);
@@ -269,6 +316,10 @@ watch(searchType, (newVal, oldVal) => {
   }
 });
 
+const selectStayDate = ref("");
+const roomCount = ref("");
+const starRating= ref("");
+
 </script>
 <style scoped>
 .container {
@@ -321,6 +372,11 @@ watch(searchType, (newVal, oldVal) => {
   color: #6b778c;
   font-size: 32px;
   font-weight: 600;
+  border-radius: 20px;
+}
+.el-tabs__content .el-tab-pane {
+  width: 100%; /* 设置宽度为100%，填充父容器的宽度 */
+  height: 100%; /* 设置高度为100%，填充父容器的高度 */
 }
 .suggestTrip {
   padding-top: 30px;
