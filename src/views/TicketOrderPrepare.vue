@@ -242,6 +242,10 @@ const backToDetail = () => {
 }
 
 const openDialog = async () => {
+    if(passengers.value.length <1) {
+      ElMessage.warning("请选择乘车人！");
+      return;
+    }
     if(selectedPaymentMethod.value == "") {
         ElMessage({
             message: "请选择支付方式！",
