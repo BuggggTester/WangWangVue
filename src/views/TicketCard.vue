@@ -55,7 +55,7 @@ const props = defineProps({
     required: true
   }
 });
-
+const duration = ref("");
 const goToTicketDetail = () => {
   let param = {
     "trip_id": props.ticket.trip_id,
@@ -72,7 +72,10 @@ onMounted(async () => {
     "fromPlace": route.query.fromPlace,
     "toPlace": route.query.toPlace
 
-  })
+  });
+  duration.value = res2.data.time;
+  console.log(res2.data);
+  console.log(duration.value);
   const res3 = await requestUtil.get('/trip/minPrice', {
     "tripId": props.ticket.trip_id,
     "fromPlace": route.query.fromPlace,
