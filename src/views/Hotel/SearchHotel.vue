@@ -40,7 +40,7 @@
       <!-- 无限滚动列表 -->
       <ul v-if="ifempty" v-infinite-scroll="handleScroll" class="hotel-list" style="overflow: auto">
         <li v-for="hotel in hotelsInfo" class="infinite-list-item">
-          <el-cards class="hotel-card" @click="handleViewDetails">
+          <el-cards class="hotel-card">
             <el-row style="margin-top: 2%; margin-left: 1%; margin-right: 1%;" class="hotel-row">
               <el-col :span="10">
                 <el-image :fit="cover" :src="getServerUrl() + hotel.picture_path" class="hotel-image" alt="酒店图片" />
@@ -78,7 +78,7 @@
                     <span>{{ hotel.lowestPrice }}</span>
                     <span style="font-size: 14px">起</span>
                   </div>
-                  <el-button style="margin-top: 7%" size="large" round type="primary" @click="handleViewDetails">
+                  <el-button style="margin-top: 7%" size="large" round type="primary" @click="handleViewDetails(hotel)">
                     <div style="color:#000000; font-weight: bold">查看详情</div>
                   </el-button>
                 </div>
@@ -87,7 +87,7 @@
           </el-cards>
         </li>
       </ul>
-      <div v-else style="margin-top:150px; text-align:center; line-height: 100px; font-size: 80px; color: white">前面的内容，以后再来探索吧~</div>
+      <div v-else style="margin-top:100px; text-align:center; line-height: 100px; font-size: 60px; color: white">前面的内容，以后再来探索吧~</div>
     </div>
   </div>
 </template>
@@ -105,17 +105,16 @@ const hotels = ref([]);
 const route = useRoute();
 const address = ref(route.query.address);
 const ifempty = ref(true)
-onMounted(async()=> {
+onMounted(async() => {
   const res = await requestUtil.get(`/hotels/selectHotelByAddress`, {
     "address": address.value
   });
-  console.log(address);
   hotelsInfo.value = res.data;
   url.value = res.data;
-  console.log(hotelsInfo.value);
   if(hotelsInfo.value.length === 0){
     ifempty.value = false
   }
+
 })
 
 // 使用 ref 创建响应式数据
@@ -132,22 +131,28 @@ const handleSearch = async () => {
     address: searchAddress.value
   });
   hotelsInfo.value = hot.data;
+
+  if(hotelsInfo.value.length === 0){
+    ifempty.value = false
+  } else {
+    ifempty.value = true
+  }
 };
 
 const handleSortChange = async (value) => {
   if (value === "price_asc") {
     const hot = await requestUtil.get('/hotels/selectHotelByPriceASC', {
-      address: searchAddress.value
+      "address": searchAddress.value
     });
     hotelsInfo.value = hot.data;
   } else if (value === "price_desc") {
     const hot = await requestUtil.get('/hotels/selectHotelByPriceDESC', {
-      address: searchAddress.value
+      "address": searchAddress.value
     });
     hotelsInfo.value = hot.data;
   } else if (value === "rating_desc") {
     const hot = await requestUtil.get('/hotels/selectHotelByScore', {
-      address: searchAddress.value
+      "address": searchAddress.value
     });
     hotelsInfo.value = hot.data;
   }
@@ -165,7 +170,13 @@ const handleScroll = (event) => {
 };
 
 const handleViewDetails = (hotel) => {
-
+  console.log(hotel.id);
+  try{
+    router.push({path: '/search/room', query:
+          {"hotel_id" : hotel.id}});
+  }catch (e) {
+    console.error(e);
+  }
 };
 </script>
 

@@ -24,10 +24,15 @@ const routes = [
                 component: () => import('../views/Hotel/SearchHotel.vue')
         },
         {
-                path: '/testRoom',
+                path: '/search/room',
                 name: 'HotelDetails',
                 component: () => import('../views/Hotel/HotelDetails.vue')
         },
+            {
+                path: '/hotelorderprepare',
+                name: 'HotelOrderPrepare',
+                component: ()=> import ('../views/Hotel/HotelOrderPrepare.vue')
+            },
         {
             path: '/ticket',
             name: 'TicketInfo',
