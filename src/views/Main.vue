@@ -12,9 +12,9 @@
         </div>
       </div>
       <div class="overlay">
-        <el-tabs :tab-position="tabPosition" v-model="searchType" style="height: 100%" class="demo-tabs" type="border-card">
-          <el-tab-pane label="车票" name="first">
-            <template v-slot:label>
+        <el-tabs :tab-position="tabPosition" v-model="searchType" style="height: 100%;" class="demo-tabs" type="border-card">
+          <el-tab-pane label="车票" name="first" >
+            <template v-slot:label >
               <div style="display: flex; flex-direction: column; align-items: center;">
                 <i class="el-icon"><Van style="font-size: 48px;" /></i>
                 <span style="margin-top: 5px;">车票</span>
@@ -374,7 +374,7 @@ const starRating= ref("");
   font-weight: 600;
   border-radius: 20px;
 }
-.el-tabs__content .el-tab-pane {
+.el-tabs__content .el-tabs__header {
   width: 100%; /* 设置宽度为100%，填充父容器的宽度 */
   height: 100%; /* 设置高度为100%，填充父容器的高度 */
 }
@@ -389,4 +389,5 @@ const starRating= ref("");
   height: 200px; /* 设置图片的高度 */
   object-fit: cover; /* 控制图片如何适应容器尺寸 */
 }
+
 </style>
