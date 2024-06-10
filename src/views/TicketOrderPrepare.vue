@@ -304,7 +304,7 @@ const openDialog = async () => {
       await createOrder(); // 在打开对话框前执行createOrder
       dialogVisible.value = true;
 };
-
+const orderId = ref("");
 const createOrder = async() =>{
 
     const chosenSeat = ref("");
@@ -331,6 +331,7 @@ const createOrder = async() =>{
         "pid": 1
     })
    console.log(res.data);
+    orderId.value = res.data.orderId;
 }
 
 const confirmMessage = async () => {
@@ -343,7 +344,9 @@ const cancelMessage = async () => {
 
 const confirmOrder = async() =>{
     //确认订单
-    const res = await requestUtil.get('/order/confirm')
+    const res = await requestUtil.get('/order/confirm',{
+      "orderId": orderId.value
+    })
     .then(response => {
       // 请求成功处理
       console.log(response.data);
@@ -358,7 +361,7 @@ const confirmOrder = async() =>{
     "toPlace": route.query.toPlace,
     "startTime": route.query.startTime,
     };
-    router.push({path: '/ticket',query: param});
+    router.push('/main');
 
     await confirmMessage();
 }

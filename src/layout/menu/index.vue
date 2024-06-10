@@ -46,12 +46,7 @@
       <span v-if="unreadMessageNumber === 0">消息中心</span>
       <span v-else>消息中心({{unreadMessageNumber}}条未读）</span>
     </el-menu-item>
-    <el-menu-item index="4">
-      <el-icon>
-        <setting/>
-      </el-icon>
-      <span>Navigator Four</span>
-    </el-menu-item>
+
   </el-menu>
 </template>
 
