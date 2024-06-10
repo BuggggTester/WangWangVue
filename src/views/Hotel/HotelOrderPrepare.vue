@@ -152,6 +152,7 @@ const confirmOrder = async() =>{
   ElMessage.success('预订成功');
   await confirmMessage();
   dialogVisible.value = false;
+  router.push('/main');
 }
 
 const cancelOrder = async() =>{

@@ -72,8 +72,10 @@ const handleBookRoom = async (room) => {
     "endDate": endTime.value,
   });
   let reser_id = res_id.data.reservationId;
+  console.log(reser_id);
+  console.log(res_id.data);
   const order = await requestUtil.post('/totalorder/create', {
-    "userId": cookieUtil.getCookie("userId"),
+    "user_id": cookieUtil.getCookie("userId"),
     "order_type": "HOTEL",
     "reservation_id": reser_id,
     "payment": room.price,
@@ -167,7 +169,7 @@ const isDateCorrect = computed(() => {
             <div class="room-card" >
               <el-row class="room-row">
                 <el-col :span="6">
-                  <el-image :fit="cover" :src="room.image" class="room-image" alt="房间图片" />
+                  <el-image :fit="cover" :src="requestUtil.getServerUrl() + room.picture_path" class="room-image" alt="房间图片" />
                 </el-col>
                 <el-col :span="8">
                   <div class="room-info">

@@ -119,7 +119,7 @@ export default {
         let orderId = order.order_id;
         let userId = cookieUtil.getCookie("userId");
         console.log(order);
-        await requestUtil.get(`order/delete/${orderId}/${userId}`);
+        await requestUtil.get(`order/cancel/${orderId}/${userId}`);
         console.log('删除成功！');
         ElMessage({
           message: '订单已取消！',

@@ -67,7 +67,7 @@ const routes = [
         },{
               path: '/user/hotelorders',
               name: "HotelOrders",
-              component: ()=> import('../views/HotelOrderInfo.vue'),
+              component: ()=> import('../views/user/HotelOrders.vue'),
         },{
               path: '/user/foodorders',
               name: 'FoodOrders',

@@ -32,7 +32,7 @@
       </div>
     </div>
     <template #footer>
-      <el-button @click="delete" style="border-radius: 10px">删除订单</el-button>
+      <el-button @click="" style="border-radius: 10px">删除订单</el-button>
       <el-button @click="showDetailInfo(hotelOrder.id)" type="primary" style="border-radius: 10px">查看订单详情</el-button>
     </template>
   </el-card>
@@ -44,11 +44,11 @@ import router from "@/router";
 import {onMounted, ref} from "vue";
 import requestUtil from "@/util/request";
 import cookieUtil from "@/util/cookie";
-const showDetailInfo = async(id) => {
-  await router.push({path: '/hotelOrderInfo', query: {
-    hotelOrderId: id
-    }});
-}
+// const showDetailInfo = async(id) => {
+//   await router.push({path: '/hotelOrderInfo', query: {
+//     hotelOrderId: id
+//     }});
+// }
 const hotelOrders = ref([]);
 onMounted(async()=> {
   const res = await requestUtil.get("/totalorder/getAllHotelReservations",{
