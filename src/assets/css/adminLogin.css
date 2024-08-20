@@ -1,0 +1,50 @@
+.login-page {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('@/assets/images/login/adminLogin.png'); /* 替换为您的背景图片路径 */
+    background-size: cover;
+    opacity: 1; /* 背景图片透明度 */
+}
+
+.login-container {
+    position: relative;
+    margin-left: 40%;
+    width: 30%;
+    height: 30%;
+    padding-top: 60px;
+    background-color: rgba(255, 255, 255, 1); /* 设置登录框背景色及透明度 */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* 设置登录框阴影效果 */
+    z-index: 999;
+    text-align: center;
+    font-size: 30px;
+    flex-direction: column;
+}
+.login {
+    font-size: 25px;
+}
+.login-container-button {
+    width: 70%;
+    padding: 10px;
+    background-color: #007bff; /* 按钮背景颜色 */
+    color: #fff; /* 按钮文字颜色 */
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+}
+.component {
+    margin-bottom: 15px; /* 设置组件之间的垂直间距为20px */
+    margin-top: 15px;
+}
