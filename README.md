@@ -1,2 +1,2 @@
-# WangWang
-The repository of WangWang
+# WangWangVue
+The repository of WangWangVue
