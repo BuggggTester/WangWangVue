@@ -157,7 +157,7 @@ onMounted( async () => {
         <el-divider class="divider"/>
       </li>
     </ul>
-    <el-button @click="createTest">press to create a message</el-button>
+<!--    <el-button @click="createTest">press to create a message</el-button>-->
   </el-card>
 </template>
 
